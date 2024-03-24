@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="create_book_table" author="aav">
+        <sql splitStatements="true" stripComments="true">
+            create table books
+            (
+                id       bigserial primary key,
+                created  timestamp,
+                modified timestamp,
+                version  integer,
+                author   text,
+                name     text unique
+            );
+
+            create index books_author on books (author);
+            create index books_version on books (version);
+        </sql>
+        <rollback>
+            drop table books;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
