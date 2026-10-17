@@ -13,8 +13,6 @@ import lombok.ToString;
 @Table(name = "books")
 public class Book extends BasicEntity {
 
-    private Long id;
-
     private String name;
     private String author;
 }

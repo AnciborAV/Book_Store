@@ -2,19 +2,15 @@ package ru.aav.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import org.hibernate.Hibernate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @MappedSuperclass
-public class Entity implements Serializable {
-
+@Access(AccessType.FIELD)
+public abstract class Entity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -30,29 +26,17 @@ public class Entity implements Serializable {
     private Date created = new Date();
 
     @Override
-    public int hashCode() {
-        if (getId() != null) {
-            return getId().hashCode();
-        } else {
-            return super.hashCode();
-        }
+    public final boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false;
+        Entity entity = (Entity) other;
+        return getId() != null && getId().equals(entity.getId());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-
-        if (obj == null) {
-            return false;
-        }
-
-        if (obj instanceof Entity e) {
-            return e.getId().equals(getId());
-        }
-
-        return false;
+    public final int hashCode() {
+        // Must remain stable when the database assigns an id.
+        return Hibernate.getClass(this).hashCode();
     }
 }
 

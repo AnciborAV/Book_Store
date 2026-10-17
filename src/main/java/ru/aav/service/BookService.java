@@ -3,6 +3,7 @@ package ru.aav.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aav.exception.EntityNotFoundException;
 import ru.aav.model.Book;
 import ru.aav.repository.BookRepository;
@@ -10,6 +11,7 @@ import ru.aav.repository.BookRepository;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
 public class BookService {
@@ -23,9 +25,10 @@ public class BookService {
     public Book findById(Long id) {
         log.info("trying to find book with id {}", id);
         return bookRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException(id));
     }
 
+    @Transactional
     public Book create(Book book) {
         log.info("Book to create {}", book);
         return bookRepository.save(book);
