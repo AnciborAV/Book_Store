@@ -1,0 +1,1955 @@
+[
+  {
+    "name": "Анна Каренина",
+    "author": "Лев Толстой",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1158868/",
+    "title": "Анна Каренина. Толстой Л. Н.",
+    "image": "https://www.moscowbooks.ru/image/book/785/w600/i785419.jpg",
+    "local": "/covers/editions/792c3397ff3da0fb.jpg"
+  },
+  {
+    "name": "Воскресение",
+    "author": "Лев Толстой",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/334232/",
+    "title": "Воскресение. Толстой Л. Н.",
+    "image": "https://www.moscowbooks.ru/image/book/188/w600/i188071.jpg",
+    "local": "/covers/editions/6b42cd2bcb0d244a.jpg"
+  },
+  {
+    "name": "Смерть Ивана Ильича",
+    "author": "Лев Толстой",
+    "category": "Российские авторы",
+    "page": "https://eksmo.ru/book/smert-ivana-ilicha-ITD165081/",
+    "title": "Книга Смерть Ивана Ильича Лев Толстой - купить, читать онлайн отзывы и рецензии | ISBN 978-5-699-52281-1 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000000165081/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/b139642548a44d4a.jpg"
+  },
+  {
+    "name": "Хаджи-Мурат",
+    "author": "Лев Толстой",
+    "category": "Российские авторы",
+    "page": "https://ast.ru/book/khadzhi-murat-136893/",
+    "title": "«Хаджи-Мурат» Толстой Лев Николаевич - описание книги | Русская классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/AST000000000136893/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/687d3912431d459e.jpg"
+  },
+  {
+    "name": "Преступление и наказание",
+    "author": "Фёдор Достоевский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1022256/",
+    "title": "Преступление и наказание. Достоевский Ф. М.",
+    "image": "https://www.moscowbooks.ru/image/book/683/w600/i683721.jpg",
+    "local": "/covers/editions/2508a6ef4724e5b2.jpg"
+  },
+  {
+    "name": "Братья Карамазовы",
+    "author": "Фёдор Достоевский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1044683/",
+    "title": "Братья Карамазовы. Достоевский Ф. М.",
+    "image": "https://www.moscowbooks.ru/image/book/701/w600/i701107.jpg",
+    "local": "/covers/editions/e0026025c513b314.jpg"
+  },
+  {
+    "name": "Идиот",
+    "author": "Фёдор Достоевский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1096612/",
+    "title": "Идиот. Достоевский Ф. М.",
+    "image": "https://www.moscowbooks.ru/image/book/739/w600/i739649.jpg",
+    "local": "/covers/editions/261458a8ac4beb3e.jpg"
+  },
+  {
+    "name": "Бесы",
+    "author": "Фёдор Достоевский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1101977/",
+    "title": "Бесы. Достоевский Ф. М.",
+    "image": "https://www.moscowbooks.ru/image/book/743/w600/i743529.jpg",
+    "local": "/covers/editions/037361f867144bc7.jpg"
+  },
+  {
+    "name": "Записки из подполья",
+    "author": "Фёдор Достоевский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1100779/",
+    "title": "Записки из подполья. Достоевский Ф. М.",
+    "image": "https://www.moscowbooks.ru/image/book/744/w600/i744133.jpg",
+    "local": "/covers/editions/651ecb7a3a6b8d08.jpg"
+  },
+  {
+    "name": "Белые ночи",
+    "author": "Фёдор Достоевский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1025610/",
+    "title": "Белые ночи. Достоевский Ф. М.",
+    "image": "https://www.moscowbooks.ru/image/book/686/w600/i686618.jpg",
+    "local": "/covers/editions/a042b690006ed98a.jpg"
+  },
+  {
+    "name": "Евгений Онегин",
+    "author": "Александр Пушкин",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1106612/",
+    "title": "Евгений Онегин. Пушкин А. С.",
+    "image": "https://www.moscowbooks.ru/image/book/746/w600/i746879.jpg",
+    "local": "/covers/editions/fb45422859eead22.jpg"
+  },
+  {
+    "name": "Капитанская дочка",
+    "author": "Александр Пушкин",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1226899/",
+    "title": "Капитанская дочка. Пушкин А. С.",
+    "image": "https://www.moscowbooks.ru/image/book/838/w600/i838182.jpg",
+    "local": "/covers/editions/daff23b417819a8a.jpg"
+  },
+  {
+    "name": "Повести Белкина",
+    "author": "Александр Пушкин",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1107993/",
+    "title": "Повести Белкина. Пушкин А. С.",
+    "image": "https://www.moscowbooks.ru/image/book/747/w600/i747839.jpg",
+    "local": "/covers/editions/1fd76b1253b8925f.jpg"
+  },
+  {
+    "name": "Пиковая дама",
+    "author": "Александр Пушкин",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1221369/",
+    "title": "Пиковая дама. Пушкин А. С.",
+    "image": "https://www.moscowbooks.ru/image/book/833/w600/i833860.jpg",
+    "local": "/covers/editions/42300083b863a0dd.jpg"
+  },
+  {
+    "name": "Герой нашего времени",
+    "author": "Михаил Лермонтов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1158895/",
+    "title": "Герой нашего времени. Лермонтов М. Ю.",
+    "image": "https://www.moscowbooks.ru/image/book/785/w600/i785414.jpg",
+    "local": "/covers/editions/e21e21c2dc66fa0b.jpg"
+  },
+  {
+    "name": "Мцыри",
+    "author": "Михаил Лермонтов",
+    "category": "Российские авторы",
+    "page": "https://eksmo.ru/book/mtsyri-ITD1380298/",
+    "title": "Книга Мцыри Михаил Лермонтов - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-199069-5 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001380298/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/9615a96145a9384d.jpg"
+  },
+  {
+    "name": "Мёртвые души",
+    "author": "Николай Гоголь",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1078347/",
+    "title": "Мертвые души. Гоголь Н. В.",
+    "image": "https://www.moscowbooks.ru/image/book/725/w600/i725649.jpg",
+    "local": "/covers/editions/b12e9bdc81ed3d8f.jpg"
+  },
+  {
+    "name": "Ревизор",
+    "author": "Николай Гоголь",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1232281/",
+    "title": "Ревизор. Гоголь Н. В.",
+    "image": "https://www.moscowbooks.ru/image/book/842/w600/i842515.jpg",
+    "local": "/covers/editions/1632de28aee44c9a.jpg"
+  },
+  {
+    "name": "Тарас Бульба",
+    "author": "Николай Гоголь",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1121854/",
+    "title": "Тарас Бульба. Гоголь Н. В.",
+    "image": "https://www.moscowbooks.ru/image/book/757/w600/i757971.jpg",
+    "local": "/covers/editions/648573ab28272379.jpg"
+  },
+  {
+    "name": "Шинель",
+    "author": "Николай Гоголь",
+    "category": "Российские авторы",
+    "page": "https://eksmo.ru/book/shinel-ITD237099/",
+    "title": "Книга Шинель Николай Гоголь - купить, читать онлайн отзывы и рецензии | ISBN 978-5-699-62675-5 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000000237099/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/56596c7edafd1a96.jpg"
+  },
+  {
+    "name": "Отцы и дети",
+    "author": "Иван Тургенев",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1051035/",
+    "title": "Отцы и дети. Тургенев И. С.",
+    "image": "https://www.moscowbooks.ru/image/book/706/w600/i706068.jpg",
+    "local": "/covers/editions/2de37f66a90e24f4.jpg"
+  },
+  {
+    "name": "Записки охотника",
+    "author": "Иван Тургенев",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1240564/",
+    "title": "Записки охотника. Тургенев И. С.",
+    "image": "https://www.moscowbooks.ru/image/book/849/w600/i849047.jpg",
+    "local": "/covers/editions/d2d84a7b5aa7c1e0.jpg"
+  },
+  {
+    "name": "Ася",
+    "author": "Иван Тургенев",
+    "category": "Российские авторы",
+    "page": "https://www.litres.ru/book/ivan-turgenev/asya-72452512/",
+    "title": "Ася Иван Тургенев Литрес Классика ЛитРес – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/72452512.webp",
+    "local": "/covers/editions/d2940870621b13cf.webp"
+  },
+  {
+    "name": "Обломов",
+    "author": "Иван Гончаров",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1089646/",
+    "title": "Обломов. Гончаров И. А.",
+    "image": "https://www.moscowbooks.ru/image/book/734/w600/i734536.jpg",
+    "local": "/covers/editions/53f97bf6f3ce0576.jpg"
+  },
+  {
+    "name": "Горе от ума",
+    "author": "Александр Грибоедов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1149148/",
+    "title": "Горе от ума. Грибоедов А. С.",
+    "image": "https://www.moscowbooks.ru/image/book/778/w600/i778322.jpg",
+    "local": "/covers/editions/479650412ce155af.jpg"
+  },
+  {
+    "name": "Гроза",
+    "author": "Александр Островский",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1255485/",
+    "title": "Гроза. Островский А. Н.",
+    "image": "https://www.moscowbooks.ru/image/book/860/w600/i860213.jpg",
+    "local": "/covers/editions/c5df2288d6ff46bf.jpg"
+  },
+  {
+    "name": "Вишнёвый сад",
+    "author": "Антон Чехов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1110548/",
+    "title": "Вишневый сад. Чехов А. П.",
+    "image": "https://www.moscowbooks.ru/image/book/749/w600/i749547.jpg",
+    "local": "/covers/editions/e6504c0541ad841e.jpg"
+  },
+  {
+    "name": "Три сестры",
+    "author": "Антон Чехов",
+    "category": "Российские авторы",
+    "page": "https://eksmo.ru/book/tri-sestry-ITD1469754/",
+    "title": "Книга Три сестры Антон Чехов - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-231651-7 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001469754/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/4891fe7993e0eb22.jpg"
+  },
+  {
+    "name": "Палата № 6",
+    "author": "Антон Чехов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/922255/",
+    "title": "Палата №6. Чехов А. П.",
+    "image": "https://www.moscowbooks.ru/image/book/597/w600/i597259.jpg",
+    "local": "/covers/editions/c173c301e122d2c6.jpg"
+  },
+  {
+    "name": "Дама с собачкой",
+    "author": "Антон Чехов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1126360/",
+    "title": "Дама с собачкой. Чехов А. П.",
+    "image": "https://www.moscowbooks.ru/image/book/761/w600/i761163.jpg",
+    "local": "/covers/editions/8f6da552f1560504.jpg"
+  },
+  {
+    "name": "Мастер и Маргарита",
+    "author": "Михаил Булгаков",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1121044/",
+    "title": "Мастер и Маргарита. Булгаков М. А.",
+    "image": "https://www.moscowbooks.ru/image/book/757/w600/i757428.jpg",
+    "local": "/covers/editions/8af4d482ca659172.jpg"
+  },
+  {
+    "name": "Собачье сердце",
+    "author": "Михаил Булгаков",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1017793/",
+    "title": "Собачье сердце. Булгаков М. А.",
+    "image": "https://www.moscowbooks.ru/image/book/679/w600/i679100.jpg",
+    "local": "/covers/editions/fecf226e3ed3bcd4.jpg"
+  },
+  {
+    "name": "Белая гвардия",
+    "author": "Михаил Булгаков",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1039768/",
+    "title": "Белая гвардия. Булгаков М. А.",
+    "image": "https://www.moscowbooks.ru/image/book/697/w600/i697664.jpg",
+    "local": "/covers/editions/67aab3601ce7732f.jpg"
+  },
+  {
+    "name": "Тихий Дон",
+    "author": "Михаил Шолохов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1005564/",
+    "title": "Тихий Дон. Шолохов М. А.",
+    "image": "https://www.moscowbooks.ru/image/book/669/w600/i669127.jpg",
+    "local": "/covers/editions/1a7a1665e115030a.jpg"
+  },
+  {
+    "name": "Судьба человека",
+    "author": "Михаил Шолохов",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/781926/",
+    "title": "Судьба человека. Шолохов М. А.",
+    "image": "https://www.moscowbooks.ru/image/book/488/w600/i488443.jpg",
+    "local": "/covers/editions/6369f8682ac11ab4.jpg"
+  },
+  {
+    "name": "Доктор Живаго",
+    "author": "Борис Пастернак",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/50018105/",
+    "title": "Доктор Живаго. Пастернак Б. Л.",
+    "image": "https://www.moscowbooks.ru/image/book/435/w600/i435352.jpg",
+    "local": "/covers/editions/2776f18cc777364d.jpg"
+  },
+  {
+    "name": "Мы",
+    "author": "Евгений Замятин",
+    "category": "Российские авторы",
+    "page": "https://eksmo.ru/book/my-ITD1457420/",
+    "title": "Книга Мы Евгений Замятин | ISBN 978-5-04-227087-1 - Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001457420/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/ad8ee09e6f4b49bf.jpg"
+  },
+  {
+    "name": "Двенадцать стульев",
+    "author": "Илья Ильф и Евгений Петров",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1088757/",
+    "title": "Двенадцать стульев. Ильф И. А., Петров Е. П.",
+    "image": "https://www.moscowbooks.ru/image/book/733/w600/i733495.jpg",
+    "local": "/covers/editions/caedfac33b8ee2bb.jpg"
+  },
+  {
+    "name": "Золотой телёнок",
+    "author": "Илья Ильф и Евгений Петров",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1054306/",
+    "title": "Золотой теленок. Ильф И. А., Петров Е. П.",
+    "image": "https://www.moscowbooks.ru/image/book/708/w600/i708402.jpg",
+    "local": "/covers/editions/4cc275841d95836d.jpg"
+  },
+  {
+    "name": "Левша",
+    "author": "Николай Лесков",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/50125701/",
+    "title": "Левша. Лесков Н. С.",
+    "image": "https://www.moscowbooks.ru/image/book/870/w600/i870101.jpg",
+    "local": "/covers/editions/4de3d3d2e3efc958.jpg"
+  },
+  {
+    "name": "История одного города",
+    "author": "Михаил Салтыков-Щедрин",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1009279/",
+    "title": "История одного города. Салтыков-Щедрин М. Е.",
+    "image": "https://www.moscowbooks.ru/image/book/672/w600/i672787.jpg",
+    "local": "/covers/editions/fc01616f78f98953.jpg"
+  },
+  {
+    "name": "Гранатовый браслет",
+    "author": "Александр Куприн",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1039862/",
+    "title": "Гранатовый браслет. Куприн А. И.",
+    "image": "https://www.moscowbooks.ru/image/book/697/w600/i697721.jpg",
+    "local": "/covers/editions/32adefeff15f25d9.jpg"
+  },
+  {
+    "name": "Тёмные аллеи",
+    "author": "Иван Бунин",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1151990/",
+    "title": "Темные аллеи. Бунин И. А.",
+    "image": "https://www.moscowbooks.ru/image/book/780/w600/i780429.jpg",
+    "local": "/covers/editions/dfff7dc8b5398f1b.jpg"
+  },
+  {
+    "name": "На дне",
+    "author": "Максим Горький",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/1098854/",
+    "title": "На дне. Горький М.",
+    "image": "https://www.moscowbooks.ru/image/book/741/w600/i741172.jpg",
+    "local": "/covers/editions/cc4db7e79b1132cb.jpg"
+  },
+  {
+    "name": "Алые паруса",
+    "author": "Александр Грин",
+    "category": "Российские авторы",
+    "page": "https://eksmo.ru/book/alye-parusa-ITD1381195/",
+    "title": "Книга Алые паруса Александр Грин",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001381195/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/e30198272390046c.jpg"
+  },
+  {
+    "name": "Один день Ивана Денисовича",
+    "author": "Александр Солженицын",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/50017046/",
+    "title": "Один день Ивана Денисовича. Солженицын А. И.",
+    "image": "https://www.moscowbooks.ru/image/book/485/w600/i485577.jpg",
+    "local": "/covers/editions/e0ce7e1c173fa886.jpg"
+  },
+  {
+    "name": "Жизнь и судьба",
+    "author": "Василий Гроссман",
+    "category": "Российские авторы",
+    "page": "https://www.moscowbooks.ru/book/689688/",
+    "title": "Жизнь и судьба. Гроссман В. С.",
+    "image": "https://www.moscowbooks.ru/image/book/433/w600/i433338.jpg",
+    "local": "/covers/editions/562a1e4b0a6b9c53.jpg"
+  },
+  {
+    "name": "Пикник на обочине",
+    "author": "Аркадий и Борис Стругацкие",
+    "category": "Российские авторы",
+    "page": "https://ast.ru/book/piknik-na-obochine-704438/",
+    "title": "«Пикник на обочине» Стругацкий Аркадий Натанович, Стругацкий Борис Натанович - описание книги | Эксклюзив: Русская классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000704438/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/48bb154d222febf5.jpg"
+  },
+  {
+    "name": "Понедельник начинается в субботу",
+    "author": "Аркадий и Борис Стругацкие",
+    "category": "Российские авторы",
+    "page": "https://ast.ru/book/ponedelnik-nachinaetsya-v-subbotu-709823/",
+    "title": "«Понедельник начинается в субботу» Стругацкий Аркадий Натанович, Стругацкий Борис Натанович - описание книги | Эксклюзив: Русская классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000709823/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/dc8c868bd8ca42c4.jpg"
+  },
+  {
+    "name": "Дон Кихот",
+    "author": "Мигель де Сервантес",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1264863/",
+    "title": "Дон Кихот. Сервантес С. М. де",
+    "image": "https://www.moscowbooks.ru/image/book/867/w600/i867329.jpg",
+    "local": "/covers/editions/15f0cf1050054816.jpg"
+  },
+  {
+    "name": "Гамлет",
+    "author": "Уильям Шекспир",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/925254/",
+    "title": "Гамлет. Макбет. Шекспир У.",
+    "image": "https://www.moscowbooks.ru/image/book/599/w600/i599852.jpg",
+    "local": "/covers/editions/9d94d28b69bd531d.jpg"
+  },
+  {
+    "name": "Ромео и Джульетта",
+    "author": "Уильям Шекспир",
+    "category": "Зарубежные авторы",
+    "page": "https://eksmo.ru/book/romeo-i-dzhuletta-tragedii-ITD1238852/",
+    "title": "Книга Ромео и Джульетта Трагедии Уильям Шекспир",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001238852/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/927b7b157a22d926.jpg"
+  },
+  {
+    "name": "Король Лир",
+    "author": "Уильям Шекспир",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1273787/",
+    "title": "Король Лир. Шекспир У.",
+    "image": "https://www.moscowbooks.ru/image/book/873/w600/i873944.jpg",
+    "local": "/covers/editions/76a6d24b26f838e5.jpg"
+  },
+  {
+    "name": "Илиада",
+    "author": "Гомер",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1164055/",
+    "title": "Илиада. Гомер",
+    "image": "https://www.moscowbooks.ru/image/book/789/w600/i789860.jpg",
+    "local": "/covers/editions/a67a076253095720.jpg"
+  },
+  {
+    "name": "Одиссея",
+    "author": "Гомер",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1247992/",
+    "title": "Одиссея. Гомер",
+    "image": "https://www.moscowbooks.ru/image/book/854/w600/i854803.jpg",
+    "local": "/covers/editions/42a6419abb510594.jpg"
+  },
+  {
+    "name": "Божественная комедия",
+    "author": "Данте Алигьери",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1156168/",
+    "title": "Божественная Комедия. Данте Алигьери",
+    "image": "https://www.moscowbooks.ru/image/book/783/w600/i783775.jpg",
+    "local": "/covers/editions/32b670679b176032.jpg"
+  },
+  {
+    "name": "Декамерон",
+    "author": "Джованни Боккаччо",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/893842/",
+    "title": "Декамерон. Боккаччо Дж.",
+    "image": "https://www.moscowbooks.ru/image/book/572/w600/i572244.jpg",
+    "local": "/covers/editions/082f8bf3a784a8e4.jpg"
+  },
+  {
+    "name": "Фауст",
+    "author": "Иоганн Вольфганг Гёте",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1112538/",
+    "title": "Фауст. Гёте И. В.",
+    "image": "https://www.moscowbooks.ru/image/book/750/w600/i750839.jpg",
+    "local": "/covers/editions/c850bed7f93c3bbc.jpg"
+  },
+  {
+    "name": "Гордость и предубеждение",
+    "author": "Джейн Остин",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/50088982/",
+    "title": "Гордость и предубеждение. Остин Дж.",
+    "image": "https://www.moscowbooks.ru/image/book/808/w600/i808655.jpg",
+    "local": "/covers/editions/327a78d751612b96.jpg"
+  },
+  {
+    "name": "Джейн Эйр",
+    "author": "Шарлотта Бронте",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1113372/",
+    "title": "Джейн Эйр. Бронте Ш.",
+    "image": "https://www.moscowbooks.ru/image/book/751/w600/i751365.jpg",
+    "local": "/covers/editions/cb64903558d8e356.jpg"
+  },
+  {
+    "name": "Грозовой перевал",
+    "author": "Эмили Бронте",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1041660/",
+    "title": "Грозовой перевал. Бронте Э.",
+    "image": "https://www.moscowbooks.ru/image/book/698/w600/i698806.jpg",
+    "local": "/covers/editions/8641a51d39fdd5bb.jpg"
+  },
+  {
+    "name": "Отверженные",
+    "author": "Виктор Гюго",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/50017320/",
+    "title": "Отверженные. Гюго В.",
+    "image": "https://www.moscowbooks.ru/image/book/447/w600/i447764.jpg",
+    "local": "/covers/editions/25b6e9e1463cd510.jpg"
+  },
+  {
+    "name": "Собор Парижской Богоматери",
+    "author": "Виктор Гюго",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1215445/",
+    "title": "Собор Парижской Богоматери. Гюго В.",
+    "image": "https://www.moscowbooks.ru/image/book/829/w600/i829168.jpg",
+    "local": "/covers/editions/4b331e24e4ca4a53.jpg"
+  },
+  {
+    "name": "Три мушкетёра",
+    "author": "Александр Дюма",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1083738/",
+    "title": "Три мушкетера. Дюма А.",
+    "image": "https://www.moscowbooks.ru/image/book/730/w600/i730266.jpg",
+    "local": "/covers/editions/0a1e3d9ba1ed3698.jpg"
+  },
+  {
+    "name": "Граф Монте-Кристо",
+    "author": "Александр Дюма",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1109248/",
+    "title": "Граф Монте-Кристо. Дюма А.",
+    "image": "https://www.moscowbooks.ru/image/book/758/w600/i758455.jpg",
+    "local": "/covers/editions/2695e0bc65f0b7f8.jpg"
+  },
+  {
+    "name": "Красное и чёрное",
+    "author": "Стендаль",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1102922/",
+    "title": "Красное и черное. Пармская обитель.. Стендаль",
+    "image": "https://www.moscowbooks.ru/image/book/744/w600/i744003.jpg",
+    "local": "/covers/editions/209498b803427d93.jpg"
+  },
+  {
+    "name": "Госпожа Бовари",
+    "author": "Гюстав Флобер",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1057326/",
+    "title": "Госпожа Бовари. Флобер Г.",
+    "image": "https://www.moscowbooks.ru/image/book/710/w600/i710529.jpg",
+    "local": "/covers/editions/555de5c72a64a171.jpg"
+  },
+  {
+    "name": "Отец Горио",
+    "author": "Оноре де Бальзак",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/429868/",
+    "title": "Отец Горио. Бальзак О. де",
+    "image": "https://www.moscowbooks.ru/image/book/262/w600/i262467.jpg",
+    "local": "/covers/editions/21470878db0a238b.jpg"
+  },
+  {
+    "name": "Большие надежды",
+    "author": "Чарльз Диккенс",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/842880/",
+    "title": "Большие надежды. Диккенс Ч.",
+    "image": "https://www.moscowbooks.ru/image/book/527/w600/i527511.jpg",
+    "local": "/covers/editions/26b8fa2b227d19be.jpg"
+  },
+  {
+    "name": "Приключения Оливера Твиста",
+    "author": "Чарльз Диккенс",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1272985/",
+    "title": "Приключения Оливера Твиста. Диккенс Ч.",
+    "image": "https://www.moscowbooks.ru/image/book/873/w600/i873402.jpg",
+    "local": "/covers/editions/7535328a6e9f765b.jpg"
+  },
+  {
+    "name": "Моби Дик, или Белый кит",
+    "author": "Герман Мелвилл",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1260099/",
+    "title": "Моби Дик, или Белый Кит. Мелвилл Г.",
+    "image": "https://www.moscowbooks.ru/image/book/863/w600/i863606.jpg",
+    "local": "/covers/editions/6f1eafaeaa509894.jpg"
+  },
+  {
+    "name": "Приключения Гекльберри Финна",
+    "author": "Марк Твен",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1192723/",
+    "title": "Приключения Гекльберри Финна. Твен М.",
+    "image": "https://www.moscowbooks.ru/image/book/812/w600/i812111.jpg",
+    "local": "/covers/editions/40606e80006f5acb.jpg"
+  },
+  {
+    "name": "Приключения Тома Сойера",
+    "author": "Марк Твен",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1112814/",
+    "title": "Приключения Тома Сойера. Твен М.",
+    "image": "https://www.moscowbooks.ru/image/book/751/w600/i751024.jpg",
+    "local": "/covers/editions/799bf35a966712ab.jpg"
+  },
+  {
+    "name": "Робинзон Крузо",
+    "author": "Даниель Дефо",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1135247/",
+    "title": "Робинзон Крузо. Дефо Д.",
+    "image": "https://www.moscowbooks.ru/image/book/767/w600/i767610.jpg",
+    "local": "/covers/editions/9830ff3fdc7a26c9.jpg"
+  },
+  {
+    "name": "Путешествия Гулливера",
+    "author": "Джонатан Свифт",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1063396/",
+    "title": "Путешествия Гулливера. Свифт Дж.",
+    "image": "https://www.moscowbooks.ru/image/book/714/w600/i714911.jpg",
+    "local": "/covers/editions/edd966e58bb89900.jpg"
+  },
+  {
+    "name": "Остров сокровищ",
+    "author": "Роберт Льюис Стивенсон",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1019453/",
+    "title": "Остров сокровищ. Стивенсон Р. Л.",
+    "image": "https://www.moscowbooks.ru/image/book/684/w600/i684784.jpg",
+    "local": "/covers/editions/cb02c0072196038d.jpg"
+  },
+  {
+    "name": "Портрет Дориана Грея",
+    "author": "Оскар Уайльд",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1163953/",
+    "title": "Портрет Дориана Грея. Уайльд О.",
+    "image": "https://www.moscowbooks.ru/image/book/789/w600/i789760.jpg",
+    "local": "/covers/editions/32d0e4af8b42f8d1.jpg"
+  },
+  {
+    "name": "Мартин Иден",
+    "author": "Джек Лондон",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1250072/",
+    "title": "Мартин Иден. Лондон Дж.",
+    "image": "https://www.moscowbooks.ru/image/book/856/w600/i856206.jpg",
+    "local": "/covers/editions/a697f2ad9f1cf74b.jpg"
+  },
+  {
+    "name": "Сто лет одиночества",
+    "author": "Габриэль Гарсиа Маркес",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1046369/",
+    "title": "Сто лет одиночества. Гарсиа Маркес Г.",
+    "image": "https://www.moscowbooks.ru/image/book/702/w600/i702310.jpg",
+    "local": "/covers/editions/5246c4fa9ec7b760.jpg"
+  },
+  {
+    "name": "Любовь во время чумы",
+    "author": "Габриэль Гарсиа Маркес",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/810408/",
+    "title": "Любовь во время чумы. Гарсиа Маркес Г.",
+    "image": "https://www.moscowbooks.ru/image/book/505/w600/i505962.jpg",
+    "local": "/covers/editions/4445f31cdcaa63b5.jpg"
+  },
+  {
+    "name": "1984",
+    "author": "Джордж Оруэлл",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1063392/",
+    "title": "1984. Оруэлл Д.",
+    "image": "https://www.moscowbooks.ru/image/book/714/w600/i714896.jpg",
+    "local": "/covers/editions/09166300599960cf.jpg"
+  },
+  {
+    "name": "Скотный двор",
+    "author": "Джордж Оруэлл",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1108270/",
+    "title": "Скотный двор. Оруэлл Д.",
+    "image": "https://www.moscowbooks.ru/image/book/748/w600/i748068.jpg",
+    "local": "/covers/editions/b5630f09c7bd733d.jpg"
+  },
+  {
+    "name": "О дивный новый мир",
+    "author": "Олдос Хаксли",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1147782/",
+    "title": "О дивный новый мир. Хаксли О.",
+    "image": "https://www.moscowbooks.ru/image/book/777/w600/i777150.jpg",
+    "local": "/covers/editions/b9ee4a1e8c262d88.jpg"
+  },
+  {
+    "name": "451 градус по Фаренгейту",
+    "author": "Рэй Брэдбери",
+    "category": "Зарубежные авторы",
+    "page": "https://eksmo.ru/book/451-gradus-po-farengeytu-il-a-simanchuka-ITD1281246/",
+    "title": "Книга 451 градус по Фаренгейту (ил А Симанчука) Рэй Брэдбери - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-169471-5 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001281246/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/fc088800f0a54778.jpg"
+  },
+  {
+    "name": "Убить пересмешника",
+    "author": "Харпер Ли",
+    "category": "Зарубежные авторы",
+    "page": "https://ast.ru/book/ubit-peresmeshnika-903191/",
+    "title": "«Убить пересмешника…» Ли Харпер - описание книги | Neoclassic проза | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000903191/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/472b364d6101d3ea.jpg"
+  },
+  {
+    "name": "Над пропастью во ржи",
+    "author": "Джером Дэвид Сэлинджер",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1256845/",
+    "title": "Над пропастью во ржи. Сэлинджер Дж. Д.",
+    "image": "https://www.moscowbooks.ru/image/book/860/w600/i860977.jpg",
+    "local": "/covers/editions/037d0ea9a84dcf16.jpg"
+  },
+  {
+    "name": "Великий Гэтсби",
+    "author": "Фрэнсис Скотт Фицджеральд",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1037991/",
+    "title": "Великий Гэтсби. Фицджеральд Ф. С.",
+    "image": "https://www.moscowbooks.ru/image/book/708/w600/i708795.jpg",
+    "local": "/covers/editions/462375290f2f98af.jpg"
+  },
+  {
+    "name": "Старик и море",
+    "author": "Эрнест Хемингуэй",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1190351/",
+    "title": "Старик и море. Острова и море. Хемингуэй Э.",
+    "image": "https://www.moscowbooks.ru/image/book/810/w600/i810280.jpg",
+    "local": "/covers/editions/0897a5da8dc73b40.jpg"
+  },
+  {
+    "name": "По ком звонит колокол",
+    "author": "Эрнест Хемингуэй",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1185249/",
+    "title": "По ком звонит колокол. Пятая колонна. Хемингуэй Э.",
+    "image": "https://www.moscowbooks.ru/image/book/806/w600/i806286.jpg",
+    "local": "/covers/editions/d483c1c7a63e37fd.jpg"
+  },
+  {
+    "name": "На Западном фронте без перемен",
+    "author": "Эрих Мария Ремарк",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/778555/",
+    "title": "На Западном фронте без перемен. Ремарк Э. М.",
+    "image": "https://www.moscowbooks.ru/image/book/486/w600/i486314.jpg",
+    "local": "/covers/editions/193861a9b002947a.jpg"
+  },
+  {
+    "name": "Три товарища",
+    "author": "Эрих Мария Ремарк",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/927546/",
+    "title": "Три товарища. Ремарк Э. М.",
+    "image": "https://www.moscowbooks.ru/image/book/601/w600/i601785.jpg",
+    "local": "/covers/editions/0ec27798cef5e67b.jpg"
+  },
+  {
+    "name": "Процесс",
+    "author": "Франц Кафка",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1207755/",
+    "title": "Процесс. Кафка Ф.",
+    "image": "https://www.moscowbooks.ru/image/book/823/w600/i823265.jpg",
+    "local": "/covers/editions/25714bf792cb5cd3.jpg"
+  },
+  {
+    "name": "Превращение",
+    "author": "Франц Кафка",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1075375/",
+    "title": "Превращение. Кафка Ф.",
+    "image": "https://www.moscowbooks.ru/image/book/723/w600/i723672.jpg",
+    "local": "/covers/editions/935d0e9ce425a255.jpg"
+  },
+  {
+    "name": "Посторонний",
+    "author": "Альбер Камю",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1076254/",
+    "title": "Посторонний. Камю А.",
+    "image": "https://www.moscowbooks.ru/image/book/724/w600/i724375.jpg",
+    "local": "/covers/editions/831b5537cfe36268.jpg"
+  },
+  {
+    "name": "Имя розы",
+    "author": "Умберто Эко",
+    "category": "Зарубежные авторы",
+    "page": "https://ast.ru/book/imya-rozy-018056/",
+    "title": "«Имя розы» Эко Умберто - описание книги | Весь Умберто Эко | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/AST000000000018056/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/2733d0721217e535.jpg"
+  },
+  {
+    "name": "Властелин колец",
+    "author": "Джон Рональд Руэл Толкин",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/1035184/",
+    "title": "Властелин Колец. Том 1. Хранители Кольца. Толкин Дж. Р. Р.",
+    "image": "https://www.moscowbooks.ru/image/book/694/w600/i694450.jpg",
+    "local": "/covers/editions/45d58fae0c55cea0.jpg"
+  },
+  {
+    "name": "Хоббит, или Туда и обратно",
+    "author": "Джон Рональд Руэл Толкин",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/712865/",
+    "title": "Хоббит, или Туда и обратно. Толкин Дж. Р. Р.",
+    "image": "https://www.moscowbooks.ru/image/book/447/w600/i447018.jpg",
+    "local": "/covers/editions/9bd13ba8eb1c58a2.jpg"
+  },
+  {
+    "name": "Гарри Поттер и философский камень",
+    "author": "Джоан Роулинг",
+    "category": "Зарубежные авторы",
+    "page": "https://www.moscowbooks.ru/book/726985/",
+    "title": "Гарри Поттер и Философский камень. Роулинг Дж. К.",
+    "image": "https://www.moscowbooks.ru/image/book/454/w600/i454685.jpg",
+    "local": "/covers/editions/48fa9487c3444084.jpg"
+  },
+  {
+    "name": "История",
+    "author": "Геродот",
+    "category": "История",
+    "page": "https://ast.ru/book/istoriya-830345/",
+    "title": "«История» Геродот - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000830345/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/02d6be5db0ab09cb.jpg"
+  },
+  {
+    "name": "История Пелопоннесской войны",
+    "author": "Фукидид",
+    "category": "История",
+    "page": "https://ast.ru/book/istoriya-867083/",
+    "title": "«История» Фукидид - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000867083/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/223fe0e1e3cf0b7f.jpg"
+  },
+  {
+    "name": "Анабасис",
+    "author": "Ксенофонт",
+    "category": "История",
+    "page": "https://ast.ru/book/anabasis-867748/",
+    "title": "«Анабасис» Ксенофонт - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000867748/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/a77aec3489eb4730.jpg"
+  },
+  {
+    "name": "Всеобщая история",
+    "author": "Полибий",
+    "category": "История",
+    "page": "https://urss.ru/cgi-bin/db.pl?blang=ru&id=241888&lang=Ru&page=Book",
+    "title": "Книга Полибий \"Всеобщая история в 40 книгах в 3-х томах\" 1994 | купить в URSS.ru",
+    "image": "https://urss.ru/covers500/71442.jpg",
+    "local": "/covers/editions/a6d9641459e515a1.jpg"
+  },
+  {
+    "name": "Сравнительные жизнеописания",
+    "author": "Плутарх",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/450131/",
+    "title": "Сравнительные жизнеописания. Плутарх Л. М.",
+    "image": "https://www.moscowbooks.ru/image/book/276/w600/i276543.jpg",
+    "local": "/covers/editions/df28c768fbdfa233.jpg"
+  },
+  {
+    "name": "История Рима от основания города",
+    "author": "Тит Ливий",
+    "category": "История",
+    "page": "https://ast.ru/book/istoriya-rima-ot-osnovaniya-goroda-855466/",
+    "title": "«История Рима от основания Города» Ливий Тит - описание книги | История в одном томе | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000855466/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/651481ad22d0e1e9.jpg"
+  },
+  {
+    "name": "Жизнь двенадцати цезарей",
+    "author": "Гай Светоний Транквилл",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/1057177/",
+    "title": "Жизнь двенадцати цезарей. Светоний Г. Т.",
+    "image": "https://www.moscowbooks.ru/image/book/710/w600/i710482.jpg",
+    "local": "/covers/editions/ce8a393db71cf26a.jpg"
+  },
+  {
+    "name": "Записки о Галльской войне",
+    "author": "Гай Юлий Цезарь",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/1114265/",
+    "title": "Записки о Галльской войне. Цезарь Г. Ю.",
+    "image": "https://www.moscowbooks.ru/image/book/752/w600/i752123.jpg",
+    "local": "/covers/editions/77a43699a98dbd51.jpg"
+  },
+  {
+    "name": "История упадка и разрушения Римской империи",
+    "author": "Эдуард Гиббон",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/835610/",
+    "title": "История упадка и разрушения Римской империи. В 7 томах. Репринтное издание оригинала 1883–1886 годов. Гиббон Э.",
+    "image": "https://www.moscowbooks.ru/image/book/525/w600/i525084.jpg",
+    "local": "/covers/editions/39829f5d42be18a6.jpg"
+  },
+  {
+    "name": "История государства Российского",
+    "author": "Николай Карамзин",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/1088533/",
+    "title": "История государства Российского. Карамзин Н. М.",
+    "image": "https://www.moscowbooks.ru/image/book/733/w600/i733123.jpg",
+    "local": "/covers/editions/1b27d34866e2a81a.jpg"
+  },
+  {
+    "name": "История России с древнейших времён",
+    "author": "Сергей Соловьёв",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/776618/",
+    "title": "История России с древнейших времен. Соловьев С. М.",
+    "image": "https://www.moscowbooks.ru/image/book/485/w600/i485279.jpg",
+    "local": "/covers/editions/8ae3e2299c11a1bf.jpg"
+  },
+  {
+    "name": "Курс русской истории",
+    "author": "Василий Ключевский",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/857334/",
+    "title": "Курс русской истории. В 5 томах. Репринтное издание оригинала 1906–1921 гг.. Ключевский В. О.",
+    "image": "https://www.moscowbooks.ru/image/book/578/w600/i578409.jpg",
+    "local": "/covers/editions/7c3a1aee78724925.jpg"
+  },
+  {
+    "name": "История Российская",
+    "author": "Василий Татищев",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/1097288/",
+    "title": "История Российская. В 5 томах (6 книгах). Татищев В. Н.",
+    "image": "https://www.moscowbooks.ru/image/book/863/w600/i863043.jpg",
+    "local": "/covers/editions/4a74145be0190fb7.jpg"
+  },
+  {
+    "name": "Россия в 1839 году",
+    "author": "Астольф де Кюстин",
+    "category": "История",
+    "page": "https://knigaplus.ru/katalog/books/history/istoriya_rossii/rossiya_v_1839_godu_kniga_kommentariev_k_knige_rossiya_v_1839_godu_8498/",
+    "title": "Книга Россия в 1839 году + книга комментариев к книге 'Россия в 1839 году' Кюстин Астольф де Купить 978-5-901805-34-3 в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/84/rossiya_v_1839_godu_kniga_kommentariev_k_knige_rossiya_v_1839_godu_8498.jpeg",
+    "local": "/covers/editions/5b0dc56c49fca5f3.jpg"
+  },
+  {
+    "name": "Былое и думы",
+    "author": "Александр Герцен",
+    "category": "История",
+    "page": "https://ast.ru/book/byloe-i-dumy-detskaya-i-universitet-tyurma-i-ssylka-865130/",
+    "title": "«Былое и думы. Детская и университет. Тюрьма и ссылка» Герцен Александр Иванович - описание книги | Русская классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000865130/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/b8be86b81e2e0832.jpg"
+  },
+  {
+    "name": "Пётр Первый",
+    "author": "Николай Павленко",
+    "category": "История",
+    "page": "https://www.labirint.ru/books/518267/",
+    "title": "Книга: Петр Первый - Николай Павленко. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/518267/cover.jpg/484-0",
+    "local": "/covers/editions/68d782028dc8a417.webp"
+  },
+  {
+    "name": "Екатерина Великая",
+    "author": "Николай Павленко",
+    "category": "История",
+    "page": "https://www.litres.ru/book/nikolay-pavlenko/ekaterina-velikaya-71043103/",
+    "title": "Екатерина Великая Николай Павленко Проспект – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/71043103.webp",
+    "local": "/covers/editions/73d4ab4697d567ad.webp"
+  },
+  {
+    "name": "Наполеон",
+    "author": "Евгений Тарле",
+    "category": "История",
+    "page": "https://ast.ru/book/napoleon-027165/?ast_utm=book_see_also",
+    "title": "«Наполеон» Тарле Евгений Викторович - описание книги | Тарле(эконом) | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/AST000000000027165/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/d38727789bf3f0ba.jpg"
+  },
+  {
+    "name": "Нашествие Наполеона на Россию",
+    "author": "Евгений Тарле",
+    "category": "История",
+    "page": "https://www.litres.ru/book/evgeniy-viktorovich-tarle/nashestvie-napoleona-na-rossiu-38499496/",
+    "title": "«Нашествие Наполеона на Россию» Евгений Викторович Тарле – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/38499496.webp",
+    "local": "/covers/editions/2222ef0d24c99e09.webp"
+  },
+  {
+    "name": "Крымская война",
+    "author": "Евгений Тарле",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/1185420/",
+    "title": "Крымская война. Том 1. Тарле Е. В.",
+    "image": "https://www.moscowbooks.ru/image/book/806/w600/i806477.jpg",
+    "local": "/covers/editions/463af7f4c318e87d.jpg"
+  },
+  {
+    "name": "История Французской революции",
+    "author": "Томас Карлейль",
+    "category": "История",
+    "page": "https://knigaplus.ru/katalog/books/antiques/history/istoriya_francuzskoj_revolyucii_1000211/",
+    "title": "Книга История Французской революции Блосъ В Купить книгу в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/1000/istoriya_francuzskoj_revolyucii_1000211.jpeg",
+    "local": "/covers/editions/8c03c8c605c38bda.jpg"
+  },
+  {
+    "name": "Старый порядок и революция",
+    "author": "Алексис де Токвиль",
+    "category": "История",
+    "page": "https://www.litres.ru/book/aleksis-de-tokvil/staryy-poryadok-i-revoluciya-55104232/",
+    "title": "Старый порядок и Революция Алексис де Токвиль Социум Интермедиатор – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/55104232.webp",
+    "local": "/covers/editions/f7183dc424c0d57f.webp"
+  },
+  {
+    "name": "Апология истории, или Ремесло историка",
+    "author": "Марк Блок",
+    "category": "История",
+    "page": "https://knigaplus.ru/katalog/books/philosophy/novejshee/apologiya_istorii_ili_remeslo_istorika_1019532/",
+    "title": "Книга Апология истории или Ремесло историка Блок Марк Купить в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/1019/apologiya_istorii_ili_remeslo_istorika_1019532.jpeg",
+    "local": "/covers/editions/3940323ee5d2d4a2.jpg"
+  },
+  {
+    "name": "Короли-чудотворцы",
+    "author": "Марк Блок",
+    "category": "История",
+    "page": "https://www.litres.ru/book/mark-blok/koroli-chudotvorcy-ocherk-predstavleniy-o-sverhestestvennom-hara-5003254/",
+    "title": "«Короли-чудотворцы. Очерк представлений о сверхъестественном характере королевской власти, распространенных преимущественно во Франции и в Англии» Марк Блок – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/5003254.webp",
+    "local": "/covers/editions/7d22024c095a6d2d.webp"
+  },
+  {
+    "name": "Феодальное общество",
+    "author": "Марк Блок",
+    "category": "История",
+    "page": "https://knigaplus.ru/katalog/books/history/srednie_veka/feodal_noe_obwestvo_32612/",
+    "title": "Книга Феодальное общество Блок Марк Купить книгу в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/32/feodal_noe_obwestvo_32612.jpeg",
+    "local": "/covers/editions/0aa0c7206577d7ec.jpg"
+  },
+  {
+    "name": "Средиземное море и средиземноморский мир в эпоху Филиппа II",
+    "author": "Фернан Бродель",
+    "category": "История",
+    "page": "https://www.litres.ru/book/fernan-brodel/sredizemnoe-more-i-sredizemnomorskiy-mir-v-epohu-filippa-ii-5707086/",
+    "title": "«Средиземное море и средиземноморский мир в эпоху Филиппа II. Часть 1. Роль среды» Фернан Бродель – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/5707086.webp",
+    "local": "/covers/editions/66ba12858989db5c.webp"
+  },
+  {
+    "name": "Материальная цивилизация, экономика и капитализм, XV–XVIII вв.",
+    "author": "Фернан Бродель",
+    "category": "История",
+    "page": "https://www.vesmirbooks.ru/book/5777703453/",
+    "title": "Материальная цивилизация, экономика и капитализм, ХV–ХVIII вв. Т.1. Структуры повседневности: возможное и невозможное - Издательство Весь Мир",
+    "image": "https://www.vesmirbooks.ru/upload/iblock/d52/500202.jpg",
+    "local": "/covers/editions/63b9f96d08ead783.jpg"
+  },
+  {
+    "name": "Цивилизация средневекового Запада",
+    "author": "Жак Ле Гофф",
+    "category": "История",
+    "page": "https://www.labirint.ru/books/935193/",
+    "title": "Книга: Цивилизация средневекового запада - Гофф Ле. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/935193/cover.jpg/484-0",
+    "local": "/covers/editions/71284af7ca4d8db9.webp"
+  },
+  {
+    "name": "Осень Средневековья",
+    "author": "Йохан Хёйзинга",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/50020631/",
+    "title": "Осень Средневековья. Хёйзинга Й.",
+    "image": "https://www.moscowbooks.ru/image/book/637/w600/i637467.jpg",
+    "local": "/covers/editions/3d648ca13b667f6d.jpg"
+  },
+  {
+    "name": "Культура Италии в эпоху Возрождения",
+    "author": "Якоб Буркхардт",
+    "category": "История",
+    "page": "https://knigaplus.ru/katalog/books/history/vsemirnaya/kul_tura_italii_v_epohu_vozrozhdeniya_26809/",
+    "title": "Книга Культура Италии в эпоху Возрождения Буркхардт Якоб Купить книгу в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/26/kul_tura_italii_v_epohu_vozrozhdeniya_26809.jpeg",
+    "local": "/covers/editions/9de70711e9cb7453.jpg"
+  },
+  {
+    "name": "Постижение истории",
+    "author": "Арнольд Тойнби",
+    "category": "История",
+    "page": "https://libcat.ru/knigi/nauka-i-obrazovanie/istoriya/12457-arnold-tojnbi-postizhenie-istorii.html",
+    "title": "Арнольд Тойнби - Постижение истории - LibCat",
+    "image": "https://libcat.ru/books/12457/arnold-tojnbi-postizhenie-istorii.webp",
+    "local": "/covers/editions/6cbcd53ff530bda9.webp"
+  },
+  {
+    "name": "Идея истории",
+    "author": "Робин Джордж Коллингвуд",
+    "category": "История",
+    "page": "https://urss.ru/cgi-bin/db.pl?blang=ru&id=59142&lang=Ru&page=Book",
+    "title": "Книга Коллингвуд Р.Дж. \"Идея истории. Автобиография. Пер. с англ.\" 1980 | купить в URSS.ru",
+    "image": "https://urss.ru/covers_ru/59142.gif",
+    "local": "/covers/editions/1bb8a9e005315bd5.gif"
+  },
+  {
+    "name": "Век капитала. 1848–1875",
+    "author": "Эрик Хобсбаум",
+    "category": "История",
+    "page": "https://na5ballov.pro/lib/evropa/1307-hobsbaum-e-vek-kapitala-1848-1875.html",
+    "title": "Хобсбаум Э. Век капитала. 1848-1875",
+    "image": "http://na5ballov.pro/uploads/posts/2015-08/thumbs/1439652920_0361043.jpg",
+    "local": "/covers/editions/692a2aca5684b4fd.jpg"
+  },
+  {
+    "name": "Век империи. 1875–1914",
+    "author": "Эрик Хобсбаум",
+    "category": "История",
+    "page": "https://tru-cap.livejournal.com/18008.html",
+    "title": "\"Век империи. 1875-1914\" Эрика Хобсбаума - tru_cap",
+    "image": "http://ic.pics.livejournal.com/tru_cap/50756171/29891/29891_original.jpg",
+    "local": "/covers/editions/80aaa368306b5d34.jpg"
+  },
+  {
+    "name": "Эпоха крайностей. Короткий двадцатый век. 1914–1991",
+    "author": "Эрик Хобсбаум",
+    "category": "История",
+    "page": "https://www.litres.ru/book/erik-hobsbaum/epoha-kraynostey-korotkiy-dvadcatyy-vek-1914-1991-56173993/",
+    "title": "Эпоха крайностей. Короткий двадцатый век (1914–1991) Эрик Хобсбаум Corpus (АСТ) Corpus (АСТ) – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/56173993.webp",
+    "local": "/covers/editions/a36b30b69c6433a8.webp"
+  },
+  {
+    "name": "История Европы",
+    "author": "Норман Дэвис",
+    "category": "История",
+    "page": "https://knigipoistorii.livejournal.com/380620.html",
+    "title": "ДЭВИС Н. ИСТОРИЯ ЕВРОПЫ - knigipoistorii - LiveJournal",
+    "image": "https://ic.pics.livejournal.com/knigipoistorii/86875804/385844/385844_original.jpg",
+    "local": "/covers/editions/fdf40e0536438484.jpg"
+  },
+  {
+    "name": "Августовские пушки",
+    "author": "Барбара Такман",
+    "category": "История",
+    "page": "https://ast.ru/book/avgustovskie-pushki-853766/",
+    "title": "«Августовские пушки» Такман Барбара - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000853766/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/22b4f32f81a48393.jpg"
+  },
+  {
+    "name": "Вторая мировая война",
+    "author": "Уинстон Черчилль",
+    "category": "История",
+    "page": "https://www.moscowbooks.ru/book/932524/",
+    "title": "Вторая мировая война. В 6 томах. В 3 книгах. Черчилль У. С.",
+    "image": "https://www.moscowbooks.ru/image/book/606/w600/i606158.jpg",
+    "local": "/covers/editions/debbe547aee5b2c9.jpg"
+  },
+  {
+    "name": "Взлёт и падение Третьего рейха",
+    "author": "Уильям Ширер",
+    "category": "История",
+    "page": "https://ast.ru/book/vzlet-i-padenie-tretego-reykha-719621/",
+    "title": "«Взлет и падение Третьего Рейха» Ширер У. - описание книги | История в одном томе | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000719621/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/474ade874f304435.jpg"
+  },
+  {
+    "name": "История русской революции",
+    "author": "Лев Троцкий",
+    "category": "История",
+    "page": "https://urss.ru/cgi-bin/db.pl?blang=ru&id=235306&lang=Ru&page=Book",
+    "title": "Книга Троцкий Л.Д. \"История русской революции. Избранные сочинения\" 2023 | купить в URSS.ru | ISBN 978-5-534-05537-5",
+    "image": "https://urss.ru/covers_max/235306.jpg",
+    "local": "/covers/editions/ad03f5545dac6bed.jpg"
+  },
+  {
+    "name": "Происхождение тоталитаризма",
+    "author": "Ханна Арендт",
+    "category": "История",
+    "page": "https://knigaplus.ru/katalog/books/philosophy/novejshee/istoki_totalitarizma_45152/",
+    "title": "Происхождение тоталитаризма",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/45/istoki_totalitarizma_45152.jpeg",
+    "local": "/covers/editions/f15717a303996460.jpg"
+  },
+  {
+    "name": "Дорога к несвободе",
+    "author": "Тимоти Снайдер",
+    "category": "История",
+    "page": "https://ast.ru/book/doroga-k-nesvobode-843654/",
+    "title": "«Дорога к несвободе» Снайдер Тимоти - описание книги | Corpus.[historia] | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000843654/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/1da69006cdc08c61.jpg"
+  },
+  {
+    "name": "Шёлковые пути",
+    "author": "Питер Франкопан",
+    "category": "История",
+    "page": "https://eksmo.ru/book/shelkovyy-put-doroga-tkaney-rabov-idey-i-religiy-evropoket-pereizdanie-ITD1123724/",
+    "title": "Шёлковые пути",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001123724/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/a78a0523819c42dd.jpg"
+  },
+  {
+    "name": "Sapiens. Краткая история человечества",
+    "author": "Юваль Ной Харари",
+    "category": "История",
+    "page": "https://www.labirint.ru/books/498309/",
+    "title": "Книга: SAPIENS. Краткая история человечества - Юваль Харари. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/498309/cover.jpg/484-0",
+    "local": "/covers/editions/b57e386fb6341fea.webp"
+  },
+  {
+    "name": "Ружья, микробы и сталь",
+    "author": "Джаред Даймонд",
+    "category": "История",
+    "page": "https://ast.ru/book/ruzhya-mikroby-i-stal-istoriya-chelovecheskikh-soobshchestv-827641/",
+    "title": "«Ружья, микробы и сталь: история человеческих сообществ» Даймонд Джаред - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000827641/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/ac0d3bee90601d1f.jpg"
+  },
+  {
+    "name": "Государство",
+    "author": "Платон",
+    "category": "Философия",
+    "page": "https://ast.ru/book/gosudarstvo-724531/",
+    "title": "«Государство» Платон - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000724531/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/55f12af9acad21fa.jpg"
+  },
+  {
+    "name": "Пир",
+    "author": "Платон",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/platon/pir-68010452/",
+    "title": "«Пир» Платон – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/68010452.webp",
+    "local": "/covers/editions/f3b8f9114243c44b.webp"
+  },
+  {
+    "name": "Федон",
+    "author": "Платон",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/platon/fedon-30077846/",
+    "title": "Федон Платон РИПОЛ Классик – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/30077846.webp",
+    "local": "/covers/editions/2db21b26d052cb86.webp"
+  },
+  {
+    "name": "Апология Сократа",
+    "author": "Платон",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/apologiya-sokrata-kriton-protagor-ITD508933/",
+    "title": "Книга Апология Сократа Критон Протагор Платон - купить, читать онлайн отзывы и рецензии | ISBN 978-5-699-75842-5 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000000508933/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/70d62c0a26723e3f.jpg"
+  },
+  {
+    "name": "Метафизика",
+    "author": "Аристотель",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/metafizika-ITD1291477/",
+    "title": "Книга Метафизика Аристотель - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-171791-9 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001291477/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/1ae70824df10e906.jpg"
+  },
+  {
+    "name": "Никомахова этика",
+    "author": "Аристотель",
+    "category": "Философия",
+    "page": "https://www.labirint.ru/books/914709/",
+    "title": "Книга: Никомахова этика - Аристотель. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/914709/cover.jpg/484-0",
+    "local": "/covers/editions/1a5f1dcd89677356.webp"
+  },
+  {
+    "name": "Политика",
+    "author": "Аристотель",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/politika-ITD1445167/",
+    "title": "Книга Политика Аристотель - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-222236-8 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001445167/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/5f7a5a1b7028e2c6.jpg"
+  },
+  {
+    "name": "О природе вещей",
+    "author": "Тит Лукреций Кар",
+    "category": "Философия",
+    "page": "https://ast.ru/book/o-prirode-veshchey-864961/",
+    "title": "«О природе вещей» Лукреций Кар Тит - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000864961/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/202e95075bfacb10.jpg"
+  },
+  {
+    "name": "Нравственные письма к Луцилию",
+    "author": "Луций Анней Сенека",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/nravstvennye-pisma-k-lutsiliyu-ITD1491366/",
+    "title": "Книга Нравственные письма к Луцилию Луций Сенека - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-242444-1 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001491366/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/6002b4e51866f356.jpg"
+  },
+  {
+    "name": "Наедине с собой",
+    "author": "Марк Аврелий",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/naedine-s-soboy-komplekt-ITD1477086/",
+    "title": "Книга Наедине с собой Подарочное издание с имитацией мозаики Марк Аврелий - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-235329-1 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001477086/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/6405422e803f1dae.jpg"
+  },
+  {
+    "name": "Беседы",
+    "author": "Эпиктет",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/epiktet/besedy-67587774/",
+    "title": "Беседы Эпиктет Издательство АСТ – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/67587774.webp",
+    "local": "/covers/editions/09348933a1500f33.webp"
+  },
+  {
+    "name": "Исповедь",
+    "author": "Аврелий Августин",
+    "category": "Философия",
+    "page": "https://ast.ru/book/ispoved-897542/",
+    "title": "«Исповедь» Августин Аврелий - описание книги | Эксклюзивная классика (Лучшее) | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000897542/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/eca81e0b38fd9db2.jpg"
+  },
+  {
+    "name": "О граде Божием",
+    "author": "Аврелий Августин",
+    "category": "Философия",
+    "page": "https://ast.ru/book/o-grade-bozhiem-873378/",
+    "title": "«О граде Божием» Августин Аврелий - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000873378/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/43f921409317c8c8.jpg"
+  },
+  {
+    "name": "Сумма теологии",
+    "author": "Фома Аквинский",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/foma-akvinskiy/summa-teologii-43445096/",
+    "title": "Сумма теологии Фома Аквинский Издательство АСТ – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/43445096.webp",
+    "local": "/covers/editions/d60f5cdb452d0cec.webp"
+  },
+  {
+    "name": "Утешение философией",
+    "author": "Боэций",
+    "category": "Философия",
+    "page": "https://ast.ru/book/uteshenie-filosofiey-898917/",
+    "title": "«Утешение философией» Боэций Аниций Манлий Торкват Северин - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000898917/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/9a24387d5c7974ad.jpg"
+  },
+  {
+    "name": "Опыты",
+    "author": "Мишель де Монтень",
+    "category": "Философия",
+    "page": "https://ast.ru/book/opyty-845016/",
+    "title": "«Опыты» Монтень Мишель - описание книги | Всемирное наследие | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000845016/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/84787c11fc6b53d9.jpg"
+  },
+  {
+    "name": "Государь",
+    "author": "Никколо Макиавелли",
+    "category": "Философия",
+    "page": "https://ast.ru/book/gosudar-867530/",
+    "title": "«Государь» Макиавелли Никколо - описание книги | Власть: искусство править миром | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000867530/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/77b55c97db22a12d.jpg"
+  },
+  {
+    "name": "Новый Органон",
+    "author": "Фрэнсис Бэкон",
+    "category": "Философия",
+    "page": "https://ast.ru/book/novyy-organon-opyty-896334/",
+    "title": "«Новый Органон. Опыты» Бэкон Фрэнсис - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000896334/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/d0ddf70fdec01e1d.jpg"
+  },
+  {
+    "name": "Рассуждение о методе",
+    "author": "Рене Декарт",
+    "category": "Философия",
+    "page": "https://ast.ru/book/rassuzhdenie-o-metode-890049/",
+    "title": "«Рассуждение о методе» Декарт Рене - описание книги | Эксклюзивная классика (Лучшее) | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000890049/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/80d4e114c53e39cf.jpg"
+  },
+  {
+    "name": "Этика",
+    "author": "Бенедикт Спиноза",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/etika-ITD1044802/",
+    "title": "Книга Этика Бенедикт Спиноза - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-111565-4 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001044802/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/2fc7493d2fc70803.jpg"
+  },
+  {
+    "name": "Левиафан",
+    "author": "Томас Гоббс",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/leviafan-ITD1309925/",
+    "title": "Книга Левиафан Томас Гоббс - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-176832-4 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001309925/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/39dadd68c0c13f04.jpg"
+  },
+  {
+    "name": "Опыт о человеческом разумении",
+    "author": "Джон Локк",
+    "category": "Философия",
+    "page": "https://urss.ru/cgi-bin/db.pl?blang=ru&id=326315&lang=Ru&page=Book",
+    "title": "Книга Локк Дж. \"Опыт о человеческом разумении\" 2022 | купить в URSS.ru | ISBN 978-5-389-20592-5",
+    "image": "https://urss.ru/covers_max/326315.jpg",
+    "local": "/covers/editions/59d07c5487f301cd.jpg"
+  },
+  {
+    "name": "Трактат о человеческой природе",
+    "author": "Дэвид Юм",
+    "category": "Философия",
+    "page": "https://ast.ru/book/traktat-o-chelovecheskoy-prirode-861456/",
+    "title": "«Трактат о человеческой природе» Юм Давид - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000861456/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/1a4d109db36e0ad3.jpg"
+  },
+  {
+    "name": "Исследование о человеческом познании",
+    "author": "Дэвид Юм",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/devid-um/issledovanie-o-chelovecheskom-razumenii-53833386/",
+    "title": "Исследование о человеческом разумении | Дэвид Юм — философия: основополагающие принципы человеческого мышления и восприятия | скачать книгу на ЛитРес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/53833386.webp",
+    "local": "/covers/editions/63980efb0ef5cbf1.webp"
+  },
+  {
+    "name": "Об общественном договоре",
+    "author": "Жан-Жак Руссо",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/zhan-zhak-russo/ob-obschestvennom-dogovore-ili-principy-politicheskogo-pra-37390304/",
+    "title": "«Об общественном договоре или принципы политического права» Жан-Жак Руссо – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/37390304.webp",
+    "local": "/covers/editions/e0be76bd80039f9f.webp"
+  },
+  {
+    "name": "Критика чистого разума",
+    "author": "Иммануил Кант",
+    "category": "Философия",
+    "page": "https://ast.ru/book/kritika-chistogo-razuma-835807/",
+    "title": "«Критика чистого разума» Кант Иммануил - описание книги | Величайшие люди и мыслители | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000835807/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/485f481e9c9e00ed.jpg"
+  },
+  {
+    "name": "Критика практического разума",
+    "author": "Иммануил Кант",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/kritika-prakticheskogo-razuma-ITD1376569/",
+    "title": "Книга Критика практического разума Иммануил Кант - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-197689-7 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001376569/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/cfb59ea493385494.jpg"
+  },
+  {
+    "name": "Критика способности суждения",
+    "author": "Иммануил Кант",
+    "category": "Философия",
+    "page": "https://ast.ru/book/kritika-sposobnosti-suzhdeniya-851945/",
+    "title": "«Критика способности суждения» Кант Иммануил - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000851945/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/10ca54baa3cd9e3a.jpg"
+  },
+  {
+    "name": "Основоположение к метафизике нравов",
+    "author": "Иммануил Кант",
+    "category": "Философия",
+    "page": "https://abelbooks.ru/product/kant-i-kritika-prakticheskogo-razuma-i-osnovopolozhenie-k-metafizike-nravov-pervoe-russkoe-izdanie/",
+    "title": "Купить Кант, И. Критика практического разума и основоположение к метафизике нравов. Первое русское издание Кант Иммануил, 1879 | Абельбукс",
+    "image": "https://abelbooks.ru/upload/iblock/633/z0a0d510h3nuq2k1mv1u7vvvw5uftwmz/kant_i_kritika_prakticheskogo_razuma_i_osnovopolozhenie_k_metafizike_nravov_pervoe_russkoe_izdanie.webp",
+    "local": "/covers/editions/1bfb6160de0f051c.png"
+  },
+  {
+    "name": "Феноменология духа",
+    "author": "Георг Вильгельм Фридрих Гегель",
+    "category": "Философия",
+    "page": "https://ast.ru/book/fenomenologiya-dukha-885242/",
+    "title": "«Феноменология духа» Гегель Георг - описание книги | Вся история в одном томе | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000885242/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/c6ad1f85877bfca5.jpg"
+  },
+  {
+    "name": "Наука логики",
+    "author": "Георг Вильгельм Фридрих Гегель",
+    "category": "Философия",
+    "page": "https://ast.ru/book/nauka-logiki-870994/",
+    "title": "«Наука логики» Гегель Георг - описание книги | Классика истории и культуры. Лучшее | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000870994/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/cb175eba91f3addd.jpg"
+  },
+  {
+    "name": "Мир как воля и представление",
+    "author": "Артур Шопенгауэр",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/mir-kak-volya-i-predstavlenie-ITD1286438/",
+    "title": "Книга Мир как воля и представление Артур Шопенгауэр - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-170597-8 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001286438/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/a76a43e08dc65767.jpg"
+  },
+  {
+    "name": "Так говорил Заратустра",
+    "author": "Фридрих Ницше",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/tak-govoril-zaratustra-ITD1452265/",
+    "title": "Книга Так говорил Заратустра Книга для всех и ни для кого Фридрих Ницше - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-225323-2 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001452265/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/7d5746bdd004b23d.jpg"
+  },
+  {
+    "name": "По ту сторону добра и зла",
+    "author": "Фридрих Ницше",
+    "category": "Философия",
+    "page": "https://eksmo.ru/book/po-tu-storonu-dobra-i-zla-ITD1279381/",
+    "title": "Книга По ту сторону добра и зла Фридрих Ницше - купить, читать онлайн отзывы и рецензии | ISBN 978-5-04-168873-8 | Эксмо",
+    "image": "https://cdn.eksmo.ru/v2/ITD000000001279381/COVER/cover1__w820.jpg",
+    "local": "/covers/editions/f5b9c635508ea3fb.jpg"
+  },
+  {
+    "name": "К генеалогии морали",
+    "author": "Фридрих Ницше",
+    "category": "Философия",
+    "page": "https://www.litres.ru/book/fridrih-vilgelm-nicshe/genealogiya-morali-69214621/",
+    "title": "Генеалогия морали Фридрих Вильгельм Ницше Азбука – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/69214621.webp",
+    "local": "/covers/editions/9882b376209238b1.webp"
+  },
+  {
+    "name": "Страх и трепет",
+    "author": "Сёрен Кьеркегор",
+    "category": "Философия",
+    "page": "https://knigaplus.ru/katalog/books/philosophy/novoe_vremya/strah_i_trepet_37017/",
+    "title": "Книга Страх и трепет Кьеркегор (Киркегор/Керкегор) Серен Купить 978-5-250-06078-3 в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/37/strah_i_trepet_37017.jpeg",
+    "local": "/covers/editions/b3d0dd5632d74f26.jpg"
+  },
+  {
+    "name": "Бытие и время",
+    "author": "Мартин Хайдеггер",
+    "category": "Философия",
+    "page": "https://www.labirint.ru/books/322244/",
+    "title": "Книга: Бытие и время - Мартин Хайдеггер. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/322244/cover.jpg/484-0",
+    "local": "/covers/editions/206b93df15b6ceb3.webp"
+  },
+  {
+    "name": "Логико-философский трактат",
+    "author": "Людвиг Витгенштейн",
+    "category": "Философия",
+    "page": "https://ast.ru/book/logiko-filosofskiy-traktat-839687/",
+    "title": "«Логико-философский трактат» Витгенштейн Людвиг - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000839687/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/9961c005de64aafe.jpg"
+  },
+  {
+    "name": "Философские исследования",
+    "author": "Людвиг Витгенштейн",
+    "category": "Философия",
+    "page": "https://ast.ru/book/filosofskie-issledovaniya-843421/",
+    "title": "«Философские исследования» Витгенштейн Людвиг - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000843421/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/bd94015d0bd00b74.jpg"
+  },
+  {
+    "name": "Бытие и ничто",
+    "author": "Жан-Поль Сартр",
+    "category": "Философия",
+    "page": "https://ast.ru/book/bytie-i-nichto-882573/",
+    "title": "«Бытие и ничто» Сартр Жан Поль - описание книги | Philosophy - Неоклассика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000882573/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/24c99395dfcd385f.jpg"
+  },
+  {
+    "name": "Миф о Сизифе",
+    "author": "Альбер Камю",
+    "category": "Философия",
+    "page": "https://ast.ru/book/buntuyushchiy-chelovek-mif-o-sizife-857656/",
+    "title": "«Бунтующий человек. Миф о Сизифе» Камю Альбер - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000857656/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/7d455b6fe6ed4c99.jpg"
+  },
+  {
+    "name": "История западной философии",
+    "author": "Бертран Рассел",
+    "category": "Философия",
+    "page": "https://ast.ru/book/istoriya-zapadnoy-filosofii-724572/",
+    "title": "«История западной философии» Рассел Бертран - описание книги | Философия – Neoclassic | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000724572/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/3f27d6aaa693c1c1.jpg"
+  },
+  {
+    "name": "Открытое общество и его враги",
+    "author": "Карл Поппер",
+    "category": "Философия",
+    "page": "https://knigaplus.ru/katalog/books/psihology/otkrytoe_obwestvo_i_ego_vragi_v_dvuh_tomah_tom_1_77504/",
+    "title": "Книга Открытое общество и его враги В двух томах Том 1 Поппер Карл Купить книгу 5-85042-064-9 в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/77/otkrytoe_obwestvo_i_ego_vragi_v_dvuh_tomah_tom_1_77504.jpeg",
+    "local": "/covers/editions/20caa91d3fb8e57f.jpg"
+  },
+  {
+    "name": "Структура научных революций",
+    "author": "Томас Кун",
+    "category": "Философия",
+    "page": "https://ast.ru/book/struktura-nauchnykh-revolyutsiy-851282/",
+    "title": "«Структура научных революций» Кун Т. - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000851282/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/b604969a2d1097ad.jpg"
+  },
+  {
+    "name": "Надзирать и наказывать",
+    "author": "Мишель Фуко",
+    "category": "Философия",
+    "page": "https://www.labirint.ru/books/491126/",
+    "title": "Книга: Надзирать и наказывать. Рождение тюрьмы - Мишель Фуко. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/491126/cover.jpg/484-0",
+    "local": "/covers/editions/5461d000b3c5142a.webp"
+  },
+  {
+    "name": "Я и Ты",
+    "author": "Мартин Бубер",
+    "category": "Философия",
+    "page": "https://ast.ru/book/ya-i-ty-876951/",
+    "title": "«Я и Ты» Бубер Мартин - описание книги | Эксклюзивная классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000876951/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/fd499ab214e925bd.jpg"
+  },
+  {
+    "name": "Смысл творчества",
+    "author": "Николай Бердяев",
+    "category": "Философия",
+    "page": "https://ast.ru/book/smysl-tvorchestva-836101/",
+    "title": "«Смысл творчества» Бердяев Николай Александрович - описание книги | Эксклюзив: Русская классика | Издательство АСТ",
+    "image": "https://cdn.ast.ru/v2/ASE000000000836101/COVER/cover1__w340.jpg",
+    "local": "/covers/editions/516b466eeeda2d3d.jpg"
+  },
+  {
+    "name": "Российское гражданское право. В 2 томах",
+    "author": "Евгений Суханов (отв. ред.)",
+    "category": "Гражданское право",
+    "page": "https://moiknigi.com/book_211657/",
+    "title": "Российское гражданское право: Учебник: В 2 томах. Том 1",
+    "image": "https://moiknigi.com/book_imgs/4/7/47287986_Suhanov_E_A__Rossiyskoe_grazhdanskoe_pravo_Uchebnik_V_2_tomah_Tom_1_big.jpg",
+    "local": "/covers/editions/82ad9f15fc629d02.jpg"
+  },
+  {
+    "name": "Гражданское право. В 3 томах",
+    "author": "Александр Сергеев (ред.)",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/163947/",
+    "title": "Книга: Гражданское право в 3 томах. Том 2. - А. Сергеев. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/163947/cover.jpg/484-0",
+    "local": "/covers/editions/f94f8ed6e91a3961.webp"
+  },
+  {
+    "name": "Гражданское право. Учебник. В 3 томах",
+    "author": "Александр Сергеев, Юрий Толстой (ред.)",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/158110/",
+    "title": "Книга: Гражданское право: Учебник в 3 томах. Том 1 - А. Сергеев. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/158110/cover.jpg/484-0",
+    "local": "/covers/editions/2fe6da7e6588ce7d.webp"
+  },
+  {
+    "name": "Гражданское право. Учебник. В 2 томах",
+    "author": "Борис Гонгало (ред.)",
+    "category": "Гражданское право",
+    "page": "https://www.iprbookshop.ru/books/109973/details",
+    "title": "Гражданское право. В 2 томах. Т.2. Учебник",
+    "image": "https://www.iprbookshop.ru/images/books/miniatures/110/109973.jpg?v=1781490236",
+    "local": "/covers/editions/b742380fb1d0d69a.jpg"
+  },
+  {
+    "name": "Гражданское право. Общая часть",
+    "author": "Владимир Белов",
+    "category": "Гражданское право",
+    "page": "https://obuchalka.org/20240914165293/grajdanskoe-pravo-obschaya-chast-tom-1-belov-v-a-2022.html",
+    "title": "Гражданское право, Общая часть, Том 1, Белов В.А., 2022",
+    "image": "https://obuchalka.org/img/knigi/pravo/1652/165293.jpg",
+    "local": "/covers/editions/7e74d4b8bc7720c7.jpg"
+  },
+  {
+    "name": "Гражданское право. Актуальные проблемы теории и практики",
+    "author": "Владимир Белов (ред.)",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/195730/",
+    "title": "Книга: Гражданское право: актуальные проблемы теории и практики - . Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/195730/cover.jpg/484-0",
+    "local": "/covers/editions/217312b2dfd04d31.webp"
+  },
+  {
+    "name": "Курс гражданского права",
+    "author": "Константин Победоносцев",
+    "category": "Гражданское право",
+    "page": "https://www.directmedia.ru/book-724708-kurs-grajdanskogo-prava/",
+    "title": "Курс гражданского права, Константин Победоносцев — купить и скачать книгу в epub, pdf на Direct-Media",
+    "image": "https://www.directmedia.ru/catalog/media/directmediashop/te/t5/b7f5eea27aeb764a7719022b135ede60ns3d8coa0u.webp",
+    "local": "/covers/editions/4687364f107459ef.webp"
+  },
+  {
+    "name": "Учебник русского гражданского права",
+    "author": "Габриэль Шершеневич",
+    "category": "Гражданское право",
+    "page": "https://www.litres.ru/book/gabriel-shershenevic/uchebnik-russkogo-grazhdanskogo-prava-v-2-t-tom-1-obs-62730238/",
+    "title": "«Учебник русского гражданского права в 2 т. Том 1. Общая часть» Габриэль Феликсович Шершеневич – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/62730238.webp",
+    "local": "/covers/editions/78a3bf99eea6535f.webp"
+  },
+  {
+    "name": "Русское гражданское право",
+    "author": "Дмитрий Мейер",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/951916/",
+    "title": "Книга: Русское гражданское право - Дмитрий Мейер. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/951916/cover.jpg/484-0",
+    "local": "/covers/editions/36a4b5353ab913fe.webp"
+  },
+  {
+    "name": "Система римского права",
+    "author": "Вениамин Хвостов",
+    "category": "Гражданское право",
+    "page": "https://www.litres.ru/book/veniamin-mihaylovich-hvostov/sistema-rimskogo-prava-41337037/",
+    "title": "«Система римского права» Вениамин Михайлович Хвостов – скачать pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/41337037.webp",
+    "local": "/covers/editions/6ea2c0e142ab3d9c.webp"
+  },
+  {
+    "name": "Римское частное право",
+    "author": "Иван Новицкий, Иван Перетерский (ред.)",
+    "category": "Гражданское право",
+    "page": "https://urss.ru/cgi-bin/db.pl?blang=ru&id=34427&lang=Ru&page=Book",
+    "title": "Книга \"Римское частное право\" / Новицкий И.Б. 2004 | купить в URSS.ru | ISBN 5-7975-0154-6",
+    "image": "https://urss.ru/covers_ru/34427.gif",
+    "local": "/covers/editions/92ab7737b586de13.gif"
+  },
+  {
+    "name": "История римского права",
+    "author": "Иосиф Покровский",
+    "category": "Гражданское право",
+    "page": "https://knigaplus.ru/katalog/books/history/drevnyaya_greciya_rim/istoriya_rimskogo_prava_49061/",
+    "title": "Книга История Римского права Покровский И А Купить книгу 5-89740-014-8 в интернет-магазине «Книга Плюс»",
+    "image": "https://knigaplus.ru/images/cms/data/import_files/49/istoriya_rimskogo_prava_49061.jpeg",
+    "local": "/covers/editions/6e2f50e55ff622fb.jpg"
+  },
+  {
+    "name": "Основные проблемы гражданского права",
+    "author": "Иосиф Покровский",
+    "category": "Гражданское право",
+    "page": "https://www.litres.ru/book/pokrovskiy-iosif/osnovnye-problemy-grazhdanskogo-prava-68303587/",
+    "title": "Основные проблемы гражданского права И. А. Покровский Эксмо – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/68303587.webp",
+    "local": "/covers/editions/a7df04a1fbe711de.webp"
+  },
+  {
+    "name": "Договорное право. Книга первая. Общие положения",
+    "author": "Михаил Брагинский, Василий Витрянский",
+    "category": "Гражданское право",
+    "page": "https://readli.net/dogovornoe-pravo-kniga-pervaya-obshhie-polozheniya/",
+    "title": "Договорное право. Книга первая. Общие положения",
+    "image": "https://readli.net/wp-content/uploads/2015/08/CoverNormal11446.jpg",
+    "local": "/covers/editions/53536bcdb15db561.jpg"
+  },
+  {
+    "name": "Договорное право. Книга вторая. Договоры о передаче имущества",
+    "author": "Михаил Брагинский, Василий Витрянский",
+    "category": "Гражданское право",
+    "page": "https://library.bmstu.ru/Catalog/Details/IPRBooks/29313",
+    "title": "Подробное описание документа - Библиотека МГТУ им. Н.Э. Баумана",
+    "image": "https://www.iprbookshop.ru/images/books/miniatures/30/29313.jpg",
+    "local": "/covers/editions/05199ef2e2a132ed.jpg"
+  },
+  {
+    "name": "Договорное право. Книга третья. Договоры о выполнении работ и оказании услуг",
+    "author": "Михаил Брагинский, Василий Витрянский",
+    "category": "Гражданское право",
+    "page": "https://j.twirpx.link/file/21920/",
+    "title": "Брагинский М.И., Витрянский В.В. Договорное право",
+    "image": "https://rc01.twirpx.net/0021/0021920.jpg?t=20090220014027",
+    "local": "/covers/editions/9d3bf4c75d535805.jpg"
+  },
+  {
+    "name": "Договорное право. Книга четвёртая. Договоры о перевозке, буксировке, транспортной экспедиции и иных услугах в сфере транспорта",
+    "author": "Михаил Брагинский, Василий Витрянский",
+    "category": "Гражданское право",
+    "page": "https://www.slideshare.net/slideshow/3-10886653/10886653",
+    "title": "Брагинский, Витрянский - Договорное право, книга 3 | PDF",
+    "image": "https://cdn.slidesharecdn.com/ss_thumbnails/3-120108081328-phpapp01-thumbnail.jpg?width=640&height=640&fit=bounds",
+    "local": "/covers/editions/b64bf11986f393ac.jpg"
+  },
+  {
+    "name": "Избранные труды по гражданскому праву",
+    "author": "Олимпиад Иоффе",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/756482/",
+    "title": "Книга: Избранные труды по гражданскому праву. Из истории цивилистической мысли. Гражданское правоотношение - Олимпиад Иоффе. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/756482/cover.jpg/484-0",
+    "local": "/covers/editions/a7e08b72473b626a.webp"
+  },
+  {
+    "name": "Вещное право",
+    "author": "Евгений Суханов",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/812203/",
+    "title": "Книга: Вещное право. Научно-познавательный очерк - Евгений Суханов. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/812203/cover.jpg/484-0",
+    "local": "/covers/editions/d45bee38263f6947.webp"
+  },
+  {
+    "name": "Собственность в гражданском праве",
+    "author": "Константин Скловский",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/956377/",
+    "title": "Книга: Собственность в гражданском праве - Константин Скловский. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/956377/cover.jpg/484-0",
+    "local": "/covers/editions/b72d744b1b75c2c5.webp"
+  },
+  {
+    "name": "Сделка и её действие",
+    "author": "Константин Скловский",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/617236/",
+    "title": "Книга: Сделка и ее действие. Комментарий главы 9 ГК РФ. Понятие, виды и форма сделок. Недействительность - Константин Скловский. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/617236/cover.jpg/484-0",
+    "local": "/covers/editions/aecb7c98094800c3.webp"
+  },
+  {
+    "name": "Свобода договора и её пределы",
+    "author": "Артём Карапетов, Александр Савельев",
+    "category": "Гражданское право",
+    "page": "https://www.litres.ru/book/artem-georgievich-ka/svoboda-dogovora-i-ee-predely-tom-1-teoreticheskie-is-39992675/",
+    "title": "Свобода договора и ее пределы. Том 1. Теоретические, исторические и политико-правовые основания принципа свободы договора и его ограничений А. Г. Карапетов Статут – купить и скачать книгу в fb2, epub, pdf на Литрес",
+    "image": "https://cdn.litres.ru/pub/c/cover_415/39992675.webp",
+    "local": "/covers/editions/0d3d17f092af7b05.webp"
+  },
+  {
+    "name": "Правовые позиции Высшего Арбитражного Суда Российской Федерации в сфере залогового права",
+    "author": "Роман Бевзенко",
+    "category": "Гражданское право",
+    "page": "https://www.iprbookshop.ru/28998.html",
+    "title": "IPR SMART / Правовые позиции Высшего Арбитражного Суда Российской Федерации в сфере залогового права",
+    "image": "https://www.iprbookshop.ru/images/books/miniatures/29/28998.jpg?v=1781488114",
+    "local": "/covers/editions/16061a5d925916c8.jpg"
+  },
+  {
+    "name": "Обязательство по советскому гражданскому праву",
+    "author": "Михаил Агарков",
+    "category": "Гражданское право",
+    "page": "https://www.prlib.ru/item/1416143",
+    "title": "Ученые труды. Вып. 3. Обязательство по советскому гражданскому праву | Президентская библиотека имени Б.Н. Ельцина",
+    "image": "https://www.prlib.ru/sites/default/files/book_preview/protected/ad1b85cc-968a-4065-8fc5-1342fde1b95e/124850001_doc1.jpg",
+    "local": "/covers/editions/837269dbc6feb8f5.jpg"
+  },
+  {
+    "name": "Осуществление и защита гражданских прав",
+    "author": "Вениамин Грибанов",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/740704/",
+    "title": "Книга: Осуществление и защита гражданских прав - Вениамин Грибанов. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/740704/cover.jpg/484-0",
+    "local": "/covers/editions/187a31fd0fd1f642.webp"
+  },
+  {
+    "name": "Основы банковского права",
+    "author": "Михаил Агарков",
+    "category": "Гражданское право",
+    "page": "https://bibliofan.ru/book/121159",
+    "title": "Основы банковского права. Учение о ценных бумагах / М.М. Агарков (1994) / купить книгу в интернет-магазине Библиофан",
+    "image": "https://i.bibliofan.ru/1017099/conversions/yEv9lGskEMl6sleeKK5Q85Qg2-main.jpg",
+    "local": "/covers/editions/9c9f6f71c4fcc02a.jpg"
+  },
+  {
+    "name": "Труды по гражданскому праву",
+    "author": "Борис Черепахин",
+    "category": "Гражданское право",
+    "page": "https://www.labirint.ru/books/740706/",
+    "title": "Книга: Труды по гражданскому праву - Борис Черепахин. Купить книгу, читать рецензии | Лабиринт",
+    "image": "https://imo10.labirint.ru/books/740706/cover.jpg/484-0",
+    "local": "/covers/editions/bf841a6cf8801261.webp"
+  }
+]
