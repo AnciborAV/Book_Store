@@ -27,7 +27,8 @@ class OrderMailTest {
                 new BigDecimal("24.68"),
                 "RUB",
                 Instant.parse("2026-10-27T12:00:00Z"),
-                Instant.now()
+                Instant.now(),
+                "000123"
             ),
             List.of(
                 new CommerceDto.Item(
@@ -53,7 +54,8 @@ class OrderMailTest {
                 "Книга &lt;img src=x&gt;",
                 "Автор &amp; имя",
                 "С уважением",
-                "27.10.2026 15:00"
+                "27.10.2026 15:00",
+                "000123"
             )
             .doesNotContain("<script>", "<img src=x>");
         assertThat(content.text()).contains(
@@ -99,7 +101,9 @@ class OrderMailTest {
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(
             "buyer@example.com"
         );
-        assertThat(message.getSubject()).contains("Переплёт", "order-123");
+        assertThat(message.getSubject())
+            .contains("Переплёт", "000123")
+            .doesNotContain("order-123");
         message.saveChanges();
         assertThat(message.getContentType()).contains("multipart");
         when(queue.claim("order-123")).thenReturn(false);

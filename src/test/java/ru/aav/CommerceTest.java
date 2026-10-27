@@ -95,6 +95,44 @@ class CommerceTest {
     }
 
     @Test
+    void readableNumbersAreUniqueStableAndSharedWithInventory()
+        throws Exception {
+        selection.quantity(buyer, book, 1);
+        selection.quantity(other, book, 1);
+        UUID key = UUID.randomUUID();
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var first = pool.submit(() -> orders.checkout(buyer, key));
+            var second = pool.submit(() ->
+                orders.checkout(other, UUID.randomUUID())
+            );
+            var a = first.get(10, TimeUnit.SECONDS).order();
+            var b = second.get(10, TimeUnit.SECONDS).order();
+            assertThat(a.orderNumber()).matches("[0-9]{6,}");
+            assertThat(b.orderNumber())
+                .matches("[0-9]{6,}")
+                .isNotEqualTo(a.orderNumber());
+            assertThat(
+                orders.checkout(buyer, key).order().orderNumber()
+            ).isEqualTo(a.orderNumber());
+            assertThat(
+                orders.detail(buyer, a.id()).order().orderNumber()
+            ).isEqualTo(a.orderNumber());
+            mvc.perform(get("/api/orders/" + a.id()).with(user(buyer)))
+                .andExpect(status().isOk())
+                .andExpect(
+                    jsonPath("$.order.orderNumber").value(a.orderNumber())
+                );
+            assertThat(inventory.movements(admin, 0)).anySatisfy(m -> {
+                assertThat(m.orderId()).isEqualTo(a.id());
+                assertThat(m.orderNumber()).isEqualTo(a.orderNumber());
+            });
+        } finally {
+            pool.shutdownNow();
+        }
+    }
+
+    @Test
     void orderNotificationIsAtomicIdempotentAndOwnerProtected()
         throws Exception {
         selection.quantity(buyer, book, 1);

@@ -21,7 +21,7 @@ public final class OrderMailTemplate {
             "Здравствуйте, " +
                 order.buyerName() +
                 "!\n\nСпасибо за заказ в книжном магазине «Переплёт».\nЗаказ № " +
-                order.id() +
+                order.orderNumber() +
                 "\nДата: " +
                 date +
                 " (МСК)\n\n"
@@ -76,13 +76,13 @@ public final class OrderMailTemplate {
         </table></td></tr></table></body></html>
         """.formatted(
             escape(order.buyerName()),
-            escape(order.id()),
+            escape(order.orderNumber()),
             date,
             rows,
             money(order.total())
         );
         return new Content(
-            "Переплёт — ваш заказ № " + order.id(),
+            "Переплёт — ваш заказ № " + order.orderNumber(),
             text.toString(),
             html
         );

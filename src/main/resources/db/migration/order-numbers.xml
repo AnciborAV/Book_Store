@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+ <changeSet id="readable-order-numbers-v1" author="aav">
+  <sql><![CDATA[
+ALTER TABLE store_orders ADD COLUMN order_number bigint GENERATED ALWAYS AS IDENTITY;
+ALTER TABLE store_orders ADD CONSTRAINT store_orders_number_unique UNIQUE (order_number);
+  ]]></sql>
+ </changeSet>
+</databaseChangeLog>

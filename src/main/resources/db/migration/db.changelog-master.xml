@@ -12,4 +12,5 @@
     <include file="/db/migration/user-selection.xml"/>
     <include file="/db/migration/commerce.xml"/>
     <include file="/db/migration/order-mail.xml"/>
+    <include file="/db/migration/order-numbers.xml"/>
 </databaseChangeLog>

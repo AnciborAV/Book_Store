@@ -18,7 +18,8 @@ public final class CommerceDto {
         BigDecimal total,
         String currency,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        String orderNumber
     ) {}
 
     public record Item(
@@ -56,6 +57,7 @@ public final class CommerceDto {
         int reservedAfter,
         String orderId,
         String note,
-        Instant createdAt
+        Instant createdAt,
+        String orderNumber
     ) {}
 }
