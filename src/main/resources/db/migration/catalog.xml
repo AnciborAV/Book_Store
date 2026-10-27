@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="book-categories" author="aav">
+        <addColumn tableName="books"><column name="category" type="varchar(255)"/></addColumn>
+        <createIndex tableName="books" indexName="books_category"><column name="category"/></createIndex>
+    </changeSet>
+    <changeSet id="curated-catalog-250" author="aav">
+        <sqlFile path="catalog-books.sql" relativeToChangelogFile="true" encoding="UTF-8"/>
+    </changeSet>
+    <changeSet id="book-reviews" author="aav">
+        <sql>
+            CREATE TABLE book_reviews (
+                id bigserial PRIMARY KEY,
+                book_id bigint NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+                user_id bigint NOT NULL REFERENCES store_users(id) ON DELETE CASCADE,
+                rating integer NOT NULL CHECK (rating BETWEEN 1 AND 5),
+                body varchar(2000) NOT NULL,
+                created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (book_id, user_id)
+            );
+            CREATE INDEX reviews_book ON book_reviews(book_id);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="440" viewBox="0 0 300 440" role="img" aria-label="Вишнёвый сад">
+<defs><linearGradient id="spine"><stop stop-color="#000" stop-opacity=".4"/><stop offset=".1" stop-color="#fff" stop-opacity=".12"/><stop offset=".18" stop-color="#000" stop-opacity="0"/></linearGradient><pattern id="grain" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".6" fill="#e5d4a0" opacity=".12"/></pattern></defs>
+<rect width="300" height="440" fill="#24445b"/><rect width="300" height="440" fill="url(#grain)"/><rect x="23" y="20" width="257" height="399" fill="none" stroke="#e5d4a0" stroke-opacity=".65"/>
+<path d="M35 29H70M35 29V64M268 29H233M268 29V64M35 410H70M35 410V375M268 410H233M268 410V375" fill="none" stroke="#e5d4a0"/>
+<text x="150" y="52" text-anchor="middle" fill="#e5d4a0" font-family="Georgia,serif" font-size="11"><tspan x="150" dy="0">Антон Чехов</tspan></text>
+<path d="M120 91H180" stroke="#e5d4a0"/>
+<text x="150" y="125" text-anchor="middle" fill="#e5d4a0" font-family="Georgia,serif" font-size="26"><tspan x="150" dy="0">Вишнёвый сад</tspan></text>
+<g fill="none" stroke="#e5d4a0" stroke-width="1.3" opacity=".85" transform="translate(0 0)"><path d="M85 295 Q150 225 215 295 Q150 365 85 295Z"/><path d="M105 295 Q150 250 195 295 Q150 340 105 295Z"/><path d="M150 245V345M95 295H205"/></g>
+<text x="150" y="393" text-anchor="middle" fill="#e5d4a0" font-family="serif" font-size="10" letter-spacing="3">ПЕРЕПЛЁТ</text><rect width="300" height="440" fill="url(#spine)"/>
+</svg>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="personal-favorites-and-cart" author="aav">
+        <sql>
+            CREATE TABLE user_favorites (
+                user_id bigint NOT NULL REFERENCES store_users(id) ON DELETE CASCADE,
+                book_id bigint NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+                PRIMARY KEY (user_id, book_id)
+            );
+            CREATE TABLE cart_items (
+                user_id bigint NOT NULL REFERENCES store_users(id) ON DELETE CASCADE,
+                book_id bigint NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+                quantity integer NOT NULL CHECK (quantity BETWEEN 1 AND 99),
+                PRIMARY KEY (user_id, book_id)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
