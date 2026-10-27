@@ -1,16 +1,17 @@
 package ru.aav.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import org.hibernate.Hibernate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Getter;
+import org.hibernate.Hibernate;
 
 @Getter
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class Entity implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +29,10 @@ public abstract class Entity implements Serializable {
     @Override
     public final boolean equals(Object other) {
         if (this == other) return true;
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false;
+        if (
+            other == null ||
+            Hibernate.getClass(this) != Hibernate.getClass(other)
+        ) return false;
         Entity entity = (Entity) other;
         return getId() != null && getId().equals(entity.getId());
     }
@@ -39,4 +43,3 @@ public abstract class Entity implements Serializable {
         return Hibernate.getClass(this).hashCode();
     }
 }
-

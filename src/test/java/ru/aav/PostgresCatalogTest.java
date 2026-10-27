@@ -6,8 +6,13 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 /** The same HTTP contract must hold for the default PostgreSQL database. */
 class PostgresCatalogTest extends CatalogTest {
-    private static final PostgreSQLContainer<?> DATABASE = new PostgreSQLContainer<>("postgres:15.3");
-    static { DATABASE.start(); }
+
+    private static final PostgreSQLContainer<?> DATABASE =
+        new PostgreSQLContainer<>("postgres:15.3");
+
+    static {
+        DATABASE.start();
+    }
 
     @DynamicPropertySource
     static void postgres(DynamicPropertyRegistry registry) {
