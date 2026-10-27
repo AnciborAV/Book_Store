@@ -59,6 +59,11 @@ function coverImage(book) {
   image.src = covers[book.name] || "/covers/default.svg";
   image.alt = "Обложка: " + book.name + " — " + book.author;
   image.loading = "lazy";
+  image.decoding = "async";
+  image.onerror = () => {
+    image.onerror = null;
+    image.src = "/covers/default.svg";
+  };
   image.width = 240;
   image.height = 350;
   return image;
@@ -360,7 +365,7 @@ async function loadBooks() {
     const data = await request("/books");
     books = data;
     $("#catalog-message").textContent = data.length
-      ? "Редакционная подборка известных произведений. Иллюстрированные обложки — оформление каталога."
+      ? "Найдите свою книгу по названию, автору или разделу."
       : "Каталог пока пуст. Добавьте первую книгу.";
     render();
   } catch (e) {

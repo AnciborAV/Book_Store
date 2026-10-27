@@ -8,26 +8,26 @@
     <script type="module" src="/app.js"></script>
   </head>
   <body>
-    <div class="announcement">
-      МЕСТО, ГДЕ НАЧИНАЮТСЯ НОВЫЕ ИСТОРИИ
-      <span>Независимый книжный магазин · с любовью к чтению</span>
-    </div>
-    <header>
-      <a class="logo" href="/"
-        >▤ <strong>переплёт<span>КНИЖНЫЙ МАГАЗИН</span></strong></a
-      >
-      <nav>
-        <a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a
-        ><a href="#about">О магазине</a>
-      </nav>
-      <button id="open-cart" class="account" aria-label="Открыть корзину">
-        Корзина <span id="cart-count" class="cart-badge">0</span></button
-      ><button id="account" class="account">
-        <span class="avatar">Ч</span><span id="account-label">Войти</span> ↗
-      </button>
-    </header>
-    <main>
-      <section class="hero">
+    <div class="home-masthead">
+      <div class="announcement">
+        МЕСТО, ГДЕ НАЧИНАЮТСЯ НОВЫЕ ИСТОРИИ
+        <span>Независимый книжный магазин · с любовью к чтению</span>
+      </div>
+      <header>
+        <a class="logo" href="/"
+          >▤ <strong>переплёт<span>КНИЖНЫЙ МАГАЗИН</span></strong></a
+        >
+        <nav>
+          <a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a
+          ><a href="#about">О магазине</a>
+        </nav>
+        <button id="open-cart" class="account" aria-label="Открыть корзину">
+          Корзина <span id="cart-count" class="cart-badge">0</span></button
+        ><button id="account" class="account">
+          <span class="avatar">Ч</span><span id="account-label">Войти</span> ↗
+        </button>
+      </header>
+      <section class="hero reading-hero">
         <div class="hero-copy">
           <div class="eyebrow"><span></span> ДЛЯ ТЕХ, КТО ЛЮБИТ ЛИСТАТЬ</div>
           <h1>Ваша следующая<br />любимая <em>история.</em></h1>
@@ -36,38 +36,26 @@
             по одной странице за раз.
           </p>
           <a class="button dark" href="#catalog"
-            >Найти свою книгу <span>↗</span></a
+            >Открыть каталог <span>↗</span></a
           >
           <div class="hero-note">
             <span>✳</span> Большие открытия начинаются с маленькой книжной
             полки.
           </div>
         </div>
-        <div
-          class="hero-art"
-          role="img"
-          aria-label="Иллюстрация: коллекция книг на тёплом зелёном фоне"
-        >
-          <span class="orbit orbit-one"></span
-          ><span class="orbit orbit-two"></span>
-          <div class="art-caption">
-            THE ART OF<br />GETTING LOST<br />IN A BOOK.
-          </div>
-          <div class="standing-book back-book">
-            <small>АНТУАН ДЕ СЕНТ-ЭКЗЮПЕРИ</small><b>Маленький<br />принц</b
-            ><span class="planet">✦</span
-            ><i>самого главного<br />глазами не увидишь</i>
-          </div>
-          <div class="standing-book front-book">
-            <small>МИХАИЛ БУЛГАКОВ</small><b>Мастер<br /><i>и</i> Маргарита</b>
-            <div class="book-window">☾<br /><span>✧</span></div>
-            <footer>РОМАН, КОТОРЫЙ ВСЕГДА С ТОБОЙ</footer>
-          </div>
-          <span class="round-seal">ЕЩЁ ОДНА<br />ГЛАВА<br />↗</span>
-          <div class="shelf"></div>
-          <span class="art-index">01 / КНИГИ ВНЕ ВРЕМЕНИ</span>
+        <div class="reading-room" aria-hidden="true">
+          <img
+            src="/covers/scene/reading-room.jpg"
+            alt=""
+            width="1086"
+            height="1448"
+            fetchpriority="high"
+          />
         </div>
+        <div class="hero-signature">Тихое место. Большие истории.</div>
       </section>
+    </div>
+    <main>
       <section class="values">
         <span>✳ Отобрано с любовью</span><span>▤ Классика и новые имена</span
         ><span>↗ Своя история для каждого</span>

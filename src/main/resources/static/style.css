@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Literata:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap");
 :root {
-  --paper: #faf8f2;
-  --ink: #263c32;
-  --green: #244b3c;
-  --muted: #82877d;
-  --line: #dedfd5;
+  --paper: #1b1916;
+  --ink: #efe6d6;
+  --green: #c7a56d;
+  --muted: #c1b69f;
+  --line: #5a4c38;
   --orange: #d7a369;
 }
 * {
@@ -19,7 +19,8 @@ body {
   color: var(--ink);
   background: var(--paper);
   font-family: "Golos Text", Arial, sans-serif;
-  font-size: 14px;
+  font-size: 1.125rem;
+  line-height: 1.55;
 }
 button,
 input {
@@ -59,13 +60,13 @@ input:focus-visible {
   color: #f0efe3;
   text-align: center;
   padding: 11px;
-  font-size: 9px;
+  font-size: 1rem;
   letter-spacing: 2px;
 }
 .announcement span {
   margin-left: 45px;
   letter-spacing: 0.4px;
-  opacity: 0.65;
+  opacity: 1;
 }
 header {
   max-width: 1320px;
@@ -90,7 +91,7 @@ header {
 .logo strong span {
   display: block;
   font:
-    8px "Golos Text",
+    1rem "Golos Text",
     sans-serif;
   letter-spacing: 3px;
   margin-top: 4px;
@@ -101,7 +102,7 @@ header {
 nav {
   display: flex;
   gap: 32px;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .account {
   display: flex;
@@ -109,7 +110,7 @@ nav {
   gap: 10px;
   background: none;
   border: 0;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .avatar {
   display: inline-flex;
@@ -142,7 +143,7 @@ main {
   padding: 28px 0;
 }
 .eyebrow {
-  font-size: 9px;
+  font-size: 1rem;
   letter-spacing: 2px;
   font-weight: 500;
 }
@@ -172,10 +173,10 @@ h2 em {
 }
 p {
   line-height: 1.85;
-  color: #7d8177;
+  color: #566454;
 }
 .hero-copy p {
-  font-size: 13px;
+  font-size: 1rem;
   margin-bottom: 28px;
 }
 .button {
@@ -186,7 +187,7 @@ p {
   justify-content: space-between;
   gap: 28px;
   align-items: center;
-  font-size: 11px;
+  font-size: 1rem;
 }
 .dark {
   background: var(--green);
@@ -197,8 +198,8 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 9px;
-  color: #8b8b7f;
+  font-size: 1rem;
+  color: #566454;
   margin-top: 30px;
 }
 .hero-note span {
@@ -241,7 +242,7 @@ p {
   position: absolute;
   top: 50px;
   left: 35px;
-  font-size: 9px;
+  font-size: 1rem;
   line-height: 1.5;
   letter-spacing: 2px;
   color: #6e8167;
@@ -258,7 +259,7 @@ p {
   text-align: center;
 }
 .standing-book small {
-  font-size: 6px;
+  font-size: 1rem;
   letter-spacing: 1px;
 }
 .standing-book b {
@@ -312,7 +313,7 @@ p {
   font-size: 26px;
 }
 .front-book footer {
-  font-size: 5px;
+  font-size: 1rem;
   letter-spacing: 1px;
   margin-top: 15px;
 }
@@ -327,7 +328,7 @@ p {
   display: grid;
   place-content: center;
   text-align: center;
-  font-size: 8px;
+  font-size: 1rem;
   letter-spacing: 1px;
   transform: rotate(15deg);
   background: #e9ecd9;
@@ -348,7 +349,7 @@ p {
   position: absolute;
   bottom: 10px;
   left: 30px;
-  font-size: 7px;
+  font-size: 1rem;
   letter-spacing: 2px;
 }
 .values {
@@ -357,7 +358,7 @@ p {
   padding: 24px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  font-size: 11px;
+  font-size: 1rem;
   color: #6c7968;
 }
 .collection {
@@ -374,7 +375,7 @@ h2 {
   margin: 12px 0;
 }
 .collection p {
-  font-size: 12px;
+  font-size: 1rem;
   margin-right: 65px;
 }
 .collection-star {
@@ -407,7 +408,7 @@ h2 {
   outline: none;
   width: 100%;
   padding: 12px 0;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .catalog-tools {
   display: flex;
@@ -424,22 +425,22 @@ h2 {
   border: 0;
   background: none;
   padding: 15px 0;
-  font-size: 11px;
-  color: #8b8e82;
+  font-size: 1rem;
+  color: #566454;
 }
 .tabs button.active {
   border-bottom: 2px solid var(--green);
   color: var(--green);
 }
 .tabs span {
-  font-size: 9px;
+  font-size: 1rem;
   background: #e5e8dd;
   padding: 2px 5px;
   border-radius: 10px;
 }
 .muted {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 1rem;
 }
 .books {
   display: grid;
@@ -479,7 +480,7 @@ h2 {
   transform: rotate(0) translateY(-5px);
 }
 .cover small {
-  font-size: 6px;
+  font-size: 1rem;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -496,7 +497,7 @@ h2 {
   opacity: 0.8;
 }
 .cover-footer {
-  font-size: 6px;
+  font-size: 1rem;
   letter-spacing: 2px;
 }
 .favorite {
@@ -522,15 +523,15 @@ h2 {
   margin: 15px 0 4px;
 }
 .book-card p {
-  font-size: 10px;
+  font-size: 1rem;
   margin: 0;
 }
 .book-meta {
   display: flex;
   justify-content: space-between;
   margin-top: 12px;
-  font-size: 9px;
-  color: #91917e;
+  font-size: 1rem;
+  color: #566454;
 }
 .catalog-bottom {
   display: flex;
@@ -539,14 +540,14 @@ h2 {
   margin-top: 28px;
   border-top: 1px solid var(--line);
   padding-top: 22px;
-  font-size: 11px;
+  font-size: 1rem;
   color: var(--muted);
 }
 .text-button {
   background: none;
   border: 0;
   padding: 12px 0;
-  font-size: 11px;
+  font-size: 1rem;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -565,7 +566,7 @@ h2 {
   font-size: 27px;
 }
 .about p {
-  font-size: 11px;
+  font-size: 1rem;
 }
 .about .button {
   margin-left: auto;
@@ -579,7 +580,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10px;
+  font-size: 1rem;
   color: var(--muted);
 }
 .site-footer .logo {
@@ -612,7 +613,7 @@ form label {
   flex-direction: column;
   gap: 8px;
   margin: 18px 0;
-  font-size: 11px;
+  font-size: 1rem;
 }
 form label[hidden] {
   display: none;
@@ -629,7 +630,7 @@ form .button {
 }
 .form-error {
   color: #aa4736;
-  font-size: 11px;
+  font-size: 1rem;
 }
 .profile-avatar {
   width: 80px;
@@ -647,10 +648,10 @@ form .button {
   padding: 14px 24px;
   display: none;
   z-index: 20;
-  font-size: 12px;
+  font-size: 1rem;
 }
 #catalog-message {
-  font-size: 12px;
+  font-size: 1rem;
 }
 #profile-email {
   overflow-wrap: anywhere;
@@ -702,11 +703,11 @@ form .button {
     font-size: 21px;
   }
   .front-book footer {
-    font-size: 4px;
+    font-size: 1rem;
   }
   .art-caption {
     left: 25px;
-    font-size: 7px;
+    font-size: 1rem;
   }
   .round-seal {
     right: 10px;
@@ -739,7 +740,7 @@ form .button {
 }
 @media (max-width: 600px) {
   .announcement {
-    font-size: 7px;
+    font-size: 1rem;
   }
   .announcement span {
     display: none;
@@ -793,7 +794,7 @@ form .button {
   .values {
     gap: 16px;
     flex-wrap: wrap;
-    font-size: 9px;
+    font-size: 1rem;
     padding: 20px 0;
   }
   .collection {
@@ -804,7 +805,7 @@ form .button {
     font-size: 29px;
   }
   .collection p {
-    font-size: 11px;
+    font-size: 1rem;
   }
   .collection-star {
     top: 70px;
@@ -832,12 +833,12 @@ form .button {
     font-size: 17px;
   }
   .book-card h3 {
-    font-size: 14px;
+    font-size: 1rem;
   }
   .catalog-bottom {
     align-items: start;
     gap: 20px;
-    font-size: 10px;
+    font-size: 1rem;
   }
   .about {
     display: block;
@@ -850,7 +851,7 @@ form .button {
     flex-wrap: wrap;
   }
   .site-footer > span {
-    font-size: 9px;
+    font-size: 1rem;
   }
   h2 {
     font-size: 28px;
@@ -893,7 +894,7 @@ form[hidden],
   border-radius: 24px;
   background: transparent;
   padding: 12px 16px;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .category-chip.active {
   background: var(--green);
@@ -901,11 +902,11 @@ form[hidden],
   border-color: var(--green);
 }
 .sort-label {
-  font-size: 10px;
+  font-size: 1rem;
   color: var(--muted);
 }
 .sort-label select {
-  font-size: 11px;
+  font-size: 1rem;
   margin-left: 6px;
   padding: 7px;
 }
@@ -919,7 +920,7 @@ form[hidden],
   color: white;
   border-radius: 20px;
   padding: 4px 8px;
-  font-size: 11px;
+  font-size: 1rem;
 }
 .cover-button {
   width: 100%;
@@ -934,7 +935,7 @@ form[hidden],
 .catalog-cover {
   height: 216px;
   width: 148px;
-  object-fit: cover;
+  object-fit: contain;
   box-shadow: 7px 9px 16px #19372738;
   border-radius: 2px 5px 5px 2px;
   transform: rotate(-3deg);
@@ -956,7 +957,7 @@ form[hidden],
 .category-label {
   display: block;
   margin-top: 14px;
-  font-size: 9px;
+  font-size: 1rem;
   letter-spacing: 0.6px;
   text-transform: uppercase;
   color: #7d866f;
@@ -978,7 +979,7 @@ form[hidden],
 }
 .small-button {
   padding: 11px 14px;
-  font-size: 11px;
+  font-size: 1rem;
   gap: 8px;
 }
 .pagination {
@@ -987,7 +988,7 @@ form[hidden],
   justify-content: center;
   gap: 24px;
   padding: 30px 0 8px;
-  font-size: 12px;
+  font-size: 1rem;
 }
 .page-button,
 .quantity-button {
@@ -1000,7 +1001,7 @@ form[hidden],
   width: min(760px, calc(100% - 28px));
 }
 .cart-hint {
-  font-size: 12px;
+  font-size: 1rem;
 }
 .cart-row {
   display: flex;
@@ -1023,7 +1024,7 @@ form[hidden],
   margin: 0;
 }
 .cart-row p {
-  font-size: 12px;
+  font-size: 1rem;
   margin: 8px 0;
 }
 .quantity-controls {
@@ -1043,7 +1044,7 @@ form[hidden],
   align-items: center;
   justify-content: space-between;
   margin: 24px 0;
-  font-size: 13px;
+  font-size: 1rem;
 }
 #book-detail {
   display: grid;
@@ -1062,7 +1063,7 @@ form[hidden],
   overflow-wrap: anywhere;
 }
 #book-detail .eyebrow {
-  font-size: 9px;
+  font-size: 1rem;
   line-height: 1.7;
 }
 .reviews-section {
@@ -1074,7 +1075,7 @@ form[hidden],
   font-size: 16px;
 }
 #review-summary {
-  font-size: 12px;
+  font-size: 1rem;
   color: var(--muted);
 }
 .review {
@@ -1090,12 +1091,12 @@ form[hidden],
   display: block;
   color: var(--muted);
   margin-top: 7px;
-  font-size: 10px;
+  font-size: 1rem;
 }
 .review p {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font-size: 13px;
+  font-size: 1rem;
 }
 .review-stars {
   white-space: nowrap;
@@ -1118,13 +1119,13 @@ form[hidden],
     gap: 16px;
   }
   .account {
-    font-size: 11px;
+    font-size: 1rem;
   }
   .categories {
     gap: 7px;
   }
   .category-chip {
-    font-size: 10px;
+    font-size: 1rem;
     padding: 9px 12px;
   }
   .catalog-tools {
@@ -1148,7 +1149,7 @@ form[hidden],
     gap: 0;
   }
   .book-actions .text-button {
-    font-size: 10px;
+    font-size: 1rem;
   }
   #book-detail {
     grid-template-columns: 100px 1fr;
@@ -1163,13 +1164,13 @@ form[hidden],
   }
   #book-detail .button {
     padding: 11px;
-    font-size: 10px;
+    font-size: 1rem;
   }
   .cart-row {
     gap: 16px;
   }
   .cart-row h3 {
-    font-size: 15px;
+    font-size: 1rem;
   }
   .quantity-controls {
     gap: 10px;
@@ -1189,7 +1190,7 @@ form[hidden],
   padding: 12px 16px;
   background: #e9eedf;
   border-left: 3px solid #6b8059;
-  font-size: 12px;
+  font-size: 1rem;
 }
 
 /* Commerce panels keep the catalogue's typography and colour palette. */
@@ -1247,4 +1248,463 @@ form[hidden],
 }
 [hidden] {
   display: none !important;
+}
+
+/* Preserve the complete artwork and lettering of the supplied editions. */
+.standing-book.edition-cover {
+  padding: 0;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Readable interface at the browser's normal zoom, including narrow screens. */
+.announcement {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 32px;
+  padding: 14px 24px;
+  line-height: 1.6;
+  letter-spacing: 0.07em;
+}
+.announcement span {
+  display: inline;
+  margin-left: 0;
+  letter-spacing: 0;
+}
+header {
+  gap: 20px;
+  flex-wrap: wrap;
+}
+nav,
+.account {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+nav {
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+nav a,
+.account {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.account {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.avatar {
+  flex-shrink: 0;
+  height: 40px;
+  width: 40px;
+}
+.eyebrow {
+  letter-spacing: 0.08em;
+}
+.hero-copy p {
+  font-size: 1.125rem;
+}
+.button,
+.text-button,
+.category-chip,
+.tabs button {
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 44px;
+}
+.book-card h3 {
+  font-size: 1.25rem;
+}
+.book-card p,
+.hero-note,
+.muted {
+  line-height: 1.6;
+}
+.tabs {
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+.values {
+  flex-wrap: wrap;
+  gap: 20px;
+}
+#toast {
+  max-width: calc(100vw - 32px);
+  width: max-content;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  nav {
+    order: 4;
+    width: 100%;
+    justify-content: center;
+  }
+  .logo {
+    margin-right: auto;
+  }
+}
+@media (max-width: 600px) {
+  header {
+    gap: 12px 16px;
+  }
+  header > .logo {
+    flex-basis: 100%;
+  }
+  nav {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px 20px;
+  }
+  .announcement {
+    padding: 12px 20px;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .announcement span {
+    display: block;
+  }
+  .hero-art .art-caption,
+  .hero-art .round-seal {
+    display: none;
+  }
+  .catalog-bottom {
+    flex-wrap: wrap;
+  }
+  .book-card h3 {
+    font-size: 1.125rem;
+  }
+  .book-actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* An atmospheric reading room, with navigation on a solid high-contrast surface. */
+.home-masthead {
+  background: #17231e;
+  color: #f8f1e4;
+}
+.home-masthead .announcement {
+  background: #101b16;
+  color: #f3e6cf;
+  border-bottom: 1px solid #b59a6438;
+}
+.home-masthead header {
+  position: relative;
+  z-index: 2;
+  border-color: #e6d8b92b;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.home-masthead nav a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+.home-masthead nav a:hover {
+  color: #efd29d;
+  text-decoration: underline;
+}
+.home-masthead .logo strong span {
+  color: #e6d8bc;
+  letter-spacing: 0.14em;
+}
+.home-masthead .avatar {
+  background: #e7dcc7;
+  color: #23392d;
+}
+.home-masthead .cart-badge {
+  background: #dac19a;
+  color: #18271f;
+  font-weight: 700;
+}
+.reading-hero {
+  max-width: 1320px;
+  margin: 0 auto;
+  min-height: 620px;
+  padding: 68px 48px 76px;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.reading-hero .hero-copy {
+  width: min(650px, 60%);
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+.reading-hero .eyebrow {
+  color: #eed4a5;
+}
+.reading-hero h1 {
+  font-size: clamp(2.8rem, 4.5vw, 4.4rem);
+  line-height: 1.16;
+  margin-top: 28px;
+}
+.reading-hero h1 em {
+  color: #e4c291;
+}
+.reading-hero p {
+  color: #f0e9da;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 510px;
+}
+.reading-hero .dark {
+  background: #e5c593;
+  color: #1b2b22;
+  border-color: #e5c593;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 18px 28px;
+}
+.reading-hero .hero-note {
+  color: #e0d5bf;
+  max-width: 480px;
+  align-items: flex-start;
+}
+.reading-hero .hero-note span {
+  color: #dec08c;
+}
+.reading-room {
+  position: absolute;
+  inset: 0 0 0 43%;
+  z-index: 0;
+}
+.reading-room img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 56%;
+}
+.reading-room::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      #17231e 0%,
+      #17231ed9 12%,
+      #17231e45 40%,
+      transparent 70%
+    ),
+    linear-gradient(0deg, #17231e 0%, transparent 25%);
+}
+.hero-signature {
+  position: absolute;
+  z-index: 1;
+  right: 48px;
+  bottom: 28px;
+  color: #efddbc;
+  font-family: "Literata", Georgia, serif;
+  font-style: italic;
+  font-size: 1.125rem;
+}
+@media (max-width: 850px) {
+  .reading-hero {
+    padding: 54px 24px 72px;
+  }
+  .reading-hero .hero-copy {
+    width: 78%;
+  }
+  .reading-room {
+    left: 30%;
+  }
+  .reading-room::after {
+    background:
+      linear-gradient(90deg, #17231e 0%, #17231ed9 38%, #17231e66 100%),
+      linear-gradient(0deg, #17231e, transparent 50%);
+  }
+}
+@media (max-width: 600px) {
+  .reading-hero {
+    padding: 42px 20px 76px;
+    min-height: 600px;
+    align-items: flex-start;
+    margin: 0;
+  }
+  .reading-hero .hero-copy {
+    width: 100%;
+    padding: 0;
+  }
+  .reading-hero h1 {
+    font-size: clamp(2.6rem, 10vw, 3.4rem);
+  }
+  .reading-hero p {
+    font-size: 1.125rem;
+  }
+  .reading-room {
+    inset: 0;
+  }
+  .reading-room::after {
+    background: #122219d9;
+  }
+  .hero-signature {
+    left: 20px;
+    right: 20px;
+    bottom: 24px;
+  }
+}
+
+/* Shared Dark Academia palette for the catalogue and every shopping dialog. */
+:root {
+  color-scheme: dark;
+  --surface: #29251f;
+  --field: #211e19;
+  --gold: #d6b47d;
+  --gold-ink: #231c13;
+}
+body {
+  background-image: radial-gradient(
+    ellipse at 20% 30%,
+    #63503414,
+    transparent 60%
+  );
+}
+p,
+.hero-note,
+.tabs button,
+.book-meta,
+.book-category,
+.values {
+  color: var(--muted);
+}
+h1 em,
+h2 em {
+  color: var(--gold);
+}
+.button {
+  border-color: #b49a70;
+}
+.dark,
+.category-chip.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--gold-ink);
+  font-weight: 600;
+}
+.category-chip {
+  border-color: #776348;
+}
+.tabs button.active {
+  color: #ecd3a7;
+  border-color: var(--gold);
+}
+.tabs span,
+.status-badge,
+.stock-summary,
+.selection-note,
+.review-card {
+  background: #363024;
+  color: #f2e5ce;
+}
+.selection-note {
+  border-color: var(--gold);
+}
+.about,
+dialog {
+  background: var(--surface);
+}
+.about {
+  border: 1px solid var(--line);
+  padding: 40px;
+}
+form input,
+input,
+select,
+textarea {
+  background: var(--field);
+  color: var(--ink);
+  border-color: #8e7855;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #c1b49c;
+  opacity: 1;
+}
+.search {
+  border-color: #8e7855;
+}
+.cover-button {
+  background: radial-gradient(ellipse at 50% 20%, #514333, #29241d 75%);
+  padding: 28px;
+  border-bottom: 5px solid #67503a;
+  box-shadow: 0 8px 14px #0005;
+}
+.catalog-cover {
+  filter: drop-shadow(6px 8px 7px #0008);
+  box-shadow: none;
+  transform: rotate(-2deg);
+}
+.book-card h3 {
+  color: #f4e8d3;
+  margin-top: 24px;
+}
+.book-price,
+.cart-amount {
+  color: #edcf9a;
+  font-size: 1.25rem;
+}
+.favorite {
+  width: 40px;
+  height: 40px;
+  background: #201e19ed;
+  color: #f2d8aa;
+  border: 1px solid #8e7855;
+}
+.favorite.selected {
+  background: #d6b47d;
+  color: #251c0d;
+}
+.quantity button {
+  border-color: #8e7855;
+}
+.form-error {
+  color: #ffbcad;
+}
+#toast {
+  background: #ead2a7;
+  color: #251d12;
+  border: 1px solid #f6e8cf;
+}
+.cart-badge {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+.commerce-dialog form,
+.order-row {
+  border-color: var(--line);
+}
+dialog::backdrop {
+  background: #080c09cc;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-color: #f4d59c;
+}
+@media (max-width: 600px) {
+  .about {
+    padding: 24px;
+  }
+}
+
+.category-label {
+  color: #cbb790;
+}
+#review-form {
+  background: #302a20;
+}
+.review-stars {
+  color: #e8c17d;
+}
+.quantity-button,
+.page-button {
+  border-color: #8e7855;
+  min-height: 44px;
 }
