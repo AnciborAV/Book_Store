@@ -54,12 +54,13 @@ let context,
   orderPage = 0,
   movementPage = 0,
   adminOrders = false;
+const retryCache = new Map();
 // Persist retry identity across reloads; a network retry must not create another order/receipt.
 function retryKey(kind, fingerprint) {
   const key = "bookstore-" + kind + "-" + context.getUser().email;
-  let saved;
+  let saved = retryCache.get(key);
   try {
-    saved = JSON.parse(sessionStorage.getItem(key) || "null");
+    saved = JSON.parse(sessionStorage.getItem(key) || "null") || saved;
   } catch (_) {}
   if (!saved || saved.fingerprint !== fingerprint) {
     saved = { fingerprint, key: crypto.randomUUID() };
@@ -67,9 +68,11 @@ function retryKey(kind, fingerprint) {
       sessionStorage.setItem(key, JSON.stringify(saved));
     } catch (_) {}
   }
+  retryCache.set(key, saved);
   return saved.key;
 }
 function clearRetry(kind) {
+  retryCache.delete("bookstore-" + kind + "-" + context.getUser().email);
   try {
     sessionStorage.removeItem(
       "bookstore-" + kind + "-" + context.getUser().email,
