@@ -15,4 +15,5 @@ public class Book extends BasicEntity {
 
     private String name;
     private String author;
+    private String category;
 }
