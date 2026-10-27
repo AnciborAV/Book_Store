@@ -16,8 +16,20 @@ jobs:
           java-version: '17'
           cache: maven
       - run: ./mvnw --batch-mode --no-transfer-progress clean verify
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/bookstore-browser" --no-audit --no-fund playwright@1.58.2
+          "$RUNNER_TEMP/bookstore-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify real local application in browser
+        run: PLAYWRIGHT_MODULE="$RUNNER_TEMP/bookstore-browser/node_modules/playwright" node scripts/browser-smoke.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-report
-          path: target/surefire-reports
+          name: verification
+          path: |
+            target/surefire-reports
+            target/browser-screenshots
+            target/browser-server.log

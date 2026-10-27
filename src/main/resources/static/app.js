@@ -1,53 +1,264 @@
 'use strict';
-const $ = s => document.querySelector(s);
-const demo = [
- {id:'demo-1',name:'Мастер и Маргарита',author:'Михаил Булгаков'},
- {id:'demo-2',name:'Маленький принц',author:'Антуан де Сент-Экзюпери'},
- {id:'demo-3',name:'Гордость и предубеждение',author:'Джейн Остин'},
- {id:'demo-4',name:'Тихие дни',author:'Выбор редакции'}
-];
-const palettes=[['#e7eadd','#34584a','#efe0b5','☾'],['#eee3d2','#d7ac74','#443e30','✧'],['#e9e5df','#a16a63','#f8e6d2','❀'],['#e1e7e6','#68878b','#fbefd3','≈']];
-let books=[], user=null, token=null, register=false, filter='all', favorites=new Set();
 
-const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
-function toast(message){$('#toast').textContent=message;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',3500);}
-async function csrf(){const r=await fetch('/api/auth/csrf');if(!r.ok)throw Error('Не удалось подключиться к серверу');token=await r.json();}
-async function request(url,options={}){
- const method=options.method||'GET';const headers=new Headers(options.headers||{});
- if(method!=='GET'){if(!token)await csrf();headers.set(token.headerName,token.token);}
- const r=await fetch(url,{...options,headers});
- if(!r.ok){let message=r.status===401?'Неверная почта или пароль':r.status===409?'Такая запись уже существует':r.status===403?'Сессия обновилась. Повторите действие.':r.status===413?'Файл слишком большой':'Не удалось выполнить запрос';try{const data=await r.json();if(data.detail)message=data.detail;}catch(_){}if(r.status===403){token=null;}throw Error(message);}
- return r.status===204?null:r.headers.get('content-type')?.match(/application\/(?:problem\+)?json/)?r.json():null;
+// Состояние страницы. Пароли и личная полка не сохраняются в localStorage.
+const $ = selector => document.querySelector(selector);
+const palettes = [
+    ['#e7eadd', '#34584a', '#efe0b5', '☾'],
+    ['#eee3d2', '#d7ac74', '#443e30', '✧'],
+    ['#e9e5df', '#a16a63', '#f8e6d2', '❀'],
+    ['#e1e7e6', '#68878b', '#fbefd3', '≈']
+];
+let user = null;
+let csrfToken = null;
+let registerMode = false;
+let favorites = new Set();
+let page = 0;
+let filter = 'all';
+let searchTimer;
+let catalogueRequest = 0;
+let toastTimer;
+
+function element(tag, text, className) {
+    const result = document.createElement(tag);
+    // Пользовательский текст вставляется как текст, а не как HTML.
+    if (text !== undefined) result.textContent = text;
+    if (className) result.className = className;
+    return result;
 }
-function render(){
- const q=$('#search').value.toLocaleLowerCase('ru');
- const visible=books.filter(b=>(b.name+' '+b.author).toLocaleLowerCase('ru').includes(q)&&(filter!=='favorites'||favorites.has(String(b.id))));
- $('#books').replaceChildren();$('#catalog-count').textContent=`Найдено: ${visible.length}`;$('#favorite-count').textContent=favorites.size;
- if(!visible.length)$('#books').append(node('p',filter==='favorites'?'Нажмите на сердечко у книги, чтобы сохранить её в своём аккаунте.':'Книги не найдены. Попробуйте другой запрос.'));
- visible.forEach(b=>{const i=books.indexOf(b)%palettes.length;const [bg,cover,text,symbol]=palettes[i];const card=node('article',undefined,'book-card');card.style.setProperty('--bg',bg);card.style.setProperty('--cover',cover);card.style.setProperty('--text',text);
- const image=node('div',undefined,'book-image'), binding=node('div',undefined,'cover');binding.append(node('small',b.author),node('strong',b.name),node('span',symbol,'cover-symbol'),node('span','ПЕРЕПЛЁТ · КОЛЛЕКЦИЯ','cover-footer'));image.append(binding);
- const saved=favorites.has(String(b.id));const button=node('button',saved?'♥':'♡','favorite'+(saved?' selected':''));button.setAttribute('aria-label',(saved?'Убрать с полки: ':'Добавить на полку: ')+b.name);button.setAttribute('aria-pressed',saved);button.onclick=async()=>{
- if(!user){$('#auth-dialog').showModal();return;}
- if(String(b.id).startsWith('demo')){toast('Сначала добавьте книгу в каталог');return;}
- button.disabled=true;
- try{await request('/api/shelf/'+b.id,{method:saved?'DELETE':'PUT'});await loadShelf();}
- catch(error){toast(error.message);button.disabled=false;}
-};image.append(button);card.append(image,node('h3',b.name),node('p',b.author));const meta=node('div',undefined,'book-meta');meta.append(node('span',String(b.id).startsWith('demo')?'ПОДБОРКА РЕДАКЦИИ':'В КАТАЛОГЕ'),node('span','↗'));card.append(meta);$('#books').append(card);
- });
+
+function toast(message) {
+    clearTimeout(toastTimer);
+    $('#toast').textContent = message;
+    $('#toast').style.display = 'block';
+    toastTimer = setTimeout(() => $('#toast').style.display = 'none', 3500);
 }
-async function loadBooks(){try{const data=await request('/books');books=data.length?data:demo;$('#catalog-message').textContent=data.length?'':'Знакомство с магазином: пример оформления полки. Добавьте свою первую книгу в каталог.';render();}catch(e){$('#catalog-message').textContent='Каталог недоступен. Проверьте подключение к серверу.';}}
-function avatar(target){target.replaceChildren();if(user?.hasAvatar){const image=node('img');image.alt='Аватарка пользователя';image.src='/api/profile/avatar?t='+Date.now();target.append(image);}else target.textContent=user?.displayName?.[0]?.toUpperCase()||'Ч';}
-async function loadShelf(){favorites=new Set(user?(await request('/api/shelf')).map(String):[]);render();}
-async function loadProfile(){const r=await fetch('/api/profile');if(r.status===401){user=null;}else if(r.ok){user=await r.json();}else throw Error('Не удалось загрузить профиль');$('#account-label').textContent=user?user.displayName:'Войти';avatar($('#account .avatar'));if(user){$('#profile-name').textContent=user.displayName;$('#profile-email').textContent=user.email;avatar($('#profile-avatar'));}await loadShelf();}
-$('#search').oninput=render;
-document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render();});
-document.querySelectorAll('dialog .close').forEach(b=>b.onclick=()=>b.closest('dialog').close());
-document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
-$('#account').onclick=()=>{$(user?'#profile-dialog':'#auth-dialog').showModal();};
-$('#auth-toggle').onclick=()=>{register=!register;$('#name-field').hidden=!register;$('#name-field input').required=register;$('#auth-title').textContent=register?'Начнём вашу историю':'С возвращением';$('#auth-hint').textContent=register?'Создайте аккаунт и добавьте свою аватарку.':'Войдите в свой книжный мир.';$('#auth-submit').textContent=register?'Создать аккаунт ↗':'Войти ↗';$('#auth-toggle').textContent=register?'Уже есть аккаунт? Войти':'Нет аккаунта? Зарегистрироваться';$('#auth-form [name=password]').autocomplete=register?'new-password':'current-password';$('#auth-error').textContent='';};
-$('#auth-form').onsubmit=async e=>{e.preventDefault();const button=$('#auth-submit');button.disabled=true;$('#auth-error').textContent='';const data=Object.fromEntries(new FormData(e.target));try{if(register)await request('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});await request('/api/auth/login',{method:'POST',body:new URLSearchParams({email:data.email.trim().toLowerCase(),password:data.password})});token=null;await csrf();await loadProfile();e.target.reset();$('#auth-dialog').close();$('#profile-dialog').showModal();toast(register?'Аккаунт создан':'Вы вошли в аккаунт');}catch(err){$('#auth-error').textContent=err.message;}finally{button.disabled=false;}};
-$('#avatar-form').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('button');const file=e.target.file.files[0];$('#avatar-message').textContent='';if(!file||file.size>2*1024*1024){$('#avatar-message').textContent='Выберите PNG или JPEG до 2 МБ';return;}button.disabled=true;try{await request('/api/profile/avatar',{method:'PUT',body:new FormData(e.target)});await loadProfile();$('#avatar-message').textContent='Аватарка сохранена';e.target.reset();}catch(err){$('#avatar-message').textContent=err.message;}finally{button.disabled=false;}};
-$('#logout').onclick=async()=>{try{await request('/api/auth/logout',{method:'POST'});token=null;await loadProfile();$('#profile-dialog').close();toast('Вы вышли из аккаунта');}catch(e){toast(e.message);}};
-$('#add-book').onclick=()=>$(user?'#book-dialog':'#auth-dialog').showModal();
-$('#book-form').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('button');button.disabled=true;try{await request('/books',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});e.target.reset();$('#book-dialog').close();await loadBooks();toast('Книга добавлена в каталог');}catch(err){$('#book-error').textContent=err.message;}finally{button.disabled=false;}};
-loadBooks();loadProfile().catch(e=>toast(e.message));
+
+async function refreshCsrf() {
+    const response = await fetch('/api/auth/csrf');
+    if (!response.ok) throw Error('Не удалось подключиться к серверу');
+    csrfToken = await response.json();
+}
+
+async function request(url, options = {}) {
+    const method = options.method || 'GET';
+    const headers = new Headers(options.headers || {});
+    if (method !== 'GET') {
+        if (!csrfToken) await refreshCsrf();
+        headers.set(csrfToken.headerName, csrfToken.token);
+    }
+    const response = await fetch(url, {...options, headers});
+    if (!response.ok) {
+        const messages = {
+            401: 'Войдите в аккаунт; проверьте почту и пароль',
+            403: 'Сессия обновилась. Повторите действие.',
+            409: 'Такая запись уже существует',
+            413: 'Файл слишком большой'
+        };
+        let message = messages[response.status] || 'Не удалось выполнить запрос';
+        try {
+            const data = await response.json();
+            if (data.detail) message = data.detail;
+        } catch (_) { /* Ответ без JSON: используем сообщение по HTTP-статусу. */ }
+        if (response.status === 403) csrfToken = null;
+        throw Error(message);
+    }
+    if (response.status === 204) return null;
+    return response.headers.get('content-type')?.match(/application\/(?:problem\+)?json/)
+        ? response.json() : null;
+}
+
+async function toggleFavorite(book, button) {
+    if (!user) { $('#auth-dialog').showModal(); return; }
+    button.disabled = true;
+    try {
+        await request('/api/shelf/' + book.id, {
+            method: favorites.has(String(book.id)) ? 'DELETE' : 'PUT'
+        });
+        await loadShelf();
+        await loadBooks();
+    } catch (error) { toast(error.message); }
+    finally { button.disabled = false; }
+}
+
+function bookCard(book, index) {
+    const [background, cover, text, symbol] = palettes[index % palettes.length];
+    const card = element('article', undefined, 'book-card');
+    card.style.setProperty('--bg', background);
+    card.style.setProperty('--cover', cover);
+    card.style.setProperty('--text', text);
+    const image = element('div', undefined, 'book-image');
+    const binding = element('div', undefined, 'cover');
+    binding.append(element('small', book.author), element('strong', book.name),
+        element('span', symbol, 'cover-symbol'), element('span', 'ПЕРЕПЛЁТ · КОЛЛЕКЦИЯ', 'cover-footer'));
+    const saved = favorites.has(String(book.id));
+    const button = element('button', saved ? '♥' : '♡', 'favorite' + (saved ? ' selected' : ''));
+    button.setAttribute('aria-label', (saved ? 'Убрать с полки: ' : 'Добавить на полку: ') + book.name);
+    button.setAttribute('aria-pressed', String(saved));
+    button.onclick = () => toggleFavorite(book, button);
+    image.append(binding, button);
+    card.append(image, element('h3', book.name), element('p', book.author));
+    return card;
+}
+
+async function loadBooks() {
+    // Поздний ответ предыдущего поиска не должен заменять более свежую выдачу.
+    const sequence = ++catalogueRequest;
+    if (filter === 'favorites' && !user) {
+        $('#books').replaceChildren();
+        $('#catalog-message').textContent = 'Войдите, чтобы открыть свою полку.';
+        $('#catalog-count').textContent = '';
+        $('#pagination').hidden = true;
+        return;
+    }
+    const params = new URLSearchParams({query: $('#search').value, page, size: 12,
+        favorites: filter === 'favorites'});
+    $('#catalog-message').textContent = 'Загружаем книги…';
+    try {
+        const data = await request('/books/page?' + params);
+        if (sequence !== catalogueRequest) return;
+        if (page > 0 && page >= data.pages) { page--; return loadBooks(); }
+        $('#books').replaceChildren(...data.items.map(bookCard));
+        $('#catalog-count').textContent = `Найдено: ${data.total}`;
+        $('#catalog-message').textContent = data.total ? '' : 'Здесь пока нет книг. Добавьте книгу или измените поиск.';
+        $('#pagination').hidden = data.pages <= 1;
+        $('#page-label').textContent = `Страница ${data.page + 1} из ${data.pages}`;
+        $('#previous-page').disabled = page === 0;
+        $('#next-page').disabled = page + 1 >= data.pages;
+    } catch (error) {
+        if (sequence !== catalogueRequest) return;
+        $('#books').replaceChildren();
+        $('#pagination').hidden = true;
+        $('#catalog-count').textContent = '';
+        $('#catalog-message').textContent = error.message;
+    }
+}
+
+async function loadShelf() {
+    favorites = new Set(user ? (await request('/api/shelf')).map(String) : []);
+    $('#favorite-count').textContent = favorites.size;
+}
+
+function renderAvatar(target) {
+    target.replaceChildren();
+    if (user?.hasAvatar) {
+        const image = element('img');
+        image.alt = 'Аватарка пользователя';
+        image.src = '/api/profile/avatar?t=' + Date.now();
+        target.append(image);
+    } else target.textContent = user?.displayName?.[0]?.toUpperCase() || 'Ч';
+}
+
+async function loadProfile() {
+    const response = await fetch('/api/profile');
+    if (response.status === 401) user = null;
+    else if (response.ok) user = await response.json();
+    else throw Error('Не удалось загрузить профиль');
+    $('#account-label').textContent = user ? user.displayName : 'Войти';
+    renderAvatar($('#account .avatar'));
+    if (user) {
+        $('#profile-name').textContent = user.displayName;
+        $('#profile-email').textContent = user.email;
+        renderAvatar($('#profile-avatar'));
+    }
+    await loadShelf();
+    await loadBooks();
+}
+
+$('#search').oninput = () => {
+    clearTimeout(searchTimer);
+    catalogueRequest++;
+    searchTimer = setTimeout(() => { page = 0; loadBooks(); }, 250);
+};
+$('#previous-page').onclick = () => { page--; loadBooks(); };
+$('#next-page').onclick = () => { page++; loadBooks(); };
+document.querySelectorAll('[data-filter]').forEach(button => {
+    button.onclick = () => {
+        filter = button.dataset.filter;
+        page = 0;
+        document.querySelectorAll('[data-filter]').forEach(item => item.classList.toggle('active', item === button));
+        loadBooks();
+    };
+});
+document.querySelectorAll('dialog .close').forEach(button => {
+    button.onclick = () => button.closest('dialog').close();
+});
+$('#account').onclick = () => $(user ? '#profile-dialog' : '#auth-dialog').showModal();
+$('#auth-toggle').onclick = () => {
+    registerMode = !registerMode;
+    $('#name-field').hidden = !registerMode;
+    $('#name-field input').required = registerMode;
+    $('#auth-title').textContent = registerMode ? 'Начнём вашу историю' : 'С возвращением';
+    $('#auth-hint').textContent = registerMode ? 'Создайте аккаунт и свою книжную полку.' : 'Войдите в свой книжный мир.';
+    $('#auth-submit').textContent = registerMode ? 'Создать аккаунт ↗' : 'Войти ↗';
+    $('#auth-toggle').textContent = registerMode ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
+    $('#auth-form [name=password]').autocomplete = registerMode ? 'new-password' : 'current-password';
+    $('#auth-error').textContent = '';
+};
+$('#auth-form').onsubmit = async event => {
+    event.preventDefault();
+    const button = $('#auth-submit');
+    button.disabled = true;
+    $('#auth-error').textContent = '';
+    const data = Object.fromEntries(new FormData(event.target));
+    try {
+        if (registerMode) await request('/api/auth/register', {
+            method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
+        });
+        await request('/api/auth/login', {method: 'POST',
+            body: new URLSearchParams({email: data.email.trim().toLowerCase(), password: data.password})});
+        csrfToken = null;
+        await refreshCsrf();
+        await loadProfile();
+        event.target.reset();
+        $('#auth-dialog').close();
+        $('#profile-dialog').showModal();
+        toast(registerMode ? 'Аккаунт создан' : 'Вы вошли в аккаунт');
+    } catch (error) { $('#auth-error').textContent = error.message; }
+    finally { button.disabled = false; }
+};
+$('#avatar-form').onsubmit = async event => {
+    event.preventDefault();
+    const button = event.target.querySelector('button');
+    const file = event.target.elements.file.files[0];
+    $('#avatar-message').textContent = '';
+    if (!file || file.size > 2 * 1024 * 1024) {
+        $('#avatar-message').textContent = 'Выберите PNG или JPEG до 2 МБ'; return;
+    }
+    button.disabled = true;
+    try {
+        await request('/api/profile/avatar', {method: 'PUT', body: new FormData(event.target)});
+        await loadProfile();
+        $('#avatar-message').textContent = 'Аватарка сохранена';
+        event.target.reset();
+    } catch (error) { $('#avatar-message').textContent = error.message; }
+    finally { button.disabled = false; }
+};
+$('#logout').onclick = async () => {
+    try {
+        await request('/api/auth/logout', {method: 'POST'});
+        csrfToken = null;
+        await loadProfile();
+        $('#profile-dialog').close();
+        toast('Вы вышли из аккаунта');
+    } catch (error) { toast(error.message); }
+};
+$('#add-book').onclick = () => {
+    $('#book-error').textContent = '';
+    $(user ? '#book-dialog' : '#auth-dialog').showModal();
+};
+$('#book-form').onsubmit = async event => {
+    event.preventDefault();
+    const button = event.target.querySelector('button');
+    button.disabled = true;
+    try {
+        await request('/books', {method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(Object.fromEntries(new FormData(event.target)))});
+        event.target.reset();
+        $('#book-dialog').close();
+        page = 0;
+        await loadBooks();
+        toast('Книга добавлена в каталог');
+    } catch (error) { $('#book-error').textContent = error.message; }
+    finally { button.disabled = false; }
+};
+loadProfile().catch(error => { toast(error.message); loadBooks(); });
