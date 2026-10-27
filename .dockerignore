@@ -1,0 +1,8 @@
+# Only Maven configuration and application sources are needed for the build.
+# Exclude local databases, uploads, Git history, IDE files and environment secrets.
+**
+!pom.xml
+!src/
+!src/**
+!Dockerfile
+!.dockerignore
