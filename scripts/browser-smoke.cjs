@@ -155,6 +155,8 @@ async function stop() {
   await page.locator("#order-detail").filter({ hasText: "Создан" }).waitFor();
   let orders = await (await page.request.get(base + "/api/orders")).json();
   const first = orders[0].id;
+  const firstNumber = orders[0].orderNumber;
+  assert.match(firstNumber, /^\d{6,}$/);
   assert.equal(Number(orders[0].total), 10.25);
   await context.close();
   await stop();
@@ -166,7 +168,16 @@ async function stop() {
   await login("buyer@example.com", "buyer-test-password");
   await page.locator("#open-orders").click();
   await page.locator("#orders-list button").click();
-  await page.locator("#order-detail").filter({ hasText: first }).waitFor();
+  await page
+    .getByRole("heading", { name: "Заказ № " + firstNumber, exact: true })
+    .waitFor();
+  const restoredOrders = await (
+    await page.request.get(base + "/api/orders")
+  ).json();
+  assert.equal(
+    restoredOrders.find((order) => order.id === first).orderNumber,
+    firstNumber,
+  );
   page.once("dialog", (dialog) => dialog.accept());
   await page
     .getByRole("button", { name: "Отменить заказ", exact: true })
@@ -191,6 +202,9 @@ async function stop() {
   await page.locator("#order-detail").filter({ hasText: "Создан" }).waitFor();
   orders = await (await page.request.get(base + "/api/orders")).json();
   const second = orders[0].id;
+  const secondNumber = orders[0].orderNumber;
+  assert.match(secondNumber, /^\d{6,}$/);
+  assert.notEqual(firstNumber, secondNumber);
   assert.notEqual(first, second);
   await logout();
   await login("admin@example.com", "admin-test-password");
@@ -198,7 +212,7 @@ async function stop() {
   await page.locator("#admin-orders").click();
   await page
     .locator(".order-row")
-    .filter({ hasText: second.slice(0, 8) })
+    .filter({ hasText: "№ " + secondNumber })
     .getByRole("button")
     .click();
   for (const status of ["Подтверждён", "Собран", "Отправлен", "Завершён"]) {
@@ -215,7 +229,7 @@ async function stop() {
   await page.locator("#open-orders").click();
   await page
     .locator(".order-row")
-    .filter({ hasText: second.slice(0, 8) })
+    .filter({ hasText: "№ " + secondNumber })
     .filter({ hasText: "Завершён" })
     .waitFor();
   await page.screenshot({
