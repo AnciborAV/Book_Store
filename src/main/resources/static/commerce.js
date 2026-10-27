@@ -254,7 +254,7 @@ async function loadOrders() {
   for (const o of orders) {
     const row = el("article", undefined, "order-row");
     row.append(
-      el("strong", "№ " + o.id.slice(0, 8)),
+      el("strong", "№ " + o.orderNumber),
       el("span", labels[o.status], "status-badge"),
       el("p", date(o.createdAt) + " · " + money(o.total)),
     );
@@ -286,7 +286,7 @@ async function showOrder(id) {
     target = $("#order-detail");
   target.replaceChildren();
   target.append(
-    el("h3", "Заказ " + o.id),
+    el("h3", "Заказ № " + o.orderNumber),
     el("p", labels[o.status] + " · " + money(o.total)),
   );
   const list = el("ul");
@@ -367,7 +367,7 @@ async function loadMovements() {
       ),
       el("p", m.note),
     );
-    if (m.orderId) row.append(el("small", "Заказ: " + m.orderId));
+    if (m.orderId) row.append(el("small", "Заказ № " + m.orderNumber));
     target.append(row);
   }
   const pager = el("div", undefined, "commerce-actions");

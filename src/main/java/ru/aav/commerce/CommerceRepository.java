@@ -27,8 +27,13 @@ public class CommerceRepository {
             r.getBigDecimal("total"),
             r.getString("currency"),
             r.getTimestamp("created_at").toInstant(),
-            r.getTimestamp("updated_at").toInstant()
+            r.getTimestamp("updated_at").toInstant(),
+            formatOrderNumber(r.getLong("order_number"))
         );
+
+    private static String formatOrderNumber(long number) {
+        return String.format(java.util.Locale.ROOT, "%06d", number);
+    }
 
     public Optional<Order> replay(long user, String key) {
         return jdbc
@@ -207,7 +212,7 @@ public class CommerceRepository {
 
     public List<Movement> movements(int page) {
         return jdbc.query(
-            "SELECT m.*,b.name,u.display_name FROM stock_movements m JOIN books b ON b.id=m.book_id JOIN store_users u ON u.id=m.actor_id ORDER BY m.id DESC LIMIT 50 OFFSET ?",
+            "SELECT m.*,b.name,u.display_name,o.order_number FROM stock_movements m JOIN books b ON b.id=m.book_id JOIN store_users u ON u.id=m.actor_id LEFT JOIN store_orders o ON o.id=m.order_id ORDER BY m.id DESC LIMIT 50 OFFSET ?",
             (r, n) ->
                 new Movement(
                     r.getLong("id"),
@@ -221,7 +226,10 @@ public class CommerceRepository {
                     r.getInt("reserved_after"),
                     r.getString("order_id"),
                     r.getString("note"),
-                    r.getTimestamp("created_at").toInstant()
+                    r.getTimestamp("created_at").toInstant(),
+                    r.getString("order_id") == null
+                        ? null
+                        : formatOrderNumber(r.getLong("order_number"))
                 ),
             page * 50
         );
