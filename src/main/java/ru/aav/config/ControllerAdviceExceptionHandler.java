@@ -18,6 +18,6 @@ public class ControllerAdviceExceptionHandler extends ResponseEntityExceptionHan
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleConflict(DataIntegrityViolationException exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,
-                "Book conflicts with a database constraint. Book names must be unique.");
+                "Запись конфликтует с существующими данными. Проверьте уникальность названия книги или адреса почты.");
     }
 }
