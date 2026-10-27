@@ -19,6 +19,11 @@ public class LowercaseH2Database extends H2Database {
     }
 
     @Override
+    public liquibase.CatalogAndSchema.CatalogAndSchemaCase getSchemaAndCatalogCase() {
+        return liquibase.CatalogAndSchema.CatalogAndSchemaCase.LOWER_CASE;
+    }
+
+    @Override
     public int getPriority() {
         return super.getPriority() + 1;
     }
