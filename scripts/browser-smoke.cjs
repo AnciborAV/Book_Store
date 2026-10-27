@@ -57,8 +57,9 @@ async function stop() {
   await page.locator("#book-form [name=name]").fill("Проверка сохранения");
   await page.locator("#book-form [name=author]").fill("Автор");
   await page.locator("#book-form button").click();
+  await page.locator("#book-dialog").waitFor({ state: "hidden" });
   await page.locator("#search").fill("Проверка сохранения");
-  await page.locator(".book-card").waitFor();
+  await page.locator(".book-card").filter({ hasText: "Проверка сохранения" }).waitFor();
   await page.locator(".favorite").click();
   await page.locator(".favorite.selected").waitFor();
   await page.locator(".book-actions .button").click();
