@@ -20,6 +20,7 @@ public class CommerceController {
 
     private final OrderService orders;
     private final InventoryService inventory;
+    private final OrderMailQueue mail;
 
     public record Checkout(@NotNull UUID requestKey) {}
 
@@ -58,6 +59,15 @@ public class CommerceController {
     @GetMapping("/orders/{id}")
     public Detail detail(Principal user, @PathVariable UUID id) {
         return orders.detail(user.getName(), id.toString());
+    }
+
+    @GetMapping("/orders/{id}/email")
+    public OrderMailQueue.Status emailStatus(
+        Principal user,
+        @PathVariable UUID id
+    ) {
+        orders.detail(user.getName(), id.toString());
+        return mail.status(id.toString());
     }
 
     @PostMapping("/orders/{id}/cancel")

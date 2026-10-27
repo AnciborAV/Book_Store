@@ -22,6 +22,7 @@ public class OrderService {
     private final CurrentAccount accounts;
     private final SelectionRepository selection;
     private final InventoryService inventory;
+    private final OrderMailQueue mail;
 
     public List<Order> list(String email, int page) {
         return repository.list(accounts.require(email).getId(), page);
@@ -96,6 +97,7 @@ public class OrderService {
         }
         repository.status(id, OrderStatus.CREATED, user.getId());
         selection.clear(user.getId());
+        mail.enqueue(id);
         return detail(repository.find(id, false).orElseThrow());
     }
 

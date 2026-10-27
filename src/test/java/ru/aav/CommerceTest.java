@@ -95,6 +95,47 @@ class CommerceTest {
     }
 
     @Test
+    void orderNotificationIsAtomicIdempotentAndOwnerProtected()
+        throws Exception {
+        selection.quantity(buyer, book, 1);
+        UUID key = UUID.randomUUID();
+        String id = orders.checkout(buyer, key).order().id();
+        orders.checkout(buyer, key);
+        assertThat(
+            jdbc.queryForObject(
+                "SELECT COUNT(*) FROM order_mail WHERE order_id=?",
+                Integer.class,
+                id
+            )
+        ).isEqualTo(1);
+        mvc.perform(get("/api/orders/" + id + "/email").with(user(buyer)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.state").value("DISABLED"));
+        mvc.perform(
+            get("/api/orders/" + id + "/email").with(user(other))
+        ).andExpect(status().isNotFound());
+        var queue = new OrderMailQueue(jdbc, true);
+        assertThat(queue.claim(id)).isTrue();
+        assertThat(queue.claim(id)).isFalse();
+        queue.sent(id);
+        assertThat(queue.status(id).state()).isEqualTo("SENT");
+        int before = jdbc.queryForObject(
+            "SELECT COUNT(*) FROM order_mail",
+            Integer.class
+        );
+        selection.quantity(buyer, book, 99);
+        assertThatThrownBy(() ->
+            orders.checkout(buyer, UUID.randomUUID())
+        ).isInstanceOf(ResponseStatusException.class);
+        assertThat(
+            jdbc.queryForObject(
+                "SELECT COUNT(*) FROM order_mail",
+                Integer.class
+            )
+        ).isEqualTo(before);
+    }
+
+    @Test
     void rolesCannotBeGrantedByRegistrationAndAdminApiIsProtected()
         throws Exception {
         String email = "spoof" + UUID.randomUUID() + "@example.com";

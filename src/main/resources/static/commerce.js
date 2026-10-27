@@ -196,9 +196,11 @@ export function updateCommerce() {
     "Сумма: " +
     money(cents / 100) +
     (valid ? "" : " · Есть позиции без цены или доступного остатка");
-  $("#checkout").disabled = !user || !valid || !Object.keys(cart).length;
+  $("#checkout").disabled = !user || !Object.keys(cart).length;
   $("#checkout-note").textContent = user
-    ? "Оформление резервирует книги. Онлайн-оплата не подключена."
+    ? valid
+      ? "Оформление резервирует книги. Онлайн-оплата не подключена."
+      : "Администратору нужно назначить любую положительную цену и оформить поступление недостающих книг в разделе «Управление магазином»."
     : "Войдите, чтобы оформить заказ. Гостевая корзина не переносится в аккаунт.";
 }
 async function loadInventory() {
@@ -295,7 +297,11 @@ async function showOrder(id) {
         `${item.name} — ${item.author}: ${item.quantity} × ${money(item.unitPrice)}`,
       ),
     );
-  target.append(list, el("h4", "История статусов"));
+  target.append(list);
+  const emailStatus = await request("/api/orders/" + id + "/email");
+  target.append(el("p", emailStatus.message));
+  target.append(button("Обновить статус письма", () => showOrder(id)));
+  target.append(el("h4", "История статусов"));
   const history = el("ol");
   for (const event of d.events)
     history.append(
