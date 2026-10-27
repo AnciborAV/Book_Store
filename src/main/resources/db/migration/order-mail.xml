@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+ <changeSet id="order-mail-outbox-v1" author="aav">
+  <sql><![CDATA[
+CREATE TABLE order_mail (
+ order_id varchar(36) PRIMARY KEY REFERENCES store_orders(id),
+ attempts integer NOT NULL DEFAULT 0,
+ next_attempt_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ sent_at timestamp with time zone
+);
+  ]]></sql>
+ </changeSet>
+</databaseChangeLog>
