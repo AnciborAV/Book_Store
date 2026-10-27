@@ -1,12 +1,18 @@
 package ru.aav.auth;
 
 /** Public account data. Password hashes and image bytes never enter this DTO. */
-public record Profile(String email, String displayName, boolean hasAvatar) {
+public record Profile(
+    String email,
+    String displayName,
+    boolean hasAvatar,
+    String role
+) {
     public static Profile from(StoreUser user) {
         return new Profile(
             user.getEmail(),
             user.getDisplayName(),
-            user.getAvatar() != null
+            user.getAvatar() != null,
+            user.getRole()
         );
     }
 }

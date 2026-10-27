@@ -207,6 +207,13 @@
         <button class="button dark">Сохранить аватарку ↗</button>
         <p id="avatar-message" role="status"></p>
       </form>
+      <div class="commerce-actions">
+        <button id="open-orders" type="button" class="button dark" hidden>
+          Мои заказы</button
+        ><button id="open-admin" type="button" class="button light" hidden>
+          Управление магазином
+        </button>
+      </div>
       <button id="logout" class="text-button">Выйти из аккаунта</button>
     </dialog>
     <dialog id="book-dialog">
@@ -238,6 +245,11 @@
         Книги сохраняются в этом браузере. Цены и оформление заказа пока
         недоступны.
       </p>
+      <p id="cart-amount" class="cart-amount"></p>
+      <p id="checkout-note"></p>
+      <button id="checkout" type="button" class="button dark" disabled>
+        Оформить заказ
+      </button>
       <div id="cart-items"></div>
       <div class="cart-bottom">
         <strong id="cart-total"></strong
@@ -285,6 +297,77 @@
           </p>
         </form>
       </section>
+    </dialog>
+    <dialog id="orders-dialog" class="commerce-dialog">
+      <button class="close" aria-label="Закрыть">×</button>
+      <h2 id="orders-heading">Мои заказы и покупки</h2>
+      <p>
+        Завершённые заказы составляют историю покупок. Оплата онлайн не
+        подключена.
+      </p>
+      <div id="orders-list"></div>
+      <div id="orders-pagination" class="commerce-actions"></div>
+      <section id="order-detail" aria-live="polite"></section>
+    </dialog>
+    <dialog id="admin-dialog" class="commerce-dialog">
+      <button class="close" aria-label="Закрыть">×</button>
+      <h2>Управление магазином</h2>
+      <div class="commerce-actions">
+        <button id="admin-orders" class="button dark">Все заказы</button
+        ><button id="admin-movements" class="button light">
+          История склада
+        </button>
+      </div>
+      <label
+        >Найти книгу<input
+          id="inventory-search"
+          type="search"
+          placeholder="Название или автор" /></label
+      ><label>Книга<select id="inventory-book"></select></label>
+      <p id="stock-summary" class="stock-summary"></p>
+      <form id="inventory-edit">
+        <h3>Карточка и цена</h3>
+        <label>Название<input name="name" required maxlength="255" /></label
+        ><label>Автор<input name="author" required maxlength="255" /></label
+        ><label
+          >Раздел<input
+            name="category"
+            maxlength="255"
+            list="admin-categories" /></label
+        ><datalist id="admin-categories">
+          <option>Российские авторы</option>
+          <option>Зарубежные авторы</option>
+          <option>История</option>
+          <option>Философия</option>
+          <option>Гражданское право</option></datalist
+        ><label
+          >Цена, ₽<input
+            name="price"
+            type="number"
+            min="0.01"
+            max="99999999.99"
+            step="0.01"
+            required /></label
+        ><button class="button dark">Сохранить карточку</button>
+      </form>
+      <form id="receipt-form">
+        <h3>Поступление на склад</h3>
+        <label
+          >Количество экземпляров<input
+            name="quantity"
+            type="number"
+            min="1"
+            max="100000"
+            required /></label
+        ><label
+          >Основание поступления<input
+            name="note"
+            maxlength="500"
+            placeholder="Например: накладная № 12"
+            required /></label
+        ><button class="button dark">Зарегистрировать поступление</button>
+      </form>
+      <section id="stock-history" aria-live="polite"></section>
     </dialog>
   </body>
 </html>

@@ -1,3 +1,4 @@
+import { setupCommerce, updateCommerce } from "./commerce.js";
 import { request, csrf, resetCsrf } from "./api-client.js";
 const $ = (s) => document.querySelector(s);
 let books = [],
@@ -159,10 +160,11 @@ async function loadSelection() {
     ? "Ваш выбор сохраняется в аккаунте и доступен после повторного входа."
     : "Гостевой выбор хранится в этом браузере. Войдите, чтобы вести личную полку и корзину в аккаунте.";
   $(".cart-hint").textContent = user
-    ? "Корзина сохранена в вашем аккаунте. Цены и оформление заказа пока недоступны."
-    : "Гостевая корзина сохраняется в этом браузере отдельно от аккаунтов. Цены и оформление заказа пока недоступны.";
+    ? "Корзина сохранена. Цена и доступный остаток проверяются при оформлении заказа."
+    : "Гостевая корзина хранится отдельно от аккаунтов. Войдите для оформления заказа.";
 }
 function updateCartCount() {
+  updateCommerce();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
@@ -182,7 +184,19 @@ function renderCart() {
     const row = node("article", undefined, "cart-row");
     row.append(coverImage(book));
     const info = node("div");
-    info.append(node("h3", book.name), node("p", book.author));
+    info.append(
+      node("h3", book.name),
+      node("p", book.author),
+      node(
+        "p",
+        book.price === null
+          ? "Цена не указана"
+          : new Intl.NumberFormat("ru-RU", {
+              style: "currency",
+              currency: "RUB",
+            }).format(book.price),
+      ),
+    );
     const controls = node("div", undefined, "quantity-controls");
     const minus = action(
       "−",
@@ -292,6 +306,19 @@ function render() {
       node("span", b.category || "Каталог", "category-label"),
       title,
       node("p", b.author),
+    );
+    card.append(
+      node(
+        "strong",
+        b.price === null
+          ? "Цена уточняется"
+          : new Intl.NumberFormat("ru-RU", {
+              style: "currency",
+              currency: "RUB",
+            }).format(b.price),
+        "book-price",
+      ),
+      node("p", "Доступно: " + b.availableStock, "stock-caption"),
     );
     const actions = node("div", undefined, "book-actions");
     actions.append(
@@ -451,6 +478,7 @@ async function loadProfile() {
     $("#profile-email").textContent = user.email;
     avatar($("#profile-avatar"));
   }
+  updateCommerce();
   if (previous !== user?.email || !selectionReady) await loadSelection();
 }
 $("#search").oninput = () => {
@@ -584,8 +612,8 @@ $("#logout").onclick = async () => {
   }
 };
 $("#add-book").onclick = () => {
-  if (!user) {
-    toast("Войдите, чтобы добавить книгу");
+  if (user?.role !== "ADMIN") {
+    toast("Добавлять книги может администратор");
     $("#auth-dialog").showModal();
     return;
   }
@@ -661,4 +689,14 @@ async function init() {
   await loadProfile().catch((e) => toast(e.message));
   await loadBooks();
 }
+setupCommerce({
+  getUser: () => user,
+  getBooks: () => books,
+  getCart: () => cart,
+  toast,
+  reload: async () => {
+    await loadBooks();
+    await loadSelection();
+  },
+});
 init();

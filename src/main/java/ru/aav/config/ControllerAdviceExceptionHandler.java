@@ -13,6 +13,16 @@ public class ControllerAdviceExceptionHandler
     extends ResponseEntityExceptionHandler
 {
 
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    public ProblemDetail handleInvalidParameters(
+        jakarta.validation.ConstraintViolationException exception
+    ) {
+        return ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            "Проверьте параметры запроса"
+        );
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ProblemDetail handleNotFound(EntityNotFoundException exception) {
         return ProblemDetail.forStatusAndDetail(
