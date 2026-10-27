@@ -1,13 +1,15 @@
 package ru.aav;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import ru.aav.controller.CreateBookRequest;
 import ru.aav.mapper.BookMapper;
 import ru.aav.model.Book;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class BookMapperTest {
+
     private final BookMapper mapper = Mappers.getMapper(BookMapper.class);
 
     @Test
@@ -24,6 +26,9 @@ class BookMapperTest {
     void distinctTransientBooksAreNotEqual() {
         Book first = new Book();
         Book second = new Book();
-        assertThat(first).isEqualTo(first).isNotEqualTo(second).isNotEqualTo(null);
+        assertThat(first)
+            .isEqualTo(first)
+            .isNotEqualTo(second)
+            .isNotEqualTo(null);
     }
 }

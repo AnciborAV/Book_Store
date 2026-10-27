@@ -16,9 +16,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 abstract class IntegrationTest {
+
     @Container
-    static final PostgreSQLContainer<?> POSTGRES =
-            new PostgreSQLContainer<>("postgres:15.3");
+    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>(
+        "postgres:15.3"
+    );
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
@@ -30,4 +32,3 @@ abstract class IntegrationTest {
     @Autowired
     protected MockMvc mockMvc;
 }
-

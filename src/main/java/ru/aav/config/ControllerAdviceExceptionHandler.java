@@ -9,15 +9,25 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.aav.exception.EntityNotFoundException;
 
 @RestControllerAdvice
-public class ControllerAdviceExceptionHandler extends ResponseEntityExceptionHandler {
+public class ControllerAdviceExceptionHandler
+    extends ResponseEntityExceptionHandler
+{
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ProblemDetail handleNotFound(EntityNotFoundException exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND,
+            exception.getMessage()
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ProblemDetail handleConflict(DataIntegrityViolationException exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,
-                "Book conflicts with a database constraint. Book names must be unique.");
+    public ProblemDetail handleConflict(
+        DataIntegrityViolationException exception
+    ) {
+        return ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            "Запись конфликтует с существующими данными. Проверьте уникальность названия книги или адреса почты."
+        );
     }
 }

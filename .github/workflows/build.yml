@@ -16,8 +16,22 @@ jobs:
           java-version: '21'
           cache: maven
       - run: ./mvnw --batch-mode --no-transfer-progress clean verify
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/browser-test" playwright@1.58.2
+          "$RUNNER_TEMP/browser-test/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Browser and persistent database restart
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser-test/node_modules/playwright
+        run: node scripts/browser-smoke.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-report
-          path: target/surefire-reports
+          path: |
+            target/surefire-reports
+            target/browser-server.log
+            target/browser-screenshots
