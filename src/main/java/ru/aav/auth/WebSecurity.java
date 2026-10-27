@@ -24,7 +24,7 @@ public class WebSecurity {
                 .map(u ->
                     User.withUsername(u.getEmail())
                         .password(u.getPasswordHash())
-                        .roles("READER")
+                        .roles(u.getRole())
                         .build()
                 )
                 .orElseThrow(() ->
@@ -56,12 +56,21 @@ public class WebSecurity {
                         "/index.html",
                         "/app.js",
                         "/api-client.js",
+                        "/commerce.js",
                         "/style.css",
                         "/catalog-covers.json",
                         "/covers/**",
                         "/favicon.ico"
                     )
                     .permitAll()
+                    .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers(
+                        org.springframework.http.HttpMethod.POST,
+                        "/books",
+                        "/books/**"
+                    )
+                    .hasRole("ADMIN")
                     .requestMatchers("/error")
                     .permitAll()
                     .anyRequest()

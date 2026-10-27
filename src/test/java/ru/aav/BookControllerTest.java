@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import ru.aav.model.Book;
 import ru.aav.repository.BookRepository;
 
-@org.springframework.security.test.context.support.WithMockUser
+@org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
 class BookControllerTest extends IntegrationTest {
 
     @Autowired

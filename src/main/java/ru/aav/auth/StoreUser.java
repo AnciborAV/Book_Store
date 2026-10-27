@@ -20,6 +20,9 @@ public class StoreUser extends BasicEntity {
     @Column(nullable = false)
     private String passwordHash;
 
+    @Column(nullable = false)
+    private String role = "CUSTOMER";
+
     @Column(columnDefinition = "bytea")
     private byte[] avatar;
 }

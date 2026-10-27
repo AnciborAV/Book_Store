@@ -48,14 +48,14 @@ public class SelectionRepository {
     public void quantity(long user, long book, int quantity) {
         if (
             jdbc.update(
-                "UPDATE cart_items SET quantity=? WHERE user_id=? AND book_id=?",
+                "UPDATE cart_items SET quantity=?, updated_at=CURRENT_TIMESTAMP WHERE user_id=? AND book_id=?",
                 quantity,
                 user,
                 book
             ) == 0
         ) {
             jdbc.update(
-                "INSERT INTO cart_items (user_id,book_id,quantity) VALUES (?,?,?)",
+                "INSERT INTO cart_items (user_id,book_id,quantity,added_at,updated_at) VALUES (?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)",
                 user,
                 book,
                 quantity

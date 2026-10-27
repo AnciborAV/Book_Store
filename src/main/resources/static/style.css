@@ -1191,3 +1191,60 @@ form[hidden],
   border-left: 3px solid #6b8059;
   font-size: 12px;
 }
+
+/* Commerce panels keep the catalogue's typography and colour palette. */
+.commerce-dialog {
+  width: min(850px, 94vw);
+  max-height: 88vh;
+  overflow: auto;
+}
+.commerce-dialog input,
+.commerce-dialog select {
+  width: 100%;
+  min-width: 0;
+}
+.commerce-dialog form {
+  padding: 18px 0;
+  border-bottom: 1px solid #d6dbce;
+}
+.commerce-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 16px 0;
+}
+.order-row {
+  padding: 18px 0;
+  border-bottom: 1px solid #d6dbce;
+  overflow-wrap: anywhere;
+}
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-left: 10px;
+  background: #e8ecdf;
+  border-radius: 20px;
+}
+#order-detail {
+  overflow-wrap: anywhere;
+  padding: 16px 0;
+}
+#order-detail li {
+  margin-bottom: 10px;
+}
+#checkout {
+  margin-bottom: 20px;
+}
+.book-price,
+.cart-amount {
+  color: #214c3d;
+  font-size: 1.1rem;
+}
+.stock-summary {
+  background: #e8ecdf;
+  padding: 14px;
+}
+[hidden] {
+  display: none !important;
+}

@@ -1,3 +1,12 @@
 package ru.aav.controller;
 
-public record BookDto(Long id, String name, String author, String category) {}
+import java.math.BigDecimal;
+
+public record BookDto(
+    Long id,
+    String name,
+    String author,
+    String category,
+    BigDecimal price,
+    int availableStock
+) {}

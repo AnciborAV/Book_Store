@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+ <changeSet id="commerce-roles-stock-orders-v1" author="aav">
+  <sql splitStatements="true"><![CDATA[
+ALTER TABLE store_users ADD COLUMN role varchar(20) NOT NULL DEFAULT 'CUSTOMER';
+ALTER TABLE store_users ADD CONSTRAINT users_role CHECK (role IN ('CUSTOMER','ADMIN'));
+ALTER TABLE books ADD COLUMN price numeric(10,2);
+ALTER TABLE books ADD COLUMN stock integer NOT NULL DEFAULT 0;
+ALTER TABLE books ADD COLUMN reserved integer NOT NULL DEFAULT 0;
+ALTER TABLE books ADD CONSTRAINT books_price CHECK (price IS NULL OR price > 0);
+ALTER TABLE books ADD CONSTRAINT books_stock CHECK (stock >= 0 AND reserved >= 0 AND reserved <= stock);
+ALTER TABLE cart_items ADD COLUMN added_at timestamp with time zone;
+ALTER TABLE cart_items ADD COLUMN updated_at timestamp with time zone;
+CREATE TABLE store_orders (
+ id varchar(36) PRIMARY KEY, user_id bigint NOT NULL REFERENCES store_users(id),
+ request_key varchar(36) NOT NULL, buyer_name varchar(80) NOT NULL, buyer_email varchar(255) NOT NULL,
+ status varchar(20) NOT NULL CHECK (status IN ('CREATED','CONFIRMED','PACKED','SHIPPED','COMPLETED','CANCELLED')),
+ total numeric(16,2) NOT NULL CHECK (total > 0), currency varchar(3) NOT NULL DEFAULT 'RUB',
+ created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE(user_id,request_key)
+);
+CREATE INDEX orders_owner_created ON store_orders(user_id,created_at);
+CREATE TABLE order_items (
+ order_id varchar(36) NOT NULL REFERENCES store_orders(id), book_id bigint NOT NULL REFERENCES books(id),
+ book_name varchar(255) NOT NULL, book_author varchar(255) NOT NULL,
+ quantity integer NOT NULL CHECK(quantity BETWEEN 1 AND 99), unit_price numeric(10,2) NOT NULL CHECK(unit_price > 0),
+ PRIMARY KEY(order_id,book_id)
+);
+CREATE TABLE order_events (
+ id bigserial PRIMARY KEY, order_id varchar(36) NOT NULL REFERENCES store_orders(id),
+ actor_id bigint NOT NULL REFERENCES store_users(id), status varchar(20) NOT NULL,
+ created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX events_order ON order_events(order_id,id);
+CREATE TABLE stock_movements (
+ id bigserial PRIMARY KEY, book_id bigint NOT NULL REFERENCES books(id), actor_id bigint NOT NULL REFERENCES store_users(id),
+ kind varchar(20) NOT NULL CHECK(kind IN ('RECEIPT','RESERVE','RELEASE','SHIP')),
+ stock_delta integer NOT NULL, reserved_delta integer NOT NULL,
+ stock_after integer NOT NULL, reserved_after integer NOT NULL,
+ order_id varchar(36) REFERENCES store_orders(id), request_key varchar(36), note varchar(500) NOT NULL,
+ created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE(actor_id,request_key)
+);
+CREATE INDEX stock_book_created ON stock_movements(book_id,id);
+CREATE VIEW cart_details AS SELECT c.user_id,u.display_name,u.email,c.book_id,b.name AS book_title,b.author,c.quantity,b.price,c.added_at,c.updated_at FROM cart_items c JOIN books b ON b.id=c.book_id JOIN store_users u ON u.id=c.user_id;
+  ]]></sql>
+ </changeSet>
+</databaseChangeLog>
