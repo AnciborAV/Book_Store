@@ -19,6 +19,27 @@ public class BookController {
 
     private final BookService bookService;
     private final BookMapper mapper;
+    private final ru.aav.auth.AccountService accounts;
+
+    /** Поиск каталога; личная выборка требует действующей сессии. */
+    @GetMapping("/page")
+    public BookPage search(@RequestParam(defaultValue = "") String query,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "12") int size,
+                           @RequestParam(defaultValue = "false") boolean favorites,
+                           java.security.Principal principal) {
+        Long ownerId = null;
+        if (favorites) {
+            if (principal == null) throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.UNAUTHORIZED, "Войдите в аккаунт");
+            ownerId = accounts.requireUser(principal.getName()).getId();
+        }
+        var result = bookService.search(query, page, size, ownerId);
+        return new BookPage(result.getContent().stream().map(mapper::toDto).toList(),
+                result.getTotalElements(), result.getTotalPages(), result.getNumber());
+    }
+
+    public record BookPage(List<BookDto> items, long total, int pages, int page) {}
 
     @GetMapping
     public ResponseEntity<List<BookDto>> findAll() {

@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@org.springframework.security.test.context.support.WithMockUser
 class BookControllerTest extends IntegrationTest {
     @Autowired BookRepository repository;
     @Autowired ObjectMapper json;
@@ -23,7 +24,7 @@ class BookControllerTest extends IntegrationTest {
 
     @Test
     void createsAndReadsBookWithGeneratedIdAndLocation() throws Exception {
-        var response = mockMvc.perform(post("/books")
+        var response = mockMvc.perform(post("/books").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Java\",\"author\":\"Author\"}"))
                 .andExpect(status().isCreated())
@@ -54,7 +55,7 @@ class BookControllerTest extends IntegrationTest {
                 "{\"name\":\" \",\"author\":\"Author\"}",
                 "{\"name\":\"Java\"}",
                 "{\"name\":\"Java\",\"author\":\" \"}"}) {
-            mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON).content(body))
+            mockMvc.perform(post("/books").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).contentType(MediaType.APPLICATION_JSON).content(body))
                     .andExpect(status().isBadRequest());
         }
         assertThat(repository.count()).isZero();
@@ -62,7 +63,7 @@ class BookControllerTest extends IntegrationTest {
 
     @Test
     void rejectsMalformedJsonAndNonNumericId() throws Exception {
-        mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON).content("{"))
+        mockMvc.perform(post("/books").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).contentType(MediaType.APPLICATION_JSON).content("{"))
                 .andExpect(status().isBadRequest());
         mockMvc.perform(get("/books/not-a-number")).andExpect(status().isBadRequest());
     }
@@ -73,7 +74,7 @@ class BookControllerTest extends IntegrationTest {
         book.setName("Java");
         book.setAuthor("Original");
         repository.save(book);
-        mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/books").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Java\",\"author\":\"Other\"}"))
                 .andExpect(status().isConflict());
         assertThat(repository.count()).isEqualTo(1);
@@ -85,7 +86,7 @@ class BookControllerTest extends IntegrationTest {
         original.setName("Original");
         original.setAuthor("First");
         long id = repository.save(original).getId();
-        mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/books").with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":" + id + ",\"name\":\"New\",\"author\":\"Second\"}"))
                 .andExpect(status().isCreated());
         assertThat(repository.findById(id).orElseThrow().getName()).isEqualTo("Original");

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="create-personal-shelf" author="aav">
+        <sql>CREATE TABLE shelf_entries (
+            id BIGSERIAL PRIMARY KEY,
+            user_id BIGINT NOT NULL REFERENCES store_users(id) ON DELETE CASCADE,
+            book_id BIGINT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+            CONSTRAINT uk_shelf_user_book UNIQUE (user_id, book_id)
+        );</sql>
+        <rollback><dropTable tableName="shelf_entries"/></rollback>
+    </changeSet>
+</databaseChangeLog>

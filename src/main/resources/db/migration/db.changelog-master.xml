@@ -8,4 +8,5 @@
     <include file="/db/migration/initial/db.changelog-1.0.xml"/>
 
     <include file="/db/migration/create_users.xml"/>
+    <include file="/db/migration/create_shelf.xml"/>
 </databaseChangeLog>
