@@ -6,6 +6,8 @@
     <title>Переплёт — книжный магазин</title>
     <link rel="stylesheet" href="/style.css" />
     <script type="module" src="/app.js"></script>
+    <script type="module" src="/password-recovery.js"></script>
+    <link rel="stylesheet" href="/password-recovery.css" />
       <link rel="stylesheet" href="/feedback.css" />
       <link rel="stylesheet" href="/announcement.css" />
   </head>
@@ -187,9 +189,23 @@
           Войти ↗
         </button>
       </form>
+      <button id="forgot-password" type="button" class="text-button">Забыли пароль?</button>
       <button id="auth-toggle" class="text-button">
         Нет аккаунта? Зарегистрироваться
       </button>
+    </dialog>
+    <dialog id="recovery-dialog" aria-labelledby="recovery-title">
+      <button type="button" class="close" aria-label="Закрыть">×</button>
+      <div class="eyebrow">ВОЗВРАЩЕНИЕ В ВАШ КНИЖНЫЙ МИР</div>
+      <h2 id="recovery-title">Забыли пароль?</h2>
+      <form>
+        <label>Электронная почта<input type="email" name="email" autocomplete="email" maxlength="255" required /></label>
+        <label hidden>Новый пароль<input type="password" name="password" minlength="8" maxlength="72" autocomplete="new-password" /></label>
+        <label hidden>Повторите новый пароль<input type="password" name="confirmation" minlength="8" maxlength="72" autocomplete="new-password" /></label>
+        <p id="recovery-message" role="status" aria-live="polite"></p>
+        <button type="submit" class="button dark">Получить письмо</button>
+      </form>
+      <button type="button" class="text-button" data-login>Вернуться ко входу</button>
     </dialog>
     <dialog id="profile-dialog">
       <button class="close" aria-label="Закрыть">×</button>

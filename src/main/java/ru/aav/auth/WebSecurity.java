@@ -12,6 +12,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurity {
 
     @Bean
+    org.springframework.security.core.session.SessionRegistry sessionRegistry() {
+        return new org.springframework.security.core.session.SessionRegistryImpl();
+    }
+    @Bean
+    org.springframework.security.web.session.HttpSessionEventPublisher sessionEvents() {
+        return new org.springframework.security.web.session.HttpSessionEventPublisher();
+    }
+    @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -33,7 +41,7 @@ public class WebSecurity {
     }
 
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+    SecurityFilterChain apiSecurity(HttpSecurity http, org.springframework.security.core.session.SessionRegistry sessions) throws Exception {
         return http
             .authorizeHttpRequests(a ->
                 a
@@ -45,7 +53,9 @@ public class WebSecurity {
                     .requestMatchers(
                         "/api/auth/csrf",
                         "/api/auth/register",
-                        "/api/auth/login"
+                        "/api/auth/login",
+                        "/api/auth/password/request",
+                        "/api/auth/password/reset"
                     )
                     .permitAll()
                     .requestMatchers(
@@ -55,6 +65,8 @@ public class WebSecurity {
                         "/",
                         "/index.html",
                         "/app.js",
+                        "/password-recovery.js",
+                        "/password-recovery.css",
                         "/api-client.js",
                         "/commerce.js",
                         "/java-library.js",
@@ -87,6 +99,8 @@ public class WebSecurity {
                     .anyRequest()
                     .authenticated()
             )
+            .sessionManagement(s -> s.maximumSessions(-1).sessionRegistry(sessions)
+                .expiredSessionStrategy(e -> e.getResponse().sendError(401)))
             .exceptionHandling(e ->
                 e.authenticationEntryPoint((req, res, ex) -> res.sendError(401))
             )

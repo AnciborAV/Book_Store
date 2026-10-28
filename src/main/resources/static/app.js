@@ -558,6 +558,7 @@ $("#auth-toggle").onclick = () => {
     ? "new-password"
     : "current-password";
   $("#auth-error").textContent = "";
+  $("#forgot-password").hidden = register;
 };
 $("#auth-form").onsubmit = async (e) => {
   e.preventDefault();
