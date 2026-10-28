@@ -1,3 +1,4 @@
+import { setupFeedback, updateFeedback } from "./feedback.js";
 import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-library.js";
 import { setupCommerce, updateCommerce } from "./commerce.js";
 import { request, csrf, resetCsrf } from "./api-client.js";
@@ -172,6 +173,7 @@ async function loadSelection() {
 function updateCartCount() {
   updateCommerce();
   updateJavaLibrary();
+  updateFeedback();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
@@ -493,6 +495,7 @@ async function loadProfile() {
   }
   updateCommerce();
   updateJavaLibrary();
+  updateFeedback();
   if (previous !== user?.email || !selectionReady) await loadSelection();
 }
 $("#search").oninput = () => {
@@ -703,6 +706,7 @@ async function init() {
   await loadProfile().catch((e) => toast(e.message));
   await loadBooks();
 }
+setupFeedback({ getUser: () => user });
 setupJavaLibrary({ getUser: () => user, toast });
 setupCommerce({
   getUser: () => user,

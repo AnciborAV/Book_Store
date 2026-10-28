@@ -7,6 +7,35 @@ const el = (tag, text, cls) => {
   if (cls) n.className = cls;
   return n;
 };
+// Local history records an initiated download, never proof of a saved file.
+const downloadMemory = new Map();
+function historyKey() { return 'bookstore-java-downloads-v1:' + (getUser?.()?.email || 'guest'); }
+function history() {
+  const key = historyKey();
+  if (!downloadMemory.has(key)) {
+    let ids = [];
+    try { const data = JSON.parse(localStorage.getItem(key) || '[]'); if (Array.isArray(data)) ids = data.filter(x => typeof x === 'string'); } catch (_) {}
+    downloadMemory.set(key, new Set(ids));
+  }
+  return downloadMemory.get(key);
+}
+function saveHistory() { try { localStorage.setItem(historyKey(), JSON.stringify([...history()])); } catch (_) {} }
+function downloadControls(book, info) {
+  const link = el('a', '', 'button dark');
+  link.href = `/api/java-library/${book.id}/download`; link.setAttribute('download', '');
+  const note = el('small', '', 'java-download-note');
+  const reset = button('Сбросить отметку', () => { history().delete(book.id); saveHistory(); paint(); }, 'java-download-reset');
+  const paint = () => {
+    const seen = history().has(book.id);
+    link.textContent = seen ? 'Скачать ещё раз ↓' : 'Скачать PDF ↓';
+    link.classList.toggle('java-downloaded', seen);
+    note.hidden = reset.hidden = !seen;
+    note.textContent = 'Вы уже запускали скачивание в этом браузере. Если файл не сохранился, скачайте ещё раз.';
+    link.title = seen ? 'Повторное скачивание. Отметка не подтверждает сохранение файла.' : 'Скачать оригинальный PDF';
+  };
+  link.addEventListener('click', () => { history().add(book.id); saveHistory(); paint(); });
+  info.append(link, note, reset); paint();
+}
 const admin = () => getUser?.()?.role === 'ADMIN';
 const mb = bytes => (bytes / 1024 / 1024).toLocaleString('ru', { maximumFractionDigits: 1 }) + ' МБ';
 function button(text, handler, cls = 'button light') {
@@ -37,9 +66,7 @@ async function load() {
       if (book.author) info.append(el('p', book.author, 'java-author'));
       info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
       if (book.description) info.append(el('p', book.description, 'java-description'));
-      const download = el('a', 'Скачать PDF ↓', 'button dark');
-      download.href = `/api/java-library/${book.id}/download`; download.setAttribute('download', '');
-      info.append(download);
+      downloadControls(book, info);
       if (admin()) {
         const actions = el('div', undefined, 'java-actions');
         actions.append(button('Редактировать', () => editor(book)), button('Удалить', () => remove(book)));

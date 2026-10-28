@@ -14,4 +14,5 @@
     <include file="/db/migration/order-mail.xml"/>
     <include file="/db/migration/order-numbers.xml"/>
     <include file="/db/migration/java-library.xml"/>
+    <include file="/db/migration/site-feedback.xml"/>
 </databaseChangeLog>
