@@ -16,20 +16,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LibraryCoverCodecTest {
     @Test void jpeg2000PictureSurvivesPdfCoverRendering() throws Exception {
-        BufferedImage source = new BufferedImage(100, 150, BufferedImage.TYPE_INT_RGB);
-        var graphics = source.createGraphics();
-        graphics.setColor(new Color(20, 120, 190));
-        graphics.fillRect(0, 0, 100, 150);
-        graphics.dispose();
-        var encoded = new ByteArrayOutputStream();
-        assertTrue(ImageIO.write(source, "JPEG2000", encoded), "JPEG2000 codec missing");
+        // Lossless RGB JPEG 2000 fixture produced with OpenJPEG (100 x 150).
+        byte[] encoded = java.util.Base64.getDecoder().decode("AAAADGpQICANCocKAAAAFGZ0eXBqcDIgAAAAAGpwMiAAAAAtanAyaAAAABZpaGRyAAAAlgAAAGQAAwcHAAAAAAAPY29scgEAAAAAABAAAADHanAyY/9P/1EALwAAAAAAZAAAAJYAAAAAAAAAAAAAAGQAAACWAAAAAAAAAAAAAwcBAQcBAQcBAf9SAAwAAAABAAUEBAAB/1wAE0BASEhQSEhQSEhQSEhQSEhQ/2QAJQABQ3JlYXRlZCBieSBPcGVuSlBFRyB2ZXJzaW9uIDIuNS40/5AACgAAAAAAQAAB/5PPtDQRUE7k8jAMJAkS+Eg/wfIEEVBUX8fUEhQAVpdCKAABg4CAgICAgICAgICAgICAgP/Z");
         byte[] pdf;
         try (var doc = new PDDocument()) {
             var page = new PDPage(new PDRectangle(100, 150));
             doc.addPage(page);
-            var picture = new PDImageXObject(doc, new ByteArrayInputStream(encoded.toByteArray()),
+            var picture = new PDImageXObject(doc, new ByteArrayInputStream(encoded),
                 org.apache.pdfbox.cos.COSName.JPX_DECODE, 100, 150, 8,
-                org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB.INSTANCE);
+                null);
             try (var content = new PDPageContentStream(doc, page)) {
                 content.drawImage(picture, 0, 0, 100, 150);
             }
@@ -42,7 +37,7 @@ class LibraryCoverCodecTest {
             var cover = ImageIO.read(new ByteArrayInputStream(prepared.cover()));
             var color = new Color(cover.getRGB(cover.getWidth()/2, cover.getHeight()/2));
             assertTrue(color.getRed() < 60 && color.getGreen() > 80 && color.getBlue() > 140,
-                "Embedded color image must not disappear into a white cover");
+                "Embedded color image must not disappear into a white cover: " + color);
             assertArrayEquals(pdf, java.nio.file.Files.readAllBytes(prepared.pdf()));
         }
     }
