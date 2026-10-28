@@ -27,7 +27,9 @@ class LibraryCoverCodecTest {
         try (var doc = new PDDocument()) {
             var page = new PDPage(new PDRectangle(100, 150));
             doc.addPage(page);
-            var picture = PDImageXObject.createFromByteArray(doc, encoded.toByteArray(), "cover.jp2");
+            var picture = new PDImageXObject(doc, new ByteArrayInputStream(encoded.toByteArray()),
+                org.apache.pdfbox.cos.COSName.JPX_DECODE, 100, 150, 8,
+                org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB.INSTANCE);
             try (var content = new PDPageContentStream(doc, page)) {
                 content.drawImage(picture, 0, 0, 100, 150);
             }
