@@ -1,3 +1,4 @@
+import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-library.js";
 import { setupCommerce, updateCommerce } from "./commerce.js";
 import { request, csrf, resetCsrf } from "./api-client.js";
 const $ = (s) => document.querySelector(s);
@@ -170,6 +171,7 @@ async function loadSelection() {
 }
 function updateCartCount() {
   updateCommerce();
+  updateJavaLibrary();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
@@ -240,12 +242,12 @@ function renderCart() {
 function renderCategories() {
   const target = $("#categories");
   target.replaceChildren();
-  for (const name of ["all", ...categoryNames]) {
+  for (const name of ["all", ...categoryNames, "Java"]) {
     const count = books.filter(
       (b) => name === "all" || b.category === name,
     ).length;
     const button = action(
-      (name === "all" ? "Все разделы" : name) + " · " + count,
+      name === "Java" ? "Java · PDF" : (name === "all" ? "Все разделы" : name) + " · " + count,
       () => {
         category = name;
         page = 1;
@@ -258,6 +260,12 @@ function renderCategories() {
   }
 }
 function render() {
+  const isJava = category === "Java";
+  $("#java-library").hidden = !isJava;
+  for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"])
+    $(selector).hidden = isJava;
+  if (isJava) { renderCategories(); openJavaLibrary(); return; }
+
   const q = $("#search").value.trim().toLocaleLowerCase("ru");
   const visible = books.filter(
     (b) =>
@@ -484,6 +492,7 @@ async function loadProfile() {
     avatar($("#profile-avatar"));
   }
   updateCommerce();
+  updateJavaLibrary();
   if (previous !== user?.email || !selectionReady) await loadSelection();
 }
 $("#search").oninput = () => {
@@ -694,6 +703,7 @@ async function init() {
   await loadProfile().catch((e) => toast(e.message));
   await loadBooks();
 }
+setupJavaLibrary({ getUser: () => user, toast });
 setupCommerce({
   getUser: () => user,
   getBooks: () => books,

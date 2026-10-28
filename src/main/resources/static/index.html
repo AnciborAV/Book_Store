@@ -91,6 +91,19 @@
           class="categories"
           aria-label="Категории книг"
         ></div>
+        <section id="java-library" class="java-library" hidden aria-labelledby="java-title">
+          <div class="java-heading">
+            <div><span class="eyebrow">ЭЛЕКТРОННАЯ БИБЛИОТЕКА</span><h2 id="java-title">Java<span class="java-dot">.</span></h2>
+            <p>От первой строки кода — к большим идеям.<br>Книги в PDF, которые можно забрать с собой.</p></div>
+            <button id="java-add" class="button dark" type="button" hidden>Добавить PDF +</button>
+          </div>
+          <form id="java-search-form" class="java-search"><label for="java-search">Найти книгу по Java</label>
+            <div><input id="java-search" type="search" maxlength="255" placeholder="Название или автор"><button class="button light">Найти</button></div>
+          </form>
+          <p id="java-status" role="status" aria-live="polite"></p>
+          <div id="java-list" class="java-grid"></div>
+          <div id="java-pages" class="pagination" aria-label="Страницы библиотеки Java"></div>
+        </section>
         <div class="catalog-tools">
           <div class="tabs">
             <button class="active" data-filter="all">Все книги</button
@@ -296,6 +309,22 @@
       <div id="orders-list"></div>
       <div id="orders-pagination" class="commerce-actions"></div>
       <section id="order-detail" aria-live="polite"></section>
+    </dialog>
+    <dialog id="java-editor" class="commerce-dialog" aria-labelledby="java-editor-title">
+      <div class="java-editor-heading"><h2 id="java-editor-title">Новая книга по Java</h2><button id="java-close" type="button" class="button light">Закрыть</button></div>
+      <form id="java-form" class="java-form">
+        <label>Название книги<input name="title" maxlength="255" required autocomplete="off"></label>
+        <label>Автор <span class="muted">(необязательно)</span><input name="author" maxlength="255" autocomplete="off"></label>
+        <label>Описание <span class="muted">(необязательно)</span><textarea name="description" maxlength="3000" rows="3"></textarea></label>
+        <label>Книга в формате PDF<input name="pdf" type="file" accept="application/pdf,.pdf"></label>
+        <p class="java-hint">PDF до 500 МБ. Исходный файл сохраняется без изменений.</p>
+        <label>Отдельная обложка <span class="muted">(необязательно)</span><input name="cover" type="file" accept="image/png,image/jpeg,.png,.jpg,.jpeg"></label>
+        <p class="java-hint">PNG или JPEG до 2 МБ, до 4096 × 4096 пикселей. Пропорции сохраняются, края не обрезаются.</p>
+        <p id="java-file-note" class="java-hint"></p>
+        <img id="java-current-cover" alt="Текущая обложка" hidden>
+        <p id="java-error" role="alert"></p>
+        <button id="java-save" class="button dark" type="submit">Сохранить и опубликовать</button>
+      </form>
     </dialog>
     <dialog id="admin-dialog" class="commerce-dialog">
       <button class="close" aria-label="Закрыть">×</button>

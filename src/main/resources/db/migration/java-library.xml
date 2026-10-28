@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+ <changeSet id="java-pdf-library-v1" author="aav">
+  <sql><![CDATA[
+CREATE TABLE java_library (
+ id varchar(36) PRIMARY KEY,
+ title varchar(255) NOT NULL,
+ author varchar(255) NOT NULL DEFAULT '',
+ description varchar(3000) NOT NULL DEFAULT '',
+ file_size bigint NOT NULL CHECK (file_size > 0),
+ page_count integer NOT NULL CHECK (page_count > 0),
+ version bigint NOT NULL DEFAULT 0,
+ created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE java_library_files (
+ book_id varchar(36) PRIMARY KEY REFERENCES java_library(id) ON DELETE CASCADE,
+ cover bytea NOT NULL
+);
+CREATE TABLE java_library_pdf_chunks (
+ book_id varchar(36) NOT NULL REFERENCES java_library(id) ON DELETE CASCADE,
+ part integer NOT NULL,
+ data bytea NOT NULL,
+ PRIMARY KEY(book_id,part)
+);
+CREATE INDEX java_library_created ON java_library(created_at,id);
+  ]]></sql>
+ </changeSet>
+</databaseChangeLog>
