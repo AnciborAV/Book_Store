@@ -24,7 +24,7 @@ class ReviewMailSenderTest {
   when(queue.claim("one")).thenReturn(true);
   doThrow(new MailSendException("secret provider details")).when(smtp).send(any(SimpleMailMessage.class));
   new ReviewMailSender(queue,smtp,true,"sender@example.com","work@example.com","smtp.example.com").sendPending();
-  verify(queue,never()).sent(anyString());verify(queue).failed(eq("one"),not(contains("secret")));
+  verify(queue,never()).sent(anyString());verify(queue).failed(eq("one"),argThat(value -> !value.contains("secret")));
  }
  @Test void invalidRecipientPreventsSending() {
   var queue=mock(ReviewMailQueue.class);var smtp=mock(JavaMailSender.class);
