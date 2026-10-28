@@ -80,4 +80,24 @@ abstract class JavaLibraryContract {
         mvc.perform(get("/api/java-library").param("q","Java 12")).andExpect(jsonPath("$.total").value(1));
         mvc.perform(get("/api/java-library?page=-1")).andExpect(status().isBadRequest());
     }
+    @Test void largePdfIsStoredInChunksAndDownloadsUnchanged() throws Exception {
+        var out=new ByteArrayOutputStream();
+        try(var doc=new org.apache.pdfbox.pdmodel.PDDocument()) {
+            doc.addPage(new org.apache.pdfbox.pdmodel.PDPage());
+            var payload=new org.apache.pdfbox.pdmodel.common.PDStream(doc);
+            byte[] block=new byte[1024*1024]; new java.util.Random(1).nextBytes(block);
+            try(var stream=payload.createOutputStream()) { for(int n=0;n<32;n++) stream.write(block); }
+            doc.getDocumentCatalog().getCOSObject().setItem(org.apache.pdfbox.cos.COSName.getPDFName("TestPayload"),payload);
+            doc.save(out);
+        }
+        byte[] large=out.toByteArray(); assertThat(large.length).isGreaterThan(30*1024*1024);
+        var response=mvc.perform(multipart("/api/admin/java-library")
+            .file(new MockMultipartFile("pdf","large.pdf","application/pdf",large))
+            .param("title","Большой учебник").with(user("admin").roles("ADMIN")).with(csrf()))
+            .andExpect(status().isCreated()).andReturn();
+        String id=json.readTree(response.getResponse().getContentAsString()).get("id").asText();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM java_library_pdf_chunks WHERE book_id=?",Integer.class,id)).isGreaterThan(30);
+        mvc.perform(get("/api/java-library/"+id+"/download")).andExpect(content().bytes(large));
+    }
+
 }

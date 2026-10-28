@@ -1743,3 +1743,5 @@ textarea:focus-visible {
 #java-status { font-size:18px; line-height:1.6; }
 @media(max-width:1000px) { .java-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:600px) { .java-grid { grid-template-columns:1fr; } .java-heading { align-items:flex-start; flex-direction:column; } .java-editor-heading { align-items:flex-start; } .java-editor-heading h2 { font-size:26px; } }
+.java-search button { width:auto; flex:0 0 auto; }
+.java-search input { width:0; flex:1 1 0; }
