@@ -30,6 +30,33 @@ abstract class JavaLibraryContract {
             .andExpect(status().isCreated()).andExpect(jsonPath("$.pageCount").value(2)).andReturn();
         return json.readTree(response.getResponse().getContentAsString()).get("id").asText();
     }
+    @Test void civilLawUploadsStayInTheirSectionAndCanBeEdited() throws Exception {
+        create("Java existing");
+        var result=mvc.perform(multipart("/api/admin/java-library").file(pdf())
+            .param("title","Гражданское право").param("author","Юрист").param("section","civil-law")
+            .with(user("admin").roles("ADMIN")).with(csrf()))
+            .andExpect(status().isCreated()).andExpect(jsonPath("$.section").value("civil-law")).andReturn();
+        String id=json.readTree(result.getResponse().getContentAsString()).get("id").asText();
+        mvc.perform(get("/api/java-library")).andExpect(jsonPath("$.total").value(1))
+            .andExpect(jsonPath("$.items[0].title").value("Java existing"));
+        mvc.perform(get("/api/java-library").param("section","civil-law"))
+            .andExpect(jsonPath("$.total").value(1)).andExpect(jsonPath("$.items[0].id").value(id));
+        mvc.perform(get("/api/java-library").param("section","java").param("q","Юрист"))
+            .andExpect(jsonPath("$.total").value(0));
+        mvc.perform(get("/api/java-library/"+id+"/download")).andExpect(content().bytes(original));
+        mvc.perform(get("/api/java-library/"+id+"/cover")).andExpect(status().isOk());
+        mvc.perform(multipart("/api/admin/java-library/"+id).param("title","Право — учебник").param("version","0")
+            .with(user("admin").roles("ADMIN")).with(csrf()))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.section").value("civil-law"));
+        mvc.perform(multipart("/api/admin/java-library").file(pdf()).param("title","Forbidden")
+            .param("section","civil-law").with(user("reader").roles("CUSTOMER")).with(csrf()))
+            .andExpect(status().isForbidden());
+        mvc.perform(get("/api/java-library").param("section","other")).andExpect(status().isBadRequest());
+        mvc.perform(delete("/api/admin/java-library/"+id).param("version","1")
+            .with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNoContent());
+        mvc.perform(get("/api/java-library").param("section","civil-law")).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(get("/api/java-library")).andExpect(jsonPath("$.total").value(1));
+    }
     @Test void publicDownloadPreservesOriginalAndAdminCanEditDelete() throws Exception {
         String id=create("Java с нуля");
         mvc.perform(get("/api/java-library")).andExpect(status().isOk()).andExpect(jsonPath("$.total").value(1))

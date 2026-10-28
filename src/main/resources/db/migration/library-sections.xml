@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+<changeSet id="library-sections" author="aav"><sql>
+ALTER TABLE java_library ADD COLUMN section VARCHAR(32) NOT NULL DEFAULT 'java';
+ALTER TABLE java_library ADD CONSTRAINT library_section_valid CHECK (section IN ('java', 'civil-law'));
+CREATE INDEX library_section_created ON java_library(section, created_at, id);
+</sql></changeSet></databaseChangeLog>
