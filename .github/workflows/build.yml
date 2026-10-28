@@ -27,6 +27,10 @@ jobs:
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser-test/node_modules/playwright
         run: node scripts/browser-smoke.cjs
+      - name: Java PDF library and persistent files
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser-test/node_modules/playwright
+        run: node scripts/java-library-smoke.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -34,4 +38,5 @@ jobs:
           path: |
             target/surefire-reports
             target/browser-server.log
+            target/java-library-server.log
             target/browser-screenshots
