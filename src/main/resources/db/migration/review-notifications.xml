@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+<changeSet id="review-notifications-1" author="aav"><sql><![CDATA[
+ALTER TABLE book_reviews ADD COLUMN admin_read_at timestamp with time zone;
+CREATE TABLE review_mail (
+ id varchar(36) PRIMARY KEY,
+ source_key varchar(80) NOT NULL UNIQUE,
+ subject varchar(255) NOT NULL,
+ body varchar(6000) NOT NULL,
+ created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ attempts integer NOT NULL DEFAULT 0,
+ next_attempt_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ sent_at timestamp with time zone,
+ last_error varchar(100)
+);
+CREATE INDEX review_mail_due ON review_mail(sent_at,next_attempt_at);
+]]></sql></changeSet>
+</databaseChangeLog>

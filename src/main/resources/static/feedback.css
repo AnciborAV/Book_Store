@@ -19,3 +19,9 @@
 .java-download-note { display: block; margin: 10px 0; color: var(--muted); line-height: 1.5; }
 .java-download-reset { display: block; padding: 4px 0; background: none; border: 0; color: var(--muted); text-decoration: underline; font: inherit; font-size: .85rem; }
 .java-download-note[hidden], .java-download-reset[hidden] { display: none; }
+
+#open-review-inbox {margin:12px 0;}
+#admin-reviews-dialog {width:min(850px,calc(100% - 32px));max-height:90dvh;overflow:auto;}
+#admin-reviews-dialog .feedback-card {overflow-wrap:anywhere;}
+.review-mail-status {margin:24px 0;padding:20px;background:rgba(211,178,115,.08);border:1px solid rgba(211,178,115,.3);border-radius:12px;}
+#review-inbox-error {color:#e8a49d;}

@@ -59,6 +59,7 @@ public class WebSecurity {
                         "/commerce.js",
                         "/java-library.js",
                         "/feedback.js",
+                        "/admin-reviews.js",
                         "/announcement.js",
                         "/announcement.css",
                         "/api/announcement",

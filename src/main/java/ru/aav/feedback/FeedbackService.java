@@ -18,6 +18,7 @@ import ru.aav.auth.CurrentAccount;
 public class FeedbackService {
     private final JdbcTemplate jdbc;
     private final CurrentAccount accounts;
+    private final ru.aav.notifications.ReviewMailQueue mail;
     public enum Kind { REVIEW, ISSUE, IDEA }
     public enum State { PENDING, PUBLISHED, ARCHIVED }
     public record Entry(String id, String author, Kind kind, String body, boolean publicConsent,
@@ -51,6 +52,11 @@ public class FeedbackService {
         String id = UUID.randomUUID().toString();
         jdbc.update("INSERT INTO site_feedback(id,user_id,request_id,author,kind,body,public_consent) VALUES(?,?,?,?,?,?,?)",
             id, user.getId(), requestId.toString(), user.getDisplayName(), kind.name(), body.strip(), consent);
+        String label = switch(kind) {case REVIEW -> "Отзыв о сайте"; case ISSUE -> "Замечание"; case IDEA -> "Предложение";};
+        mail.enqueue("SITE:"+id,"Новое сообщение о сайте",
+            label+"\nАвтор: "+user.getDisplayName()+"\n\n"+body.strip()
+            +"\n\n"+(consent ? "Автор разрешил публикацию после проверки." : "Сообщение только для администратора. Не публиковать.")
+            +"\nОткройте кабинет администратора → Отзывы и уведомления → О сайте.");
         return id;
     }
 
