@@ -173,7 +173,6 @@ async function loadSelection() {
 function updateCartCount() {
   updateCommerce();
   updateJavaLibrary();
-  updateFeedback();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
