@@ -17,6 +17,7 @@ public class ReviewService {
     private final ReviewRepository reviews;
     private final CurrentAccount accounts;
     private final BookService books;
+    private final ru.aav.notifications.ReviewMailQueue mail;
 
     public List<Review> list(long book, String email) {
         books.findById(book);
@@ -28,9 +29,14 @@ public class ReviewService {
 
     @Transactional
     public void save(long book, String email, int rating, String body) {
-        long user = accounts.lock(email).getId();
-        books.findById(book);
-        reviews.save(book, user, rating, body.strip());
+        var account = accounts.lock(email);
+        var title = books.findById(book);
+        if (reviews.save(book, account.getId(), rating, body.strip())) {
+            mail.enqueue("BOOK:"+reviews.id(book,account.getId()), "Новый отзыв о книге",
+                "Книга: "+title.getName()+" — "+title.getAuthor()+"\nАвтор отзыва: "+account.getDisplayName()
+                +"\nОценка: "+rating+" из 5\n\n"+body.strip()
+                +"\n\nОткройте кабинет администратора → Отзывы и уведомления → Книги.");
+        }
     }
 
     @Transactional

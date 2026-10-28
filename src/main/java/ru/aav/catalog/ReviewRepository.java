@@ -27,10 +27,10 @@ public class ReviewRepository {
         );
     }
 
-    public void save(long book, long user, int rating, String body) {
+    public boolean save(long book, long user, int rating, String body) {
         if (
             jdbc.update(
-                "UPDATE book_reviews SET rating=?, body=? WHERE book_id=? AND user_id=?",
+                "UPDATE book_reviews SET rating=?, body=?, admin_read_at=NULL WHERE book_id=? AND user_id=?",
                 rating,
                 body,
                 book,
@@ -44,7 +44,13 @@ public class ReviewRepository {
                 rating,
                 body
             );
+            return true;
         }
+        return false;
+    }
+
+    public long id(long book,long user) {
+        return jdbc.queryForObject("SELECT id FROM book_reviews WHERE book_id=? AND user_id=?",Long.class,book,user);
     }
 
     public boolean delete(long book, long review, long user) {

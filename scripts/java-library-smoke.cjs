@@ -39,6 +39,13 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
  await page.locator('.java-card a.java-downloaded').waitFor();
  await page.getByRole('button',{name:'Сбросить отметку',exact:true}).click();
  assert.equal(await page.locator('.java-card a').textContent(), 'Скачать PDF ↓');
+ // Admin review inbox is accessible and clearly indicates disabled email.
+ await page.locator('#account').click();
+ await page.locator('#open-review-inbox').click();
+ await page.locator('#admin-reviews-dialog').waitFor({state:'visible'});
+ await page.locator('#review-mail-message').filter({hasText:'выключены'}).waitFor();
+ await page.locator('#review-inbox-site').click();
+ await page.locator('#admin-reviews-dialog').waitFor({state:'hidden'});
  // Feedback is persisted, moderated, and rendered as text, including markup-like input.
  await page.locator('#feedback-form [name=body]').fill('<img src=x onerror=alert(1)> Спасибо за сайт');
  await page.locator('#feedback-form [name=publicConsent]').check();

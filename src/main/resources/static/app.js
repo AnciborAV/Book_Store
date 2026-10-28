@@ -1,3 +1,4 @@
+import { setupAdminReviews, updateAdminReviews } from "./admin-reviews.js";
 import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
 import { setupFeedback, updateFeedback } from "./feedback.js";
 import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-library.js";
@@ -496,6 +497,7 @@ async function loadProfile() {
   updateCommerce();
   updateJavaLibrary();
   updateFeedback();
+  updateAdminReviews();
   updateAnnouncement();
   if (previous !== user?.email || !selectionReady) await loadSelection();
 }
@@ -708,6 +710,7 @@ async function init() {
   await loadBooks();
 }
 setupAnnouncement({ getUser: () => user });
+setupAdminReviews({ getUser: () => user });
 setupFeedback({ getUser: () => user });
 setupJavaLibrary({ getUser: () => user, toast });
 setupCommerce({
