@@ -30,6 +30,30 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
  await page.locator('#java-save').click();await page.locator('#java-editor').waitFor({state:'hidden'});
  await page.locator('.java-card h3').filter({hasText:'Java: первая книга'}).waitFor();
  const downloadPath=await page.locator('.java-card a').getAttribute('href');
+ const downloadEvent = page.waitForEvent('download');
+ await page.locator('.java-card a').click();
+ assert.equal(await (await downloadEvent).failure(), null);
+ assert.equal(await page.locator('.java-card a').textContent(), 'Скачать ещё раз ↓');
+ assert.ok(await page.locator('.java-card a').evaluate(n=>n.classList.contains('java-downloaded')));
+ await page.reload();await page.getByRole('button',{name:'Java · PDF',exact:true}).click();
+ await page.locator('.java-card a.java-downloaded').waitFor();
+ await page.getByRole('button',{name:'Сбросить отметку',exact:true}).click();
+ assert.equal(await page.locator('.java-card a').textContent(), 'Скачать PDF ↓');
+ // Feedback is persisted, moderated, and rendered as text, including markup-like input.
+ await page.locator('#feedback-form [name=body]').fill('<img src=x onerror=alert(1)> Спасибо за сайт');
+ await page.locator('#feedback-form [name=publicConsent]').check();
+ await page.locator('#feedback-form button[type=submit]').click();
+ await page.locator('#feedback-result').filter({hasText:'Спасибо!'}).waitFor();
+ await page.locator('#feedback-refresh').click();
+ await page.locator('#feedback-inbox .feedback-card').waitFor();
+ assert.equal(await page.locator('#feedback-inbox .feedback-card img').count(),0);
+ page.once('dialog', d=>d.accept());
+ await page.locator('#feedback-inbox').getByRole('button',{name:'Опубликовать',exact:true}).click();
+ await page.locator('#feedback-public .feedback-card').waitFor();
+ await page.locator('#site-feedback').scrollIntoViewIfNeeded();
+ mkdirSync('target/browser-screenshots',{recursive:true});
+ await page.screenshot({path:'target/browser-screenshots/feedback-desktop.png'});
+
  const source=readFileSync('src/test/resources/java-library-sample.pdf');
  assert.deepEqual(Buffer.from(await (await fetch(base+downloadPath)).arrayBuffer()),source);
  await page.getByRole('button',{name:'Редактировать',exact:true}).click();
@@ -46,6 +70,9 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
  const guest=await browser.newPage();await guest.goto(base);await guest.getByRole('button',{name:'Java · PDF',exact:true}).click();
  await guest.locator('.java-card h3').filter({hasText:'Java: обновлённая книга'}).waitFor();
  assert.equal(await guest.getByRole('button',{name:'Редактировать',exact:true}).count(),0);
+ await guest.locator('#feedback-public .feedback-card').waitFor();
+ assert.equal(await guest.locator('#feedback-admin').isVisible(),false);
+ assert.equal(await guest.locator('.java-card a').textContent(),'Скачать PDF ↓');
  assert.deepEqual(Buffer.from(await(await fetch(base+downloadPath)).arrayBuffer()),source);
  assert.deepEqual(errors,[]);console.log('Java library upload/edit/public download/restart/mobile passed');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await stop();});
