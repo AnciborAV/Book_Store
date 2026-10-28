@@ -1,3 +1,4 @@
+import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
 import { setupFeedback, updateFeedback } from "./feedback.js";
 import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-library.js";
 import { setupCommerce, updateCommerce } from "./commerce.js";
@@ -495,6 +496,7 @@ async function loadProfile() {
   updateCommerce();
   updateJavaLibrary();
   updateFeedback();
+  updateAnnouncement();
   if (previous !== user?.email || !selectionReady) await loadSelection();
 }
 $("#search").oninput = () => {
@@ -705,6 +707,7 @@ async function init() {
   await loadProfile().catch((e) => toast(e.message));
   await loadBooks();
 }
+setupAnnouncement({ getUser: () => user });
 setupFeedback({ getUser: () => user });
 setupJavaLibrary({ getUser: () => user, toast });
 setupCommerce({
