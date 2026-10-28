@@ -19,7 +19,8 @@ public class JavaLibraryController {
 
     @GetMapping("/api/java-library")
     public JavaLibraryService.Page list(@RequestParam(defaultValue="0") @Min(0) @Max(1000000) int page,
-        @RequestParam(defaultValue="") @Size(max=255) String q) { return library.list(page,q); }
+        @RequestParam(defaultValue="") @Size(max=255) String q,
+        @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law") String section) { return library.list(page,q,section); }
 
     @GetMapping("/api/java-library/{id}/download")
     public void download(@PathVariable UUID id, HttpServletResponse response) throws IOException {
@@ -35,9 +36,10 @@ public class JavaLibraryController {
     public JavaLibraryService.Book create(@RequestParam @NotBlank @Size(max=255) String title,
         @RequestParam(defaultValue="") @Size(max=255) String author,
         @RequestParam(defaultValue="") @Size(max=3000) String description,
+        @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law") String section,
         @RequestParam MultipartFile pdf, @RequestParam(required=false) MultipartFile cover) throws IOException {
         try (var prepared=files.prepare(pdf,cover)) {
-            return library.create(title,author,description,prepared);
+            return library.create(title,author,description,section,prepared);
         }
     }
     @PostMapping(value="/api/admin/java-library/{id}",consumes=MediaType.MULTIPART_FORM_DATA_VALUE)

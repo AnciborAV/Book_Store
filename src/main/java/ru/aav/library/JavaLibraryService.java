@@ -22,26 +22,26 @@ import org.springframework.web.server.ResponseStatusException;
 public class JavaLibraryService {
     private final JdbcTemplate jdbc;
     public record Book(String id, String title, String author, String description, long fileSize,
-                       int pageCount, long version, Instant updatedAt) {}
+                       int pageCount, long version, Instant updatedAt, String section) {}
     public record Page(List<Book> items, long total, int page, int pageSize) {}
     public record File(String title, byte[] bytes) {}
     private static final RowMapper<Book> ROW = (r,n) -> new Book(r.getString("id"),r.getString("title"),
         r.getString("author"),r.getString("description"),r.getLong("file_size"),r.getInt("page_count"),
-        r.getLong("version"),r.getTimestamp("updated_at").toInstant());
+        r.getLong("version"),r.getTimestamp("updated_at").toInstant(),r.getString("section"));
 
     @Transactional(readOnly=true)
-    public Page list(int page, String query) {
+    public Page list(int page, String query, String section) {
         String q = "%" + query.strip().toLowerCase(Locale.ROOT).replace("!","!!").replace("%","!%").replace("_","!_") + "%";
-        String where = " WHERE LOWER(title) LIKE ? ESCAPE '!' OR LOWER(author) LIKE ? ESCAPE '!'";
-        long count = jdbc.queryForObject("SELECT COUNT(*) FROM java_library"+where,Long.class,q,q);
-        return new Page(jdbc.query("SELECT * FROM java_library"+where+" ORDER BY created_at DESC,id LIMIT 12 OFFSET ?",ROW,q,q,(long)page*12),count,page,12);
+        String where = " WHERE section=? AND (LOWER(title) LIKE ? ESCAPE '!' OR LOWER(author) LIKE ? ESCAPE '!')";
+        long count = jdbc.queryForObject("SELECT COUNT(*) FROM java_library"+where,Long.class,section,q,q);
+        return new Page(jdbc.query("SELECT * FROM java_library"+where+" ORDER BY created_at DESC,id LIMIT 12 OFFSET ?",ROW,section,q,q,(long)page*12),count,page,12);
     }
     @Transactional
-    public Book create(String title,String author,String description,LibraryFiles.Prepared files) {
+    public Book create(String title,String author,String description,String section,LibraryFiles.Prepared files) {
         if (files.pdf()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Выберите PDF книги");
         String id=UUID.randomUUID().toString();
-        jdbc.update("INSERT INTO java_library(id,title,author,description,file_size,page_count) VALUES(?,?,?,?,?,?)",
-            id,title.strip(),author.strip(),description.strip(),files.size(),files.pages());
+        jdbc.update("INSERT INTO java_library(id,title,author,description,file_size,page_count,section) VALUES(?,?,?,?,?,?,?)",
+            id,title.strip(),author.strip(),description.strip(),files.size(),files.pages(),section);
         jdbc.update("INSERT INTO java_library_files(book_id,cover) VALUES(?,?)",id,files.cover());
         savePdf(id,files);
         return get(id);

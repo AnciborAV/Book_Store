@@ -250,7 +250,7 @@ function renderCategories() {
       (b) => name === "all" || b.category === name,
     ).length;
     const button = action(
-      name === "Java" ? "Java · PDF" : (name === "all" ? "Все разделы" : name) + " · " + count,
+      (name === "Java" || name === "Гражданское право") ? name : (name === "all" ? "Все разделы" : name) + " · " + count,
       () => {
         category = name;
         page = 1;
@@ -264,10 +264,12 @@ function renderCategories() {
 }
 function render() {
   const isJava = category === "Java";
-  $("#java-library").hidden = !isJava;
+  const isCivilLaw = category === "Гражданское право";
+  $("#java-library").hidden = !(isJava || isCivilLaw);
+  if (isCivilLaw) openJavaLibrary("civil-law");
   for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"])
     $(selector).hidden = isJava;
-  if (isJava) { renderCategories(); openJavaLibrary(); return; }
+  if (isJava) { renderCategories(); openJavaLibrary("java"); return; }
 
   const q = $("#search").value.trim().toLocaleLowerCase("ru");
   const visible = books.filter(

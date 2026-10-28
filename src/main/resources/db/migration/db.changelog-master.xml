@@ -18,4 +18,5 @@
     <include file="/db/migration/site-announcement.xml"/>
     <include file="/db/migration/review-notifications.xml"/>
     <include file="/db/migration/password-reset.xml"/>
+    <include file="/db/migration/library-sections.xml"/>
 </databaseChangeLog>

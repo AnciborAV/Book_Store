@@ -1,6 +1,8 @@
 import { request } from './api-client.js';
 const $ = s => document.querySelector(s);
 let getUser, toast, page = 0, query = '', generation = 0, editing = null, busy = false;
+let section = 'java', editorSection = 'java';
+const sectionTitle = () => section === 'civil-law' ? 'Гражданское право' : 'Java';
 const el = (tag, text, cls) => {
   const n = document.createElement(tag);
   if (text !== undefined) n.textContent = text;
@@ -46,23 +48,32 @@ export function updateJavaLibrary() {
   if (!admin() && $('#java-editor').open) $('#java-editor').close();
   if (!$('#java-library').hidden) load();
 }
-export function openJavaLibrary() { load(); }
+export function openJavaLibrary(nextSection = 'java') {
+  if (section !== nextSection) { section = nextSection; page = 0; query = ''; $('#java-search').value = ''; }
+  $('#java-title').textContent = sectionTitle();
+  $('#library-intro').textContent = section === 'civil-law'
+    ? 'Книги по гражданскому праву. Скачивайте PDF и изучайте в удобное время.'
+    : 'От первой строки кода — к большим идеям. Книги в PDF, которые можно забрать с собой.';
+  $('#java-search-form label').textContent = 'Найти книгу — ' + sectionTitle();
+  $('#java-pages').setAttribute('aria-label', 'Страницы библиотеки: ' + sectionTitle());
+  load();
+}
 async function load() {
   const ticket = ++generation;
   $('#java-status').textContent = 'Загружаем электронную полку…';
   $('#java-list').replaceChildren(); $('#java-pages').replaceChildren();
   try {
-    const data = await request('/api/java-library?' + new URLSearchParams({ page, q: query }));
+    const data = await request('/api/java-library?' + new URLSearchParams({ page, q: query, section }));
     if (ticket !== generation) return;
     if (page && !data.items.length) { page = Math.max(0, Math.ceil(data.total / 12) - 1); return load(); }
-    $('#java-status').textContent = data.total ? `Книг: ${data.total}. Скачивание доступно без регистрации.` : 'Полка пока пуста. Здесь появятся книги по Java для свободного скачивания.';
+    $('#java-status').textContent = data.total ? `Книг: ${data.total}. Скачивание доступно без регистрации.` : `Полка «${sectionTitle()}» пока пуста. Здесь появятся книги для свободного скачивания.`;
     for (const book of data.items) {
       const card = el('article', undefined, 'java-card');
       const img = el('img'); img.src = `/api/java-library/${book.id}/cover?v=${book.version}`;
       img.alt = 'Обложка книги «' + book.title + '»'; img.loading = 'lazy'; img.decoding = 'async';
       const frame = el('div', undefined, 'java-cover'); frame.append(img);
       const info = el('div', undefined, 'java-info');
-      info.append(el('span', 'JAVA · PDF', 'eyebrow'), el('h3', book.title));
+      info.append(el('span', sectionTitle(), 'eyebrow'), el('h3', book.title));
       if (book.author) info.append(el('p', book.author, 'java-author'));
       info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
       if (book.description) info.append(el('p', book.description, 'java-description'));
@@ -87,9 +98,9 @@ async function load() {
   }
 }
 function editor(book = null) {
-  editing = book;
+  editing = book; editorSection = book?.section || section;
   const form = $('#java-form'); form.reset(); $('#java-error').textContent = '';
-  $('#java-editor-title').textContent = book ? 'Редактировать книгу' : 'Новая книга по Java';
+  $('#java-editor-title').textContent = book ? 'Редактировать книгу' : 'Новая книга — ' + sectionTitle();
   form.elements.title.value = book?.title || '';
   form.elements.author.value = book?.author || '';
   form.elements.description.value = book?.description || '';
@@ -122,6 +133,7 @@ export function setupJavaLibrary(options) {
     if (pdf && pdf.size > 500 * 1024 * 1024) { $('#java-error').textContent = 'PDF должен быть не больше 500 МБ'; return; }
     if (cover && cover.size > 2 * 1024 * 1024) { $('#java-error').textContent = 'Обложка должна быть не больше 2 МБ'; return; }
     const data = new FormData(form);
+    data.set('section', editorSection);
     if (!pdf) data.delete('pdf'); if (!cover) data.delete('cover');
     if (editing) data.set('version', editing.version);
     busy = true; $('#java-save').disabled = true; $('#java-close').disabled = true;
