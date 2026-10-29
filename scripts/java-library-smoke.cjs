@@ -20,7 +20,7 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
 (async()=>{
  await start();browser=await chromium.launch({headless:true});
  const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base);await page.getByRole('button',{name:'Java · PDF',exact:true}).click();
+ await page.goto(base);await page.getByRole('button',{name:'Java',exact:true}).click();
  assert.equal(await page.locator('#java-add').isVisible(),false);
  await page.locator('#account').click();await page.locator('#auth-form [name=email]').fill('java-admin@example.com');
  await page.locator('#auth-form [name=password]').fill('java-admin-password');await page.locator('#auth-submit').click();
@@ -35,7 +35,7 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
  assert.equal(await (await downloadEvent).failure(), null);
  assert.equal(await page.locator('.java-card a').textContent(), 'Скачать ещё раз ↓');
  assert.ok(await page.locator('.java-card a').evaluate(n=>n.classList.contains('java-downloaded')));
- await page.reload();await page.getByRole('button',{name:'Java · PDF',exact:true}).click();
+ await page.reload();await page.getByRole('button',{name:'Java',exact:true}).click();
  await page.locator('.java-card a.java-downloaded').waitFor();
  await page.getByRole('button',{name:'Сбросить отметку',exact:true}).click();
  assert.equal(await page.locator('.java-card a').textContent(), 'Скачать PDF ↓');
@@ -74,7 +74,7 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
   await page.screenshot({path:`target/browser-screenshots/java-${width}.png`});
  }
  await stop();await start();
- const guest=await browser.newPage();await guest.goto(base);await guest.getByRole('button',{name:'Java · PDF',exact:true}).click();
+ const guest=await browser.newPage();await guest.goto(base);await guest.getByRole('button',{name:'Java',exact:true}).click();
  await guest.locator('.java-card h3').filter({hasText:'Java: обновлённая книга'}).waitFor();
  assert.equal(await guest.getByRole('button',{name:'Редактировать',exact:true}).count(),0);
  await guest.locator('#feedback-public .feedback-card').waitFor();

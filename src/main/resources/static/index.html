@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/password-recovery.css" />
       <link rel="stylesheet" href="/feedback.css" />
       <link rel="stylesheet" href="/announcement.css" />
+      <link rel="stylesheet" href="/editorial.css" />
   </head>
   <body>
     <div class="home-masthead">
@@ -33,8 +34,7 @@
         </a>
         <button id="menu-toggle" class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation"><span aria-hidden="true">☰</span> Меню</button>
         <nav id="main-navigation" aria-label="Основная навигация">
-          <a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a
-          ><a href="#about">О магазине</a>
+          <a href="#about">О магазине</a><a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a>
         </nav>
         <button id="open-cart" class="account" aria-label="Открыть корзину">
           Корзина <span id="cart-count" class="cart-badge">0</span></button
@@ -71,8 +71,8 @@
           <h2>Хорошие книги.<br /><em>Хорошая компания.</em></h2>
         </div>
         <p>
-          Знакомые авторы и неожиданные открытия.<br />Собирайте собственную
-          коллекцию историй.
+          Знакомые авторы и неожиданные открытия.<br />Личные рекомендации редактора.
+          <button type="button" class="button light" data-open-editorial>Открыть выбор редакции ↗</button>
         </p>
         <span class="collection-star">✳</span>
       </section>
@@ -123,7 +123,7 @@
             <label class="sort-label"
               >Сортировка
               <select id="sort">
-                <option value="default">Выбор редакции</option>
+                <option value="default">По умолчанию</option>
                 <option value="name">По названию</option>
                 <option value="author">По автору</option>
               </select></label
@@ -163,6 +163,53 @@
         ><span>© 2026 Анцибор А.В.</span>
       </footer>
     </div>
+
+    <dialog id="editorial-dialog" class="editorial-dialog" aria-labelledby="editorial-heading">
+      <div class="editorial-dialog-head"><div><span class="eyebrow">ЛИЧНАЯ КНИЖНАЯ ПОЛКА</span><h2 id="editorial-heading">Выбор редакции</h2></div><button type="button" class="text-button" data-editorial-close>Закрыть ✕</button></div>
+      <p id="editorial-help"></p>
+      <div class="editorial-toolbar"><label>Найти книгу<input id="editorial-search" type="search" placeholder="Название или автор" /></label><button id="editorial-manage" type="button" class="button dark" hidden>Управлять подборками</button><button id="editorial-retry" type="button" class="text-button">Обновить</button></div>
+      <div id="editorial-filters" class="editorial-card-actions" aria-label="Подборки редактора"></div>
+      <p id="editorial-status" role="status"></p><div id="editorial-list"></div>
+    </dialog>
+    <dialog id="description-dialog" class="description-dialog" aria-labelledby="description-title">
+      <pre class="description-code" aria-hidden="true">import java.util.List;
+
+public final class ReadingRoom {
+    public static void main(String[] args) {
+        var books = List.of("Ideas", "Knowledge");
+        books.stream()
+             .map(String::toUpperCase)
+             .forEach(System.out::println);
+    }
+}
+
+interface Reader {
+    void discover();
+}
+
+// Каждая книга открывает новый мир.
+record Chapter(String title, int pages) { }</pre>
+      <div class="description-content"><div class="editorial-dialog-head"><span class="eyebrow">О КНИГЕ</span><button type="button" class="text-button" data-editorial-close>Закрыть ✕</button></div>
+      <h2 id="description-title"></h2><p id="description-author" class="description-author"></p><div id="description-body" lang="ru"></div>
+      <p id="description-source"></p><aside id="description-comment" class="editorial-note"></aside>
+      <button id="description-edit" type="button" class="button light" hidden>Редактировать описание и рекомендацию</button></div>
+    </dialog>
+    <dialog id="editorial-editor" class="editorial-dialog" aria-labelledby="editorial-edit-title">
+      <div class="editorial-dialog-head"><span class="eyebrow">РЕДАКТОР МАГАЗИНА</span><button type="button" class="text-button" data-editorial-close>Закрыть ✕</button></div>
+      <h2 id="editorial-edit-title"></h2>
+      <form id="editorial-form">
+        <label>Описание книги<textarea name="description" maxlength="3000" rows="9"></textarea></label>
+        <small>Короткая заметка до 3000 символов. Абзацы отделяйте пустой строкой. Текст публикуется как обычный текст, без HTML.</small>
+        <label>Подборки редактора<textarea name="lists" maxlength="407" rows="3" placeholder="Выбор редакции&#10;Изучаем Java"></textarea></label>
+        <small>По одному названию в строке: до 8 списков по 50 символов. Новое название создаёт подборку. Без списков книга не показывается в «Выборе редакции».</small>
+        <div id="editorial-existing" class="editorial-card-actions" aria-label="Добавить в существующий список"></div>
+        <button id="editorial-clear-lists" type="button" class="text-button">Убрать из всех подборок</button>
+        <label>Закреплённый комментарий редактора<textarea name="comment" maxlength="1000" rows="4" placeholder="Почему вы рекомендуете эту книгу?"></textarea></label>
+        <small>Виден всем в карточке и описании книги, даже вне подборки. Чтобы убрать комментарий, очистите поле и сохраните.</small>
+        <p id="editorial-error" role="alert"></p><button id="editorial-save" type="submit" class="button dark">Сохранить и опубликовать</button>
+      </form>
+    </dialog>
+
     <dialog id="auth-dialog">
       <button class="close" aria-label="Закрыть">×</button>
       <div class="eyebrow">ВАША ЛИЧНАЯ ИСТОРИЯ</div>
