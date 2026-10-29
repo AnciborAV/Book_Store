@@ -142,6 +142,7 @@ async function remove(book) {
   busy = true;
   try {
     await request(`/api/admin/java-library/${book.id}?version=${book.version}`, { method: 'DELETE' });
+    document.dispatchEvent(new Event('library-books-changed'));
     toast('Книга удалена'); await load();
   } catch (e) { toast(e.message); } finally { busy = false; }
 }
@@ -169,6 +170,7 @@ export function setupJavaLibrary(options) {
     $('#java-save').textContent = 'Загрузка и сохранение…';
     try {
       await request('/api/admin/java-library' + (editing ? '/' + editing.id : ''), { method: 'POST', body: data });
+      document.dispatchEvent(new Event('library-books-changed'));
       $('#java-editor').close(); toast('Книга опубликована и доступна для скачивания');
       page = 0; query = ''; $('#java-search').value = ''; await load();
     } catch (err) { $('#java-error').textContent = err.message; }
