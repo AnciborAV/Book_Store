@@ -1,5 +1,5 @@
 .reading-hero { position:relative; }
-#owner-announcement { position:absolute; z-index:4; top:16px; right:clamp(20px,4vw,70px); width:min(390px,36vw); max-height:430px; overflow:auto; padding:28px 30px; border:1px solid rgba(226,199,143,.65); border-radius:4px 4px 24px 4px; background:rgba(22,35,29,.80); backdrop-filter:blur(9px); -webkit-backdrop-filter:blur(9px); color:#fff6e4; box-shadow:0 14px 40px #0003; }
+#owner-announcement { position:absolute; z-index:4; top:16px; right:clamp(20px,4vw,70px); width:min(390px,36vw); max-height:430px; overflow:auto; padding:28px 30px; border:1px solid rgba(226,199,143,.65); border-radius:4px 4px 24px 4px; background:rgba(33,27,22,.90); backdrop-filter:blur(9px); -webkit-backdrop-filter:blur(9px); color:#fff6e4; box-shadow:0 14px 40px #0003; }
 #owner-announcement[hidden] { display:none; }
 .owner-note-label {font:600 10px/1.5 sans-serif; letter-spacing:.22em; color:#e5c889; margin-bottom:16px;}
 #owner-note-body {font:400 23px/1.5 Georgia,'Times New Roman',serif; white-space:pre-wrap; overflow-wrap:anywhere; margin:0;}
