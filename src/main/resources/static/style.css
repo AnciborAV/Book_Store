@@ -2014,3 +2014,15 @@ textarea:focus-visible {
 /* PDF favorites share the catalogue heart control. */
 .java-cover { position: relative; }
 .java-cover .favorite { z-index: 1; }
+
+/* An author's portrait in the opening of the personal preface. */
+.about-story-content {display:flow-root;}
+.about-author {float:left;width:240px;margin:4px 36px 24px 0;padding:8px;background:#211912;border:1px solid #b693586e;border-radius:8px;box-shadow:0 16px 38px #0005;}
+.about-author img {display:block;width:100%;height:auto;border-radius:3px;}
+.about-author figcaption {padding:16px 8px 10px;text-align:center;line-height:1.5;}
+.about-author figcaption span {display:block;font-family:Georgia,"Times New Roman",serif;font-size:21px;color:#efcf94;}
+.about-author figcaption small {display:block;margin-top:4px;font-size:14px;letter-spacing:.06em;color:#c7b89f;}
+.about-story p.about-story-signature {clear:both;}
+@media(max-width:1000px) {
+  .about-author {float:none;width:min(260px,100%);margin:0 auto 30px;}
+}
