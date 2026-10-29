@@ -1,3 +1,4 @@
+import { addEditorialControls } from "./editorial.js";
 import { request } from './api-client.js';
 const $ = s => document.querySelector(s);
 let getUser, toast, page = 0, query = '', generation = 0, editing = null, busy = false;
@@ -76,8 +77,9 @@ async function load() {
       info.append(el('span', sectionTitle(), 'eyebrow'), el('h3', book.title));
       if (book.author) info.append(el('p', book.author, 'java-author'));
       info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
-      if (book.description) info.append(el('p', book.description, 'java-description'));
+
       downloadControls(book, info);
+      addEditorialControls(info, "library", book);
       if (admin()) {
         const actions = el('div', undefined, 'java-actions');
         actions.append(button('Редактировать', () => editor(book)), button('Удалить', () => remove(book)));
@@ -104,6 +106,7 @@ function editor(book = null) {
   form.elements.title.value = book?.title || '';
   form.elements.author.value = book?.author || '';
   form.elements.description.value = book?.description || '';
+  form.elements.description.closest('label').hidden = !!book; // Existing descriptions are edited in the shared editorial dialog.
   form.elements.pdf.required = !book;
   $('#java-file-note').textContent = book ? 'Оставьте файлы пустыми, чтобы сохранить текущий PDF и обложку. Новый PDF обновит обложку по первой странице, если не выбрана отдельная.' : 'Обложка появится автоматически с первой страницы PDF. При желании выберите отдельное изображение.';
   $('#java-current-cover').hidden = !book;

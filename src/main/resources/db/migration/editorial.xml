@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="editorial-books-v1" author="aav">
+    <sql>
+      CREATE TABLE book_editorial (
+        id bigserial PRIMARY KEY,
+        catalog_id bigint UNIQUE REFERENCES books(id) ON DELETE CASCADE,
+        library_id varchar(36) UNIQUE REFERENCES java_library(id) ON DELETE CASCADE,
+        description varchar(3000),
+        lists varchar(500) NOT NULL DEFAULT '',
+        comment varchar(1000) NOT NULL DEFAULT '',
+        version bigint NOT NULL DEFAULT 0,
+        CHECK ((catalog_id IS NOT NULL AND library_id IS NULL) OR (catalog_id IS NULL AND library_id IS NOT NULL))
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>

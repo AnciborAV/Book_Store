@@ -1,0 +1,69 @@
+package ru.aav;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(properties={"spring.datasource.url=jdbc:h2:mem:editorial;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password="})
+@AutoConfigureMockMvc
+class EditorialTest {
+    @Autowired MockMvc mvc;
+    @Autowired JdbcTemplate jdbc;
+    @Autowired ObjectMapper json;
+    final String library="00000000-0000-0000-0000-000000000071";
+    long catalog;
+    @BeforeEach void reset() {
+        jdbc.update("DELETE FROM book_editorial");
+        jdbc.update("DELETE FROM java_library WHERE id=?",library);
+        jdbc.update("INSERT INTO java_library(id,title,author,description,file_size,page_count,section) VALUES(?,?,?,?,?,?,?)",
+            library,"Философия Java","Брюс Эккель","",100,10,"java");
+        catalog=jdbc.queryForObject("SELECT MIN(id) FROM books",Long.class);
+    }
+    String payload(long version,String lists,String comment) throws Exception {
+        return json.writeValueAsString(java.util.Map.of("version",version,"description","Моё описание", "lists", lists.isBlank()?java.util.List.of():java.util.List.of(lists,"Изучаем Java"),"comment",comment));
+    }
+    @Test void recommendationsPersistAcrossCatalogsAndRemovalDoesNotDeleteBooks() throws Exception {
+        mvc.perform(get("/api/editorial/books")).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
+        String url="/api/admin/editorial/books/library/"+library;
+        mvc.perform(put(url).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(-1,"Начать здесь","Рекомендую")))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.version").value(0));
+        mvc.perform(put("/api/admin/editorial/books/catalog/"+catalog).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(-1,"Классика","Мой выбор"))).andExpect(status().isOk());
+        mvc.perform(get("/api/editorial/books")).andExpect(jsonPath("$.length()").value(2));
+        mvc.perform(get("/api/editorial/books/library/"+library)).andExpect(jsonPath("$.lists.length()").value(2)).andExpect(jsonPath("$.comment").value("Рекомендую"));
+        mvc.perform(put(url).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(0,"",""))).andExpect(status().isOk());
+        mvc.perform(get("/api/editorial/books")).andExpect(jsonPath("$.length()").value(1));
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM java_library WHERE id=?",Integer.class,library)).isEqualTo(1);
+        jdbc.update("DELETE FROM java_library WHERE id=?",library);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM book_editorial WHERE library_id=?",Integer.class,library)).isZero();
+    }
+    @Test void mutationsRequireAdminCsrfAndCurrentVersion() throws Exception {
+        String url="/api/admin/editorial/books/library/"+library, data=payload(-1,"Выбор редакции","Комментарий");
+        mvc.perform(put(url).with(csrf()).contentType("application/json").content(data)).andExpect(status().isUnauthorized());
+        mvc.perform(put(url).with(user("reader")).with(csrf()).contentType("application/json").content(data)).andExpect(status().isForbidden());
+        mvc.perform(put(url).with(user("admin").roles("ADMIN")).contentType("application/json").content(data)).andExpect(status().isForbidden());
+        mvc.perform(put(url).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(data)).andExpect(status().isOk());
+        mvc.perform(put(url).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(data)).andExpect(status().isConflict());
+        mvc.perform(put(url).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(0,"Bad\nname",""))).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/editorial/books/wrong/12")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/editorial/books/library/00000000-0000-0000-0000-000000000072")).andExpect(status().isNotFound());
+    }
+    @Test void sourcedDescriptionsAreTargetedAndCanBeOverridden() throws Exception {
+        mvc.perform(get("/api/editorial/books/library/"+library)).andExpect(jsonPath("$.description").value(org.hamcrest.Matchers.containsString("Брюса Эккеля")))
+            .andExpect(jsonPath("$.source").value(org.hamcrest.Matchers.containsString("piter.com")));
+        jdbc.update("UPDATE java_library SET title='Java. Полное руководство (12 издание)',author='Герберт Шилдт' WHERE id=?",library);
+        mvc.perform(get("/api/editorial/books/library/"+library)).andExpect(jsonPath("$.description").value(org.hamcrest.Matchers.containsString("Java SE 17")));
+        jdbc.update("UPDATE java_library SET title='Другая книга',description='Прежнее описание' WHERE id=?",library);
+        mvc.perform(get("/api/editorial/books/library/"+library)).andExpect(jsonPath("$.description").value("Прежнее описание")).andExpect(jsonPath("$.source").value(""));
+        mvc.perform(put("/api/admin/editorial/books/library/"+library).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(-1,"",""))).andExpect(jsonPath("$.description").value("Моё описание"));
+        mvc.perform(get("/editorial.js")).andExpect(status().isOk());
+        mvc.perform(get("/editorial.css")).andExpect(status().isOk());
+    }
+}

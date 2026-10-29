@@ -1,3 +1,4 @@
+import { setupEditorial, updateEditorial, addEditorialControls } from "./editorial.js";
 import { setupAdminReviews, updateAdminReviews } from "./admin-reviews.js";
 import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
 import { setupFeedback, updateFeedback } from "./feedback.js";
@@ -173,6 +174,7 @@ async function loadSelection() {
     : "Гостевая корзина хранится отдельно от аккаунтов. Войдите для оформления заказа.";
 }
 function updateCartCount() {
+  updateEditorial();
   updateCommerce();
   updateJavaLibrary();
   $("#cart-count").textContent = Object.values(cart).reduce(
@@ -250,7 +252,7 @@ function renderCategories() {
       (b) => name === "all" || b.category === name,
     ).length;
     const button = action(
-      (name === "Java" || name === "Гражданское право") ? name : (name === "all" ? "Все разделы" : name) + " · " + count,
+      (name === "Java" || name === "Гражданское право") ? name : (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + count : ""),
       () => {
         category = name;
         page = 1;
@@ -344,6 +346,7 @@ function render() {
       action("Отзывы ↗", () => openBook(b), "text-button"),
     );
     card.append(actions);
+    addEditorialControls(card, "catalog", b);
     $("#books").append(card);
   });
   const pager = $("#pagination");
@@ -498,6 +501,7 @@ async function loadProfile() {
     $("#profile-email").textContent = user.email;
     avatar($("#profile-avatar"));
   }
+  updateEditorial();
   updateCommerce();
   updateJavaLibrary();
   updateFeedback();
@@ -728,6 +732,8 @@ setupCommerce({
     await loadSelection();
   },
 });
+setupEditorial({ getUser: () => user, toast });
+document.addEventListener("editorial-open-catalog", e => { const book = books.find(b => String(b.id) === e.detail); if (book) openBook(book); });
 init();
 
 // Enhance navigation only after the controls are wired; links remain available without JS.
