@@ -1860,3 +1860,41 @@ textarea:focus-visible {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Approved ornamental wordmark: preserve the lettering at every screen size. */
+.home-masthead header { gap: 24px; }
+.logo-wordmark { display: block; flex: 0 0 auto; width: 320px; max-width: 100%; }
+.logo-wordmark img { display: block; width: 100%; height: auto; }
+.site-footer .logo-wordmark { width: 250px; }
+@media (max-width: 1200px) and (min-width: 851px) {
+  .home-masthead header { flex-wrap: wrap; }
+  .home-masthead header nav { order: 3; width: 100%; justify-content: center; }
+}
+@media (max-width: 600px) {
+  .home-masthead header > .logo-wordmark { width: min(320px, 100%); flex-basis: 100%; }
+  .home-masthead header > .logo-wordmark img { max-width: 320px; margin: 0 auto; }
+  .site-footer .logo-wordmark { width: 250px; }
+}
+
+/* One full-bleed photograph behind the entire masthead, including navigation. */
+.home-masthead { position: relative; isolation: isolate; overflow: hidden; }
+.home-masthead > .reading-room { inset: 0; z-index: -1; }
+.home-masthead > .reading-room img { object-position: center 48%; filter: none; }
+.home-masthead > .reading-room::after {
+  background:
+    linear-gradient(180deg, #17120e38 0%, transparent 65%, #17120e 100%),
+    linear-gradient(90deg, #100b08d9 0%, #100b08b8 40%, #100b0859 72%, #100b0873 100%);
+}
+.home-masthead .announcement { position: relative; background: #100b0833; }
+.home-masthead header { background: transparent; }
+.home-masthead .reading-hero { overflow: visible; }
+.home-masthead nav a,
+.home-masthead .account { text-shadow: 0 2px 10px #0009; }
+@media (max-width: 850px) {
+  .home-masthead > .reading-room img { object-position: 45% center; }
+  .home-masthead > .reading-room::after {
+    background:
+      linear-gradient(180deg, #17120e40, #17120e20 70%, #17120e 100%),
+      linear-gradient(90deg, #100b08d9, #100b088a);
+  }
+}
