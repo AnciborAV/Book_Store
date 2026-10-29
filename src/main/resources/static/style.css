@@ -1932,7 +1932,7 @@ textarea:focus-visible {
   .page-intro .values { gap: 10px; padding: 18px 0; font-size: 13px; }
 }
 
-/* Approved personal story: readable centered copy over the law/Java study. */
+/* Approved personal story: readable justified copy over the law/Java study. */
 .catalog-scene .about.about-story {
   display: block;
   position: relative;
@@ -1974,14 +1974,17 @@ textarea:focus-visible {
 .about-story p {
   margin: 0 0 24px;
   color: #f3e9d9;
-  font-size: clamp(16px, 1.35vw, 18px);
+  font-size: clamp(18px, 1.7vw, 22px);
   line-height: 1.8;
-  text-align: center;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
   overflow-wrap: break-word;
 }
 .about-story p.about-story-lead {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(21px, 2.1vw, 28px);
+  font-size: clamp(23px, 2.3vw, 30px);
   line-height: 1.5;
   color: #f4d9ab;
 }
@@ -1989,7 +1992,9 @@ textarea:focus-visible {
   margin-top: 36px;
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
-  font-size: 23px;
+  text-align: center;
+  text-align-last: center;
+  font-size: 25px;
   color: #efcf94;
 }
 .about.about-story .button { margin: 8px auto 0; max-width: 100%; white-space: normal; }
