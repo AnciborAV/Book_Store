@@ -127,7 +127,8 @@ nav {
   height: 100%;
   object-fit: cover;
 }
-main {
+main,
+.page-intro {
   max-width: 1320px;
   margin: auto;
   padding: 0 48px;
@@ -674,7 +675,8 @@ form .button {
   header {
     padding: 22px 24px;
   }
-  main {
+  main,
+  .page-intro {
     padding: 0 24px;
   }
   nav {
@@ -754,7 +756,8 @@ form .button {
   nav {
     display: none;
   }
-  main {
+  main,
+  .page-intro {
     padding: 0 20px;
   }
   .hero {
@@ -1745,3 +1748,114 @@ textarea:focus-visible {
 @media(max-width:600px) { .java-grid { grid-template-columns:1fr; } .java-heading { align-items:flex-start; flex-direction:column; } .java-editor-heading { align-items:flex-start; } .java-editor-heading h2 { font-size:26px; } }
 .java-search button { width:auto; flex:0 0 auto; }
 .java-search input { width:0; flex:1 1 0; }
+
+/* One photographic backdrop from the catalogue to the footer.
+   A sticky viewport-sized layer avoids stretching the portrait over long lists
+   and works on mobile without background-attachment: fixed. */
+.catalog-scene {
+  position: relative;
+  isolation: isolate;
+  display: flow-root;
+  background: #17120e;
+}
+.catalog-scene::before {
+  content: "";
+  display: block;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: -100vh;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, #1b1916 0%, #17120e38 18%, #17120e66 100%),
+    linear-gradient(90deg, #100d0bc9, #100d0b70 50%, #100d0bb3),
+    url("/covers/scene/catalog-library.jpg") center 55% / cover no-repeat;
+}
+@supports (height: 100svh) {
+  .catalog-scene::before {
+    height: 100svh;
+    margin-bottom: -100svh;
+  }
+}
+.catalog-scene #catalog {
+  padding-top: 64px;
+}
+.catalog-scene .catalog-top h2,
+.catalog-scene .java-heading h2 {
+  text-shadow: 0 2px 20px #000a;
+}
+.catalog-scene .search,
+.catalog-scene .category-chip:not(.active),
+.catalog-scene .page-button:not(.active) {
+  background-color: #211b16ed;
+}
+.catalog-scene .java-search input,
+.catalog-scene .button.light {
+  background: #211b16ed;
+  color: var(--ink);
+}
+.catalog-scene .search {
+  padding: 0 14px;
+  border: 1px solid #8e7855;
+  border-radius: 6px;
+}
+.catalog-scene .book-card,
+.catalog-scene .java-card {
+  background: #211b16f2;
+  border: 1px solid #776348;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 12px 28px #0005;
+}
+.catalog-scene .java-cover {
+  background: #17130ff2;
+  border-radius: 4px;
+}
+.catalog-scene .catalog-tools {
+  background: #211b16eb;
+  padding: 0 16px;
+  border-radius: 6px;
+}
+.catalog-scene .about,
+.catalog-scene .site-feedback {
+  background: #211b16ed;
+  border: 1px solid #776348;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px #0004;
+}
+.catalog-scene .site-feedback {
+  margin: 0 0 48px;
+}
+.catalog-scene .feedback-card {
+  background: #17130fbd;
+}
+.catalog-scene .site-footer {
+  padding: 28px 24px;
+  background: #17130ff2;
+  border-color: #776348;
+}
+@media (max-width: 600px) {
+  .catalog-scene::before {
+    background-position: center, center, 48% center;
+  }
+  .catalog-scene #catalog {
+    padding-top: 40px;
+  }
+  .catalog-scene .book-card,
+  .catalog-scene .java-card {
+    padding: 14px;
+  }
+  .catalog-scene .catalog-tools {
+    padding: 12px;
+  }
+  .catalog-scene .site-footer {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-scene .books {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
