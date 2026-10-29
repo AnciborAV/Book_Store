@@ -1945,14 +1945,18 @@ textarea:focus-visible {
   text-align: center;
   scroll-margin-top: 24px;
 }
-.about-story-scene {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  z-index: -2;
+/* Keep the uploaded development photo intact; blend only in presentation. */
+.about-story-backdrop { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.about-story-backdrop img { position: absolute; top: 0; height: 100%; object-fit: cover; }
+.about-story-development {
+  left: 0; width: 65%; object-position: 36% center;
+  -webkit-mask-image: linear-gradient(to right, #000 45%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 45%, transparent 100%);
+}
+.about-story-library {
+  right: 0; width: 65%; object-position: 65% center;
+  -webkit-mask-image: linear-gradient(to left, #000 45%, transparent 100%);
+  mask-image: linear-gradient(to left, #000 45%, transparent 100%);
 }
 .about-story::before {
   content: "";
@@ -1962,7 +1966,7 @@ textarea:focus-visible {
   background: linear-gradient(180deg, #130d09a6, #130d09cc 35%, #130d09eb),
     linear-gradient(90deg, #130d091a, #130d09a6 35%, #130d09a6 65%, #130d091a);
 }
-.about-story-content { max-width: 760px; margin-inline: auto; }
+.about-story-content { max-width: 900px; margin-inline: auto; }
 .about-story h2 {
   margin: 0 0 28px;
   font-family: Georgia, "Times New Roman", serif;
@@ -1978,9 +1982,10 @@ textarea:focus-visible {
   line-height: 1.8;
   text-align: justify;
   text-align-last: left;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  overflow-wrap: break-word;
+  hyphens: none;
+  -webkit-hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 .about-story p.about-story-lead {
   font-family: Georgia, "Times New Roman", serif;
@@ -1999,7 +2004,8 @@ textarea:focus-visible {
 }
 .about.about-story .button { margin: 8px auto 0; max-width: 100%; white-space: normal; }
 @media (max-width: 600px) {
-  .about-story-scene { object-position: 32% center; }
+  .about-story-development { object-position: 30% center; }
+  .about-story-library { object-position: 70% center; }
   .about-story::before { background: linear-gradient(180deg, #130d09bd, #130d09e6 40%, #130d09f2); }
   .about-story p { line-height: 1.7; margin-bottom: 22px; }
 }
