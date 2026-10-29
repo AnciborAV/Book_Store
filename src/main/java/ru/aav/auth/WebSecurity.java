@@ -83,6 +83,7 @@ public class WebSecurity {
                         "/feedback.css",
                         "/api/site-feedback",
                         "/api/java-library",
+                        "/api/java-library/metadata",
                         "/api/java-library/*/cover",
                         "/api/java-library/*/download",
                         "/style.css",

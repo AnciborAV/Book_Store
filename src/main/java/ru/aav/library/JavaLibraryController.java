@@ -22,6 +22,11 @@ public class JavaLibraryController {
         @RequestParam(defaultValue="") @Size(max=255) String q,
         @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law") String section) { return library.list(page,q,section); }
 
+    @GetMapping("/api/java-library/metadata")
+    public java.util.List<JavaLibraryService.Book> metadata(@RequestParam @Size(max=12) java.util.List<UUID> ids) {
+        return library.metadata(ids);
+    }
+
     @GetMapping("/api/java-library/{id}/download")
     public void download(@PathVariable UUID id, HttpServletResponse response) throws IOException {
         library.download(id.toString(),response);

@@ -24,7 +24,7 @@ public class SelectionRepository {
                 cart.put(rs.getLong("book_id"), rs.getInt("quantity")),
             user
         );
-        return new Selection(favorites, cart);
+        return new Selection(favorites, cart, jdbc.queryForList("SELECT book_id FROM library_favorites WHERE user_id=? ORDER BY book_id", String.class, user));
     }
 
     public void favorite(long user, long book) {
@@ -43,6 +43,15 @@ public class SelectionRepository {
             user,
             book
         );
+    }
+
+    public void libraryFavorite(long user, String book) {
+        if (jdbc.queryForObject("SELECT COUNT(*) FROM java_library WHERE id=?", Integer.class, book) == 0)
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Книга не найдена");
+        jdbc.update("INSERT INTO library_favorites(user_id,book_id) SELECT ?,? WHERE NOT EXISTS (SELECT 1 FROM library_favorites WHERE user_id=? AND book_id=?)", user, book, user, book);
+    }
+    public void libraryUnfavorite(long user, String book) {
+        jdbc.update("DELETE FROM library_favorites WHERE user_id=? AND book_id=?", user, book);
     }
 
     public void quantity(long user, long book, int quantity) {

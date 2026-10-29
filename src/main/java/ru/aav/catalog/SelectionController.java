@@ -34,6 +34,17 @@ public class SelectionController {
         selection.unfavorite(user.getName(), bookId);
     }
 
+    @PutMapping("/library-favorites/{bookId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void libraryFavorite(Principal user, @PathVariable java.util.UUID bookId) {
+        selection.libraryFavorite(user.getName(), bookId.toString());
+    }
+    @DeleteMapping("/library-favorites/{bookId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void libraryUnfavorite(Principal user, @PathVariable java.util.UUID bookId) {
+        selection.libraryUnfavorite(user.getName(), bookId.toString());
+    }
+
     @PutMapping("/cart/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void quantity(

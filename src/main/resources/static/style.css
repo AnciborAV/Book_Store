@@ -2009,3 +2009,7 @@ textarea:focus-visible {
   .about-story::before { background: linear-gradient(180deg, #130d09bd, #130d09e6 40%, #130d09f2); }
   .about-story p { line-height: 1.7; margin-bottom: 22px; }
 }
+
+/* PDF favorites share the catalogue heart control. */
+.java-cover { position: relative; }
+.java-cover .favorite { z-index: 1; }

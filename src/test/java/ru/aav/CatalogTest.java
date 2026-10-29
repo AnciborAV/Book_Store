@@ -120,6 +120,40 @@ class CatalogTest {
         );
     }
 
+    @Test
+    void pdfFavoritesArePrivateIdempotentAndRemovedWithBook() throws Exception {
+        String javaId = "00000000-0000-0000-0000-000000000091";
+        String law = "00000000-0000-0000-0000-000000000092";
+        for (String id : java.util.List.of(javaId, law)) {
+            jdbc.update("INSERT INTO java_library(id,title,author,file_size,page_count,section) VALUES(?,?,?,?,?,?)",
+                id, "Favorite test", "Author", 10, 1, id.equals(javaId) ? "java" : "civil-law");
+        }
+        mvc.perform(get("/api/java-library/metadata").param("ids", javaId + "," + law))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].pageCount").value(1)).andExpect(jsonPath("$[0].version").value(0));
+        mvc.perform(get("/api/java-library/metadata").param("ids", "bad")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/java-library/metadata").param("ids", String.join(",", java.util.Collections.nCopies(13, javaId))))
+            .andExpect(status().isBadRequest());
+        var owner = login("pdffavorite@example.com");
+        var other = login("otherpdffavorite@example.com");
+        String url = "/api/selection/library-favorites/" + javaId;
+        mvc.perform(put(url).with(csrf())).andExpect(status().isUnauthorized());
+        mvc.perform(put(url).session(owner)).andExpect(status().isForbidden());
+        for (int i = 0; i < 2; i++) mvc.perform(put(url).session(owner).with(csrf())).andExpect(status().isNoContent());
+        mvc.perform(put("/api/selection/library-favorites/" + law).session(owner).with(csrf())).andExpect(status().isNoContent());
+        mvc.perform(get("/api/selection").session(owner)).andExpect(jsonPath("$.libraryFavorites.length()").value(2));
+        mvc.perform(get("/api/selection").session(other)).andExpect(jsonPath("$.libraryFavorites.length()").value(0));
+        mvc.perform(delete(url).session(other).with(csrf())).andExpect(status().isNoContent());
+        mvc.perform(get("/api/selection").session(owner)).andExpect(jsonPath("$.libraryFavorites.length()").value(2));
+        for (int i = 0; i < 2; i++) mvc.perform(delete(url).session(owner).with(csrf())).andExpect(status().isNoContent());
+        mvc.perform(get("/api/selection").session(owner)).andExpect(jsonPath("$.libraryFavorites[0]").value(law));
+        jdbc.update("DELETE FROM java_library WHERE id=?", law);
+        mvc.perform(get("/api/selection").session(owner)).andExpect(jsonPath("$.libraryFavorites.length()").value(0));
+        mvc.perform(put("/api/selection/library-favorites/" + law).session(owner).with(csrf())).andExpect(status().isNotFound());
+        mvc.perform(put("/api/selection/library-favorites/not-a-uuid").session(owner).with(csrf())).andExpect(status().isBadRequest());
+        jdbc.update("DELETE FROM java_library WHERE id=?", javaId);
+    }
+
     private MockHttpSession login(String email) throws Exception {
         mvc.perform(
             post("/api/auth/register")
