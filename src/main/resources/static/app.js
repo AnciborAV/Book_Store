@@ -824,3 +824,9 @@ window.addEventListener('message', event => {
   const height = event.data.height;
   if (Number.isFinite(height) && height >= 200 && height <= 30000) frame.style.height = Math.ceil(height) + 'px';
 });
+
+// The original image remains accessible when JavaScript is unavailable.
+document.querySelector(".about-author-zoom").addEventListener("click", (event) => {
+  event.preventDefault();
+  document.querySelector("#author-photo-dialog").showModal();
+});

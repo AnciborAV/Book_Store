@@ -165,7 +165,9 @@
           <div class="about-story-content">
             <h2 id="about-heading">О магазине</h2>
             <figure class="about-author">
+              <a class="about-author-zoom" href="/covers/author-andrey.jpeg" aria-label="Увеличить фотографию Андрея Анцибора" aria-haspopup="dialog">
               <img src="/covers/author-andrey.jpeg" width="960" height="1280" loading="lazy" decoding="async" alt="Андрей Анцибор, автор проекта «Переплёт»" />
+              </a>
             </figure>
             <p class="about-story-lead">«Переплёт» начался с любопытства и желания освоить новое.</p>
             <p>Большую часть своей профессиональной жизни я посвятил юриспруденции. В сорок лет решил начать изучать программирование на Java. Примерно через полгода появился замысел первого самостоятельного проекта: создать веб-приложение, в котором можно соединить любовь к книгам, интерес к технологиям и собственное представление об эстетике.</p>
@@ -185,6 +187,11 @@
         ><span>© 2026 Анцибор А.В.</span>
       </footer>
     </div>
+
+    <dialog id="author-photo-dialog" class="author-photo-dialog" aria-label="Фотография Андрея Анцибора">
+      <button type="button" class="close author-photo-close" aria-label="Закрыть фотографию" autofocus>×</button>
+      <img src="/covers/author-andrey.jpeg" width="960" height="1280" loading="lazy" alt="Андрей Анцибор" />
+    </dialog>
 
     <dialog id="editorial-dialog" class="editorial-dialog" aria-labelledby="editorial-heading">
       <div class="editorial-dialog-head"><div><span class="eyebrow">ЛИЧНАЯ КНИЖНАЯ ПОЛКА</span><h2 id="editorial-heading">Выбор редакции</h2></div><button type="button" class="text-button" data-editorial-close>Закрыть ✕</button></div>
