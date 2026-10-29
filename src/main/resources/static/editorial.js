@@ -22,12 +22,19 @@ async function all(refresh = false) {
   }
   return pending;
 }
+function fillCommentPreview(note, book) {
+  note.classList.add('editorial-note-preview');
+  note.append(element('strong', 'Комментарий редактора'), element('p', book.comment));
+  const more = button('Читать полностью', () => showDescription(book.kind, String(book.id)), 'text-button editorial-read-more');
+  more.setAttribute('aria-label', 'Читать комментарий полностью: ' + book.title);
+  note.append(more);
+}
 function paintNotes() {
   document.querySelectorAll('[data-editorial-key]').forEach(holder => {
     const book = records.find(b => key(b) === holder.dataset.editorialKey);
     holder.replaceChildren();
     if (book?.comment) {
-      holder.append(element('strong', 'Комментарий редактора'), element('p', book.comment));
+      fillCommentPreview(holder, book);
     }
     holder.hidden = !book?.comment;
   });
@@ -98,7 +105,7 @@ function renderCollection() {
     const card = element('article', undefined, 'editorial-book');
     const info = element('div'); info.append(element('span', b.kind === 'catalog' ? b.section : b.section === 'java' ? 'Java · PDF' : 'Гражданское право · PDF', 'eyebrow'), element('h3', b.title), element('p', b.author));
     if (b.lists.length) info.append(element('p', b.lists.join(' · '), 'editorial-membership'));
-    if (b.comment) { const note=element('aside',undefined,'editorial-note'); note.append(element('strong','Комментарий редактора'),element('p',b.comment)); info.append(note); }
+    if (b.comment) { const note=element('aside',undefined,'editorial-note'); fillCommentPreview(note,b); info.append(note); }
     const actions = element('div', undefined, 'editorial-card-actions');
     actions.append(button('Описание', () => showDescription(b.kind,b.id)));
     if (b.kind === 'library') { const a=element('a','Скачать PDF ↓','button dark'); a.href=`/api/java-library/${b.id}/download`; a.setAttribute('download',''); actions.append(a); }

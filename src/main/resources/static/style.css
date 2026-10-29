@@ -1733,7 +1733,7 @@ textarea:focus-visible {
 .java-info p { margin:0; font-size:17px; line-height:1.6; }
 .java-author,.java-meta { color:#d1c7b1; }
 .java-description { white-space:pre-wrap; overflow-wrap:anywhere; }
-.java-info>a { margin-top:auto; text-align:center; }
+.java-info>a { margin-top:0; text-align:center; }
 .java-actions { display:flex; flex-wrap:wrap; gap:8px; }
 .java-actions .button { padding:10px 14px; font-size:16px; }
 .java-editor-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; }
