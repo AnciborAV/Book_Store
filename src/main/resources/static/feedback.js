@@ -31,7 +31,14 @@ export function setupFeedback(ctx) {
         </form>
         <p id="feedback-result" role="status" aria-live="polite"></p>
       </div>
-      <div><h3>Отзывы посетителей</h3><div id="feedback-public" aria-live="polite"></div></div>
+      <div class="feedback-reader-column">
+        <h3>Отзывы посетителей</h3>
+        <div id="feedback-public" aria-live="polite"></div>
+        <figure class="feedback-artwork">
+          <img src="/covers/nietzsche-java.webp" width="1536" height="1024" loading="lazy" decoding="async"
+               alt="Художественная иллюстрация: Фридрих Ницше пишет код Java в IntelliJ IDEA в старинной библиотеке при свечах">
+        </figure>
+      </div>
     </div>
     <div id="feedback-admin" hidden>
       <h3>Сообщения администратору</h3>

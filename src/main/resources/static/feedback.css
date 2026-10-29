@@ -25,3 +25,23 @@
 #admin-reviews-dialog .feedback-card {overflow-wrap:anywhere;}
 .review-mail-status {margin:24px 0;padding:20px;background:rgba(211,178,115,.08);border:1px solid rgba(211,178,115,.3);border-radius:12px;}
 #review-inbox-error {color:#e8a49d;}
+
+/* Keep the illustration outside the live reviews region so pagination never removes it. */
+.feedback-layout > div { min-width: 0; }
+.feedback-artwork {
+  margin: 28px 0 0;
+  overflow: hidden;
+  border: 1px solid rgba(211, 178, 115, .38);
+  border-radius: 12px;
+  background: #17100b;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .22);
+}
+.feedback-artwork img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+}
+@media (max-width: 760px) {
+  .feedback-artwork { margin-top: 24px; border-radius: 8px; }
+}
