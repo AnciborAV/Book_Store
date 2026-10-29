@@ -75,6 +75,7 @@ public class WebSecurity {
                         "/announcement.js",
                         "/editorial.js",
                         "/editorial.css",
+                        "/reading-text.css",
                         "/api/editorial/books",
                         "/api/editorial/books/*/*",
                         "/announcement.css",

@@ -30,6 +30,21 @@ class EditorialTest {
     String payload(long version,String lists,String comment) throws Exception {
         return json.writeValueAsString(java.util.Map.of("version",version,"description","Моё описание", "lists", lists.isBlank()?java.util.List.of():java.util.List.of(lists,"Изучаем Java"),"comment",comment));
     }
+    @Test void allHomeStylesheetsArePublic() throws Exception {
+        String html = new String(new org.springframework.core.io.ClassPathResource("static/index.html")
+            .getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        var links = java.util.regex.Pattern.compile("href=\"(/[^\"]+\\.css)\"").matcher(html);
+        int count = 0;
+        while (links.find()) {
+            mvc.perform(get(links.group(1))).andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("text/css"));
+            count++;
+        }
+        assertThat(count).isGreaterThan(0);
+        mvc.perform(get("/reading-text.css")).andExpect(status().isOk())
+            .andExpect(content().string(org.hamcrest.Matchers.containsString(".editorial-note p")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("text-align: justify")));
+    }
     @Test void recommendationsPersistAcrossCatalogsAndRemovalDoesNotDeleteBooks() throws Exception {
         mvc.perform(get("/api/editorial/books")).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
         String url="/api/admin/editorial/books/library/"+library;
