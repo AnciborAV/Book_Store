@@ -24,29 +24,30 @@
         </div>
 
       <div class="announcement">
-        МЕСТО, ГДЕ НАЧИНАЮТСЯ НОВЫЕ ИСТОРИИ
+        <div class="announcement-kicker">МЕСТО, ГДЕ НАЧИНАЮТСЯ НОВЫЕ ИСТОРИИ</div>
         <span>Независимый книжный магазин · с любовью к чтению</span>
       </div>
       <header>
         <a class="logo logo-wordmark" href="/" aria-label="Переплёт — книжный магазин, главная">
           <img src="/covers/scene/pereplet-wordmark.png" width="1984" height="800" alt="Переплёт — книжный магазин" />
         </a>
-        <nav>
+        <button id="menu-toggle" class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation"><span aria-hidden="true">☰</span> Меню</button>
+        <nav id="main-navigation" aria-label="Основная навигация">
           <a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a
           ><a href="#about">О магазине</a>
         </nav>
         <button id="open-cart" class="account" aria-label="Открыть корзину">
           Корзина <span id="cart-count" class="cart-badge">0</span></button
         ><button id="account" class="account">
-          <span class="avatar">Ч</span><span id="account-label">Войти</span> ↗
+          <span class="avatar">Ч</span><span id="account-label">Войти</span><span class="mobile-account-label" aria-hidden="true">Войти</span><span class="account-arrow" aria-hidden="true">↗</span>
         </button>
       </header>
       <section class="hero reading-hero">
         <div class="hero-copy">
           <div class="eyebrow"><span></span> ДЛЯ ТЕХ, КТО ЛЮБИТ ЛИСТАТЬ</div>
-          <h1>Ваша следующая<br />любимая <em>история.</em></h1>
+          <h1>Ваша следующая<br /> любимая <em>история.</em></h1>
           <p>
-            Книги, к которым хочется возвращаться.<br />Открывайте новые миры —
+            Книги, к которым хочется возвращаться.<br /> Открывайте новые миры —
             по одной странице за раз.
           </p>
           <a class="button dark" href="#catalog"

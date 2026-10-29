@@ -490,6 +490,8 @@ async function loadProfile() {
     user = await r.json();
   } else throw Error("Не удалось загрузить профиль");
   $("#account-label").textContent = user ? user.displayName : "Войти";
+  $(".mobile-account-label").textContent = user ? "Кабинет" : "Войти";
+  $("#account").setAttribute("aria-label", user ? `Личный кабинет: ${user.displayName}` : "Войти в личный кабинет");
   avatar($("#account .avatar"));
   if (user) {
     $("#profile-name").textContent = user.displayName;
@@ -727,3 +729,24 @@ setupCommerce({
   },
 });
 init();
+
+// Enhance navigation only after the controls are wired; links remain available without JS.
+const menuToggle = $("#menu-toggle");
+const mainNavigation = $("#main-navigation");
+function closeMobileMenu() {
+  menuToggle.setAttribute("aria-expanded", "false");
+}
+menuToggle.addEventListener("click", () => {
+  menuToggle.setAttribute("aria-expanded", String(menuToggle.getAttribute("aria-expanded") !== "true"));
+});
+mainNavigation.addEventListener("click", (event) => {
+  if (event.target.closest("a")) closeMobileMenu();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && menuToggle.getAttribute("aria-expanded") === "true") {
+    closeMobileMenu();
+    menuToggle.focus();
+  }
+});
+window.matchMedia("(max-width: 600px)").addEventListener("change", closeMobileMenu);
+document.documentElement.classList.add("mobile-navigation-ready");
