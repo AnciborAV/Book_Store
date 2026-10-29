@@ -1,0 +1,35 @@
+/* Shared prose typography. Headings, controls and code keep their own alignment. */
+body p,
+body .feedback-body,
+body .hero-note {
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+  -webkit-hyphens: none;
+  hyphens: none;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* These components have more specific rules in their own stylesheets. */
+#description-body p,
+#owner-note-body,
+.editorial-note p,
+.reading-hero .hero-editorial-book p,
+.about-story p,
+.about-story p.about-story-signature {
+  text-align: justify;
+  text-align-last: left;
+  -webkit-hyphens: none;
+  hyphens: none;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* Code is shown exactly as written, without stretched word spacing. */
+pre, code {
+  text-align: left;
+  text-align-last: auto;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
