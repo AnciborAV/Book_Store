@@ -383,7 +383,7 @@ h2 {
   position: absolute;
   right: 0;
   font-size: 52px;
-  color: #b2bc9e;
+  color: #c7a56d;
 }
 #catalog {
   padding: 45px 0;
@@ -1385,11 +1385,11 @@ nav a,
 
 /* An atmospheric reading room, with navigation on a solid high-contrast surface. */
 .home-masthead {
-  background: #17231e;
+  background: #1b1916;
   color: #f8f1e4;
 }
 .home-masthead .announcement {
-  background: #101b16;
+  background: #15110e;
   color: #f3e6cf;
   border-bottom: 1px solid #b59a6438;
 }
@@ -1414,11 +1414,11 @@ nav a,
 }
 .home-masthead .avatar {
   background: #e7dcc7;
-  color: #23392d;
+  color: #302215;
 }
 .home-masthead .cart-badge {
   background: #dac19a;
-  color: #18271f;
+  color: #271d13;
   font-weight: 700;
 }
 .reading-hero {
@@ -1457,7 +1457,7 @@ nav a,
 }
 .reading-hero .dark {
   background: #e5c593;
-  color: #1b2b22;
+  color: #271d13;
   border-color: #e5c593;
   font-size: 1.125rem;
   font-weight: 600;
@@ -1481,6 +1481,8 @@ nav a,
   height: 100%;
   object-fit: cover;
   object-position: center 56%;
+  /* Warm the original photograph without modifying the image file. */
+  filter: sepia(.85) saturate(.65) brightness(.88);
 }
 .reading-room::after {
   content: "";
@@ -1489,12 +1491,12 @@ nav a,
   background:
     linear-gradient(
       90deg,
-      #17231e 0%,
-      #17231ed9 12%,
-      #17231e45 40%,
+      #1b1916 0%,
+      #1b1916d9 12%,
+      #1b191645 40%,
       transparent 70%
     ),
-    linear-gradient(0deg, #17231e 0%, transparent 25%);
+    linear-gradient(0deg, #1b1916 0%, #1b191633 30%, transparent 65%);
 }
 .hero-signature {
   position: absolute;
@@ -1518,8 +1520,8 @@ nav a,
   }
   .reading-room::after {
     background:
-      linear-gradient(90deg, #17231e 0%, #17231ed9 38%, #17231e66 100%),
-      linear-gradient(0deg, #17231e, transparent 50%);
+      linear-gradient(90deg, #1b1916 0%, #1b1916d9 38%, #1b191666 100%),
+      linear-gradient(0deg, #1b1916, transparent 50%);
   }
 }
 @media (max-width: 600px) {
@@ -1543,7 +1545,9 @@ nav a,
     inset: 0;
   }
   .reading-room::after {
-    background: #122219d9;
+    background:
+      linear-gradient(0deg, #1b1916 0%, transparent 38%),
+      linear-gradient(90deg, #1b1611eb, #1b1611bd);
   }
   .hero-signature {
     left: 20px;
@@ -1561,11 +1565,8 @@ nav a,
   --gold-ink: #231c13;
 }
 body {
-  background-image: radial-gradient(
-    ellipse at 20% 30%,
-    #63503414,
-    transparent 60%
-  );
+  /* A shared base keeps the hero, introduction and catalogue transition seamless. */
+  background-image: none;
 }
 p,
 .hero-note,
