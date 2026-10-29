@@ -32,6 +32,15 @@ public class SelectionService {
     }
 
     @Transactional
+    public void libraryFavorite(String email, String book) {
+        selection.libraryFavorite(accounts.lock(email).getId(), book);
+    }
+    @Transactional
+    public void libraryUnfavorite(String email, String book) {
+        selection.libraryUnfavorite(accounts.lock(email).getId(), book);
+    }
+
+    @Transactional
     public void quantity(String email, long book, int quantity) {
         long user = accounts.lock(email).getId();
         books.findById(book);

@@ -14,7 +14,7 @@ let books = [],
   page = 1,
   selectedBook = null,
   covers = {},
-  favorites = new Set();
+  favorites = new Set(), libraryFavorites = new Set();
 const categoryNames = [
   "Российские авторы",
   "Зарубежные авторы",
@@ -29,6 +29,11 @@ let cart = {},
 function loadGuestSelection() {
   cart = {};
   favorites = new Set();
+  libraryFavorites = new Set();
+  try {
+    const stored = JSON.parse(localStorage.getItem("bookstore-library-favorites") || "[]");
+    if (Array.isArray(stored)) libraryFavorites = new Set(stored.filter(id => typeof id === "string"));
+  } catch (_) {}
   try {
     const stored = JSON.parse(localStorage.getItem("bookstore-cart") || "{}");
     for (const [id, quantity] of Object.entries(stored))
@@ -145,8 +150,17 @@ async function toggleFavorite(book) {
     if (!user) saveGuestSelection();
   });
 }
+async function toggleLibraryFavorite(book) {
+  await changeSelection(async () => {
+    const id = String(book.id), saved = libraryFavorites.has(id);
+    if (user) await request('/api/selection/library-favorites/' + id, {method: saved ? 'DELETE' : 'PUT'});
+    saved ? libraryFavorites.delete(id) : libraryFavorites.add(id);
+    if (!user) saveGuestSelection();
+  });
+}
 function saveGuestSelection() {
   try {
+    localStorage.setItem("bookstore-library-favorites", JSON.stringify([...libraryFavorites]));
     localStorage.setItem("bookstore-cart", JSON.stringify(cart));
     localStorage.setItem("bookstore-favorites", JSON.stringify([...favorites]));
   } catch (_) {
@@ -158,10 +172,12 @@ async function loadSelection() {
   if (user) {
     cart = {};
     favorites = new Set();
+    libraryFavorites = new Set();
     render();
     const data = await request("/api/selection");
     cart = data.cart;
     favorites = new Set(data.favorites.map(String));
+    libraryFavorites = new Set(data.libraryFavorites || []);
   } else loadGuestSelection();
   selectionReady = true;
   render();
@@ -721,7 +737,7 @@ async function init() {
 setupAnnouncement({ getUser: () => user });
 setupAdminReviews({ getUser: () => user });
 setupFeedback({ getUser: () => user });
-setupJavaLibrary({ getUser: () => user, toast });
+setupJavaLibrary({ getUser: () => user, toast, getFavorites: () => libraryFavorites, toggleFavorite: toggleLibraryFavorite, isSelectionReady: () => selectionReady && !selectionBusy });
 setupCommerce({
   getUser: () => user,
   getBooks: () => books,

@@ -36,6 +36,13 @@ public class JavaLibraryService {
         long count = jdbc.queryForObject("SELECT COUNT(*) FROM java_library"+where,Long.class,section,q,q);
         return new Page(jdbc.query("SELECT * FROM java_library"+where+" ORDER BY created_at DESC,id LIMIT 12 OFFSET ?",ROW,section,q,q,(long)page*12),count,page,12);
     }
+    @Transactional(readOnly=true)
+    public List<Book> metadata(List<UUID> ids) {
+        if (ids.isEmpty()) return List.of();
+        String placeholders = String.join(",", Collections.nCopies(ids.size(), "?"));
+        return jdbc.query("SELECT * FROM java_library WHERE id IN (" + placeholders + ")", ROW,
+            ids.stream().map(UUID::toString).toArray());
+    }
     @Transactional
     public Book create(String title,String author,String description,String section,LibraryFiles.Prepared files) {
         if (files.pdf()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Выберите PDF книги");

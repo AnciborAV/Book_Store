@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="library-favorites" author="aav">
+        <sql>
+            CREATE TABLE library_favorites (
+                user_id bigint NOT NULL REFERENCES store_users(id) ON DELETE CASCADE,
+                book_id varchar(36) NOT NULL REFERENCES java_library(id) ON DELETE CASCADE,
+                PRIMARY KEY (user_id, book_id)
+            );
+            CREATE INDEX library_favorites_book_idx ON library_favorites(book_id);
+        </sql>
+        <rollback><dropTable tableName="library_favorites"/></rollback>
+    </changeSet>
+</databaseChangeLog>

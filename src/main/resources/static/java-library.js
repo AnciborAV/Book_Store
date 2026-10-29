@@ -3,6 +3,7 @@ import { request } from './api-client.js';
 const $ = s => document.querySelector(s);
 let getUser, toast, page = 0, query = '', generation = 0, editing = null, busy = false;
 let section = 'java', editorSection = 'java';
+let getFavorites, toggleFavorite, isSelectionReady, favoritesOnly = false;
 const sectionTitle = () => section === 'civil-law' ? 'Гражданское право' : 'Java';
 const el = (tag, text, cls) => {
   const n = document.createElement(tag);
@@ -61,22 +62,43 @@ export function openJavaLibrary(nextSection = 'java') {
 }
 async function load() {
   const ticket = ++generation;
+  $('#java-favorites').setAttribute('aria-pressed', String(favoritesOnly));
+  $('#java-favorites').textContent = favoritesOnly ? '♥ Избранное PDF - показать все' : '♡ Избранное PDF';
+  $('#java-favorites-note').textContent = getUser?.() ? 'Избранные PDF сохраняются в вашем аккаунте.' : 'Гостевое избранное хранится в этом браузере отдельно от аккаунта.';
   $('#java-status').textContent = 'Загружаем электронную полку…';
   $('#java-list').replaceChildren(); $('#java-pages').replaceChildren();
   try {
-    const data = await request('/api/java-library?' + new URLSearchParams({ page, q: query, section }));
+    let data;
+    if (favoritesOnly) {
+      const books = await request('/api/editorial/books?recommended=false');
+      const term = query.toLocaleLowerCase('ru');
+      const selected = books.filter(b => b.kind === 'library' && b.section === section && getFavorites().has(String(b.id)) && (b.title + ' ' + b.author).toLocaleLowerCase('ru').includes(term));
+      const slice = selected.slice(page * 12, (page + 1) * 12);
+      const metadata = slice.length ? await request('/api/java-library/metadata?' + new URLSearchParams({ids: slice.map(b => b.id).join(',')})) : [];
+      data = {items: slice.map(b => metadata.find(m => m.id === b.id)).filter(Boolean), total: selected.length, pageSize: 12};
+    } else data = await request('/api/java-library?' + new URLSearchParams({ page, q: query, section }));
     if (ticket !== generation) return;
     if (page && !data.items.length) { page = Math.max(0, Math.ceil(data.total / 12) - 1); return load(); }
     $('#java-status').textContent = data.total ? `Книг: ${data.total}. Скачивание доступно без регистрации.` : `Полка «${sectionTitle()}» пока пуста. Здесь появятся книги для свободного скачивания.`;
+    if (!data.total && favoritesOnly) $('#java-status').textContent = query ? 'В избранном нет книг по этому запросу.' : 'В этом разделе пока нет избранных PDF. Нажмите сердечко на обложке книги.';
     for (const book of data.items) {
       const card = el('article', undefined, 'java-card');
       const img = el('img'); img.src = `/api/java-library/${book.id}/cover?v=${book.version}`;
       img.alt = 'Обложка книги «' + book.title + '»'; img.loading = 'lazy'; img.decoding = 'async';
       const frame = el('div', undefined, 'java-cover'); frame.append(img);
+      const saved = getFavorites().has(String(book.id));
+      const heart = button(saved ? '♥' : '♡', async () => {
+        heart.disabled = true;
+        try { await toggleFavorite(book); } finally { if (heart.isConnected) heart.disabled = !isSelectionReady(); }
+      }, 'favorite' + (saved ? ' selected' : ''));
+      heart.disabled = !isSelectionReady();
+      heart.setAttribute('aria-pressed', String(saved));
+      heart.setAttribute('aria-label', (saved ? 'Убрать из избранного: ' : 'Добавить в избранное: ') + book.title);
+      frame.append(heart);
       const info = el('div', undefined, 'java-info');
       info.append(el('span', sectionTitle(), 'eyebrow'), el('h3', book.title));
       if (book.author) info.append(el('p', book.author, 'java-author'));
-      info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
+      if (book.pageCount != null) info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
 
       downloadControls(book, info);
       addEditorialControls(info, "library", book);
@@ -123,6 +145,8 @@ async function remove(book) {
 }
 export function setupJavaLibrary(options) {
   getUser = options.getUser; toast = options.toast;
+  getFavorites = options.getFavorites; toggleFavorite = options.toggleFavorite; isSelectionReady = options.isSelectionReady;
+  $('#java-favorites').onclick = () => { favoritesOnly = !favoritesOnly; page = 0; load(); };
   $('#java-add').onclick = () => editor();
   $('#java-close').onclick = () => { if (!busy) $('#java-editor').close(); };
   $('#java-editor').addEventListener('cancel', e => { if (busy) e.preventDefault(); });
