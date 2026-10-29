@@ -30,16 +30,18 @@ abstract class JavaLibraryContract {
             .andExpect(status().isCreated()).andExpect(jsonPath("$.pageCount").value(2)).andReturn();
         return json.readTree(response.getResponse().getContentAsString()).get("id").asText();
     }
-    @Test void civilLawUploadsStayInTheirSectionAndCanBeEdited() throws Exception {
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings={"civil-law","ai"})
+    void sectionUploadsStayInTheirSectionAndCanBeEdited(String section) throws Exception {
         create("Java existing");
         var result=mvc.perform(multipart("/api/admin/java-library").file(pdf())
-            .param("title","Гражданское право").param("author","Юрист").param("section","civil-law")
+            .param("title","Гражданское право").param("author","Юрист").param("section",section)
             .with(user("admin").roles("ADMIN")).with(csrf()))
-            .andExpect(status().isCreated()).andExpect(jsonPath("$.section").value("civil-law")).andReturn();
+            .andExpect(status().isCreated()).andExpect(jsonPath("$.section").value(section)).andReturn();
         String id=json.readTree(result.getResponse().getContentAsString()).get("id").asText();
         mvc.perform(get("/api/java-library")).andExpect(jsonPath("$.total").value(1))
             .andExpect(jsonPath("$.items[0].title").value("Java existing"));
-        mvc.perform(get("/api/java-library").param("section","civil-law"))
+        mvc.perform(get("/api/java-library").param("section",section))
             .andExpect(jsonPath("$.total").value(1)).andExpect(jsonPath("$.items[0].id").value(id));
         mvc.perform(get("/api/java-library").param("section","java").param("q","Юрист"))
             .andExpect(jsonPath("$.total").value(0));
@@ -47,15 +49,22 @@ abstract class JavaLibraryContract {
         mvc.perform(get("/api/java-library/"+id+"/cover")).andExpect(status().isOk());
         mvc.perform(multipart("/api/admin/java-library/"+id).param("title","Право — учебник").param("version","0")
             .with(user("admin").roles("ADMIN")).with(csrf()))
-            .andExpect(status().isOk()).andExpect(jsonPath("$.section").value("civil-law"));
+            .andExpect(status().isOk()).andExpect(jsonPath("$.section").value(section));
         mvc.perform(multipart("/api/admin/java-library").file(pdf()).param("title","Forbidden")
-            .param("section","civil-law").with(user("reader").roles("CUSTOMER")).with(csrf()))
+            .param("section",section).with(user("reader").roles("CUSTOMER")).with(csrf()))
             .andExpect(status().isForbidden());
         mvc.perform(get("/api/java-library").param("section","other")).andExpect(status().isBadRequest());
         mvc.perform(delete("/api/admin/java-library/"+id).param("version","1")
             .with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNoContent());
-        mvc.perform(get("/api/java-library").param("section","civil-law")).andExpect(jsonPath("$.total").value(0));
+        mvc.perform(get("/api/java-library").param("section",section)).andExpect(jsonPath("$.total").value(0));
         mvc.perform(get("/api/java-library")).andExpect(jsonPath("$.total").value(1));
+    }
+    @Test void atlasAssetsArePublic() throws Exception {
+        mvc.perform(get("/ai-atlas.html")).andExpect(header().string("X-Frame-Options", "SAMEORIGIN"));
+        mvc.perform(get("/")).andExpect(header().string("X-Frame-Options", "DENY"));
+        for (String path : new String[]{"/ai.css", "/ai-atlas.html", "/ai-atlas.css", "/ai-atlas.js", "/covers/ai-illustrations.webp"}) {
+            mvc.perform(get(path)).andExpect(status().isOk());
+        }
     }
     @Test void publicDownloadPreservesOriginalAndAdminCanEditDelete() throws Exception {
         String id=create("Java с нуля");

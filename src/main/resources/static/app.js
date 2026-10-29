@@ -263,12 +263,12 @@ function renderCart() {
 function renderCategories() {
   const target = $("#categories");
   target.replaceChildren();
-  for (const name of ["all", ...categoryNames, "Java"]) {
+  for (const name of ["all", ...categoryNames, "Java", "AI"]) {
     const count = books.filter(
       (b) => name === "all" || b.category === name,
     ).length;
     const button = action(
-      (name === "Java" || name === "Гражданское право") ? name : (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + count : ""),
+      (["Java", "Гражданское право", "AI"].includes(name)) ? name : (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + count : ""),
       () => {
         category = name;
         page = 1;
@@ -281,13 +281,17 @@ function renderCategories() {
   }
 }
 function render() {
+  const isAI = category === "AI";
+  $("#ai").hidden = !isAI;
+  $("#library-layout").classList.toggle("ai-library-layout", isAI);
+  if (isAI && !$("#ai-frame").hasAttribute("src")) $("#ai-frame").src = $("#ai-frame").dataset.src;
   const isJava = category === "Java";
   const isCivilLaw = category === "Гражданское право";
-  $("#java-library").hidden = !(isJava || isCivilLaw);
+  $("#java-library").hidden = !(isJava || isCivilLaw || isAI);
   if (isCivilLaw) openJavaLibrary("civil-law");
   for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"])
-    $(selector).hidden = isJava;
-  if (isJava) { renderCategories(); openJavaLibrary("java"); return; }
+    $(selector).hidden = isJava || isAI;
+  if (isJava || isAI) { renderCategories(); openJavaLibrary(isAI ? "ai" : "java"); return; }
 
   const q = $("#search").value.trim().toLocaleLowerCase("ru");
   const visible = books.filter(
@@ -733,6 +737,7 @@ async function init() {
   } catch (_) {}
   await loadProfile().catch((e) => toast(e.message));
   await loadBooks();
+  if (location.hash === "#ai") openAI();
 }
 setupAnnouncement({ getUser: () => user });
 setupAdminReviews({ getUser: () => user });
@@ -772,3 +777,16 @@ document.addEventListener("keydown", (event) => {
 });
 window.matchMedia("(max-width: 600px)").addEventListener("change", closeMobileMenu);
 document.documentElement.classList.add("mobile-navigation-ready");
+
+function openAI() {
+  category = "AI"; page = 1; render();
+  $("#ai").scrollIntoView({block: "start"});
+}
+document.querySelectorAll('[data-open-ai]').forEach(link => link.addEventListener('click', () => openAI()));
+window.addEventListener('hashchange', () => { if (location.hash === '#ai') openAI(); });
+window.addEventListener('message', event => {
+  const frame = $("#ai-frame");
+  if (event.origin !== location.origin || event.source !== frame.contentWindow || event.data?.type !== 'ai-atlas-height') return;
+  const height = event.data.height;
+  if (Number.isFinite(height) && height >= 200 && height <= 30000) frame.style.height = Math.ceil(height) + 'px';
+});

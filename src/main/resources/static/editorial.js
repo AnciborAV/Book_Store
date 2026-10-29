@@ -103,7 +103,7 @@ function renderCollection() {
   $('#editorial-status').textContent = visible.length ? `Книг: ${visible.length}` : (query || listName ? 'По этому запросу книг нет.' : manage ? 'В каталоге пока нет книг.' : 'Редактор пока не добавил рекомендации.');
   for (const b of visible) {
     const card = element('article', undefined, 'editorial-book');
-    const info = element('div'); info.append(element('span', b.kind === 'catalog' ? b.section : b.section === 'java' ? 'Java · PDF' : 'Гражданское право · PDF', 'eyebrow'), element('h3', b.title), element('p', b.author));
+    const info = element('div'); info.append(element('span', b.kind === 'catalog' ? b.section : ({java: 'Java · PDF', 'civil-law': 'Гражданское право · PDF', ai: 'AI · PDF'})[b.section] || 'PDF', 'eyebrow'), element('h3', b.title), element('p', b.author));
     if (b.lists.length) info.append(element('p', b.lists.join(' · '), 'editorial-membership'));
     if (b.comment) { const note=element('aside',undefined,'editorial-note'); fillCommentPreview(note,b); info.append(note); }
     const actions = element('div', undefined, 'editorial-card-actions');

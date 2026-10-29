@@ -20,7 +20,7 @@ public class JavaLibraryController {
     @GetMapping("/api/java-library")
     public JavaLibraryService.Page list(@RequestParam(defaultValue="0") @Min(0) @Max(1000000) int page,
         @RequestParam(defaultValue="") @Size(max=255) String q,
-        @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law") String section) { return library.list(page,q,section); }
+        @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law|ai") String section) { return library.list(page,q,section); }
 
     @GetMapping("/api/java-library/metadata")
     public java.util.List<JavaLibraryService.Book> metadata(@RequestParam @Size(max=12) java.util.List<UUID> ids) {
@@ -41,7 +41,7 @@ public class JavaLibraryController {
     public JavaLibraryService.Book create(@RequestParam @NotBlank @Size(max=255) String title,
         @RequestParam(defaultValue="") @Size(max=255) String author,
         @RequestParam(defaultValue="") @Size(max=3000) String description,
-        @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law") String section,
+        @RequestParam(defaultValue="java") @Pattern(regexp="java|civil-law|ai") String section,
         @RequestParam MultipartFile pdf, @RequestParam(required=false) MultipartFile cover) throws IOException {
         try (var prepared=files.prepare(pdf,cover)) {
             return library.create(title,author,description,section,prepared);

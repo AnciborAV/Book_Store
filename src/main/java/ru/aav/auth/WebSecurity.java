@@ -43,6 +43,8 @@ public class WebSecurity {
     @Bean
     SecurityFilterChain apiSecurity(HttpSecurity http, org.springframework.security.core.session.SessionRegistry sessions) throws Exception {
         return http
+            .headers(h -> h.frameOptions(f -> f.disable()).addHeaderWriter((req, res) ->
+                res.setHeader("X-Frame-Options", (req.getContextPath() + "/ai-atlas.html").equals(req.getRequestURI()) ? "SAMEORIGIN" : "DENY")))
             .authorizeHttpRequests(a ->
                 a
                     .requestMatchers(
@@ -76,6 +78,10 @@ public class WebSecurity {
                         "/editorial.js",
                         "/editorial.css",
                         "/reading-text.css",
+                        "/ai.css",
+                        "/ai-atlas.html",
+                        "/ai-atlas.css",
+                        "/ai-atlas.js",
                         "/api/editorial/books",
                         "/api/editorial/books/*/*",
                         "/announcement.css",
