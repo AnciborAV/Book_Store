@@ -2023,3 +2023,11 @@ textarea:focus-visible {
 @media(max-width:1000px) {
   .about-author {float:none;width:min(260px,100%);margin:0 auto 30px;}
 }
+
+.about-author-zoom {display:block;cursor:zoom-in;border-radius:3px;}
+.about-author-zoom:focus-visible {outline:2px solid #e9c783;outline-offset:5px;}
+dialog.author-photo-dialog {width:fit-content;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:48px 12px 12px;border:1px solid #b69358;border-radius:8px;background:#211912;box-sizing:border-box;}
+.author-photo-dialog img {display:block;width:auto;height:auto;max-width:calc(100vw - 50px);max-height:calc(100dvh - 86px);object-fit:contain;}
+.author-photo-dialog .author-photo-close {top:2px;right:4px;width:44px;height:44px;padding:0;color:#f4e7ce;cursor:pointer;}
+.author-photo-dialog::backdrop {background:rgba(10,7,5,.88);backdrop-filter:blur(6px);}
+html:has(#author-photo-dialog[open]) {overflow:hidden;}
