@@ -270,6 +270,8 @@ function renderCategories() {
     const button = action(
       (["Java", "Гражданское право", "AI"].includes(name)) ? name : (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + count : ""),
       () => {
+        $("#ai").hidden = true;
+        if (location.hash === "#ai") history.replaceState(null, "", "#catalog");
         category = name;
         page = 1;
         render();
@@ -282,9 +284,7 @@ function renderCategories() {
 }
 function render() {
   const isAI = category === "AI";
-  $("#ai").hidden = !isAI;
-  $("#library-layout").classList.toggle("ai-library-layout", isAI);
-  if (isAI && !$("#ai-frame").hasAttribute("src")) $("#ai-frame").src = $("#ai-frame").dataset.src;
+  $("#library-layout").classList.toggle("ai-books-layout", isAI);
   const isJava = category === "Java";
   const isCivilLaw = category === "Гражданское право";
   $("#java-library").hidden = !(isJava || isCivilLaw || isAI);
@@ -779,11 +779,22 @@ window.matchMedia("(max-width: 600px)").addEventListener("change", closeMobileMe
 document.documentElement.classList.add("mobile-navigation-ready");
 
 function openAI() {
-  category = "AI"; page = 1; render();
+  $("#ai").hidden = false;
+  if (!$("#ai-frame").hasAttribute("src")) $("#ai-frame").src = $("#ai-frame").dataset.src;
   $("#ai").scrollIntoView({block: "start"});
 }
 document.querySelectorAll('[data-open-ai]').forEach(link => link.addEventListener('click', () => openAI()));
-window.addEventListener('hashchange', () => { if (location.hash === '#ai') openAI(); });
+function openAIBooks() {
+  $("#ai").hidden = true;
+  category = "AI"; page = 1; render();
+  $("#catalog").scrollIntoView({block: "start"});
+}
+document.querySelectorAll('[data-open-ai-books]').forEach(link => link.addEventListener('click', openAIBooks));
+document.querySelectorAll('a[href="#catalog"]').forEach(link => link.addEventListener('click', () => { $("#ai").hidden = true; }));
+window.addEventListener('hashchange', () => {
+  if (location.hash === '#ai') openAI();
+  else $("#ai").hidden = true;
+});
 window.addEventListener('message', event => {
   const frame = $("#ai-frame");
   if (event.origin !== location.origin || event.source !== frame.contentWindow || event.data?.type !== 'ai-atlas-height') return;
