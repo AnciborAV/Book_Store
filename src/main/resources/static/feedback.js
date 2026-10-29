@@ -34,6 +34,10 @@ export function setupFeedback(ctx) {
       <div class="feedback-reader-column">
         <h3>Отзывы посетителей</h3>
         <div id="feedback-public" aria-live="polite"></div>
+
+      </div>
+    </div>
+    <div class="feedback-gallery" aria-label="Философия и код Переплёта">
         <figure class="feedback-artwork">
           <img src="/covers/nietzsche-java.webp" width="1536" height="1024" loading="lazy" decoding="async"
                alt="Художественная иллюстрация: Фридрих Ницше пишет код Java в IntelliJ IDEA в старинной библиотеке при свечах">
@@ -44,7 +48,18 @@ export function setupFeedback(ctx) {
             <small>Перевод Ю. М. Антоновского</small>
           </figcaption>
         </figure>
-      </div>
+      <figure class="feedback-artwork feedback-code">
+        <a class="feedback-code-link" href="/covers/checkout-code.png" target="_blank" rel="noopener" aria-label="Открыть оригинальный скриншот кода в новой вкладке">
+          <img src="/covers/checkout-code.png" width="1814" height="1310" loading="lazy" decoding="async"
+               alt="Оригинальный скриншот IntelliJ IDEA: метод checkout класса OrderService, проверка корзины, резервирование книг и расчёт суммы заказа">
+        </a>
+        <figcaption class="feedback-artwork-caption">
+          <h3>По ту сторону «Переплёта»</h3>
+          <p>Фрагмент кода, который превращает выбранные книги в заказ.</p>
+          <small>Java · OrderService · checkout()</small>
+          <a class="text-button" href="/covers/checkout-code.png" target="_blank" rel="noopener">Рассмотреть код ↗</a>
+        </figcaption>
+      </figure>
     </div>
     <div id="feedback-admin" hidden>
       <h3>Сообщения администратору</h3>
