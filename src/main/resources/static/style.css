@@ -1898,3 +1898,36 @@ textarea:focus-visible {
       linear-gradient(90deg, #100b08d9, #100b088a);
   }
 }
+
+/* Compact phone layout: retain comfortable touch targets without a full-screen header. */
+.announcement-kicker { display: inline; }
+.mobile-menu-toggle, .mobile-account-label { display: none; }
+@media (max-width: 600px) {
+  .home-masthead .announcement { padding: 8px 16px; text-align: center; }
+  .home-masthead .announcement-kicker { display: none; }
+  .home-masthead .announcement span { margin: 0; font-size: 12px; line-height: 1.5; letter-spacing: .02em; }
+  .home-masthead header { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 14px 16px 12px; }
+  .home-masthead header > .logo-wordmark { grid-column: 1 / -1; width: 224px; max-width: 80%; margin: 0 auto 4px; }
+  .home-masthead header > .logo-wordmark img { max-width: 100%; }
+  .mobile-navigation-ready .mobile-menu-toggle { display: inline-flex; }
+  .home-masthead .mobile-menu-toggle, .home-masthead .account { align-items: center; justify-content: center; gap: 6px; min-height: 44px; min-width: 0; padding: 4px 0; font-size: 14px; white-space: nowrap; }
+  .mobile-menu-toggle { border: 0; background: transparent; color: #f8f1e4; font: inherit; }
+  .mobile-menu-toggle > span { font-size: 19px; }
+  .home-masthead #account-label, .home-masthead .account-arrow { display: none; }
+  .home-masthead .mobile-account-label { display: inline; }
+  .home-masthead .avatar { width: 26px; height: 26px; flex: 0 0 26px; }
+  .home-masthead .cart-badge { min-width: 22px; padding: 2px 5px; font-size: 12px; }
+  .home-masthead #main-navigation { grid-column: 1 / -1; order: 4; width: 100%; flex-direction: column; align-items: stretch; gap: 0; }
+  .home-masthead #main-navigation a { display: block; padding: 12px; min-height: 44px; font-size: 16px; }
+  .mobile-navigation-ready #main-navigation { display: none; }
+  .mobile-navigation-ready #menu-toggle[aria-expanded="true"] + #main-navigation { display: flex; border-top: 1px solid #e6d8b92b; padding-top: 6px; }
+  .home-masthead .reading-hero { min-height: 0; padding: 30px 20px 58px; }
+  .reading-hero .eyebrow { font-size: 11px; line-height: 1.5; letter-spacing: .12em; }
+  .reading-hero h1 { font-size: clamp(32px, 8.5vw, 39px); line-height: 1.15; margin: 18px 0; }
+  .reading-hero h1 br, .reading-hero p br { display: none; }
+  .reading-hero p { font-size: 16px; line-height: 1.6; margin-bottom: 22px; }
+  .reading-hero .dark { font-size: 16px; padding: 14px 22px; min-height: 48px; }
+  .reading-hero .hero-note { font-size: 13px; line-height: 1.55; margin-top: 22px; }
+  .home-masthead .hero-signature { font-size: 14px; bottom: 18px; }
+  .page-intro .values { gap: 10px; padding: 18px 0; font-size: 13px; }
+}
