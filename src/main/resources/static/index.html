@@ -59,7 +59,7 @@
         <div class="hero-signature">Тихое место. Большие истории.</div>
       </section>
     </div>
-    <main>
+    <div class="page-intro">
       <section class="values">
         <span>✳ Отобрано с любовью</span><span>▤ Классика и новые имена</span
         ><span>↗ Своя история для каждого</span>
@@ -75,88 +75,92 @@
         </p>
         <span class="collection-star">✳</span>
       </section>
-      <section id="catalog">
-        <div class="catalog-top">
-          <div>
-            <span class="eyebrow">ВРЕМЯ ВЫБИРАТЬ</span>
-            <h2>Найдётся ваша книга</h2>
+    </div>
+    <div class="catalog-scene">
+      <main>
+        <section id="catalog">
+          <div class="catalog-top">
+            <div>
+              <span class="eyebrow">ВРЕМЯ ВЫБИРАТЬ</span>
+              <h2>Найдётся ваша книга</h2>
+            </div>
+            <label class="search"
+              ><span>⌕</span
+              ><input
+                id="search"
+                type="search"
+                placeholder="Название или автор"
+                aria-label="Поиск книг"
+            /></label>
           </div>
-          <label class="search"
-            ><span>⌕</span
-            ><input
-              id="search"
-              type="search"
-              placeholder="Название или автор"
-              aria-label="Поиск книг"
-          /></label>
-        </div>
-        <div
-          id="categories"
-          class="categories"
-          aria-label="Категории книг"
-        ></div>
-        <section id="java-library" class="java-library" hidden aria-labelledby="java-title">
-          <div class="java-heading">
-            <div><span class="eyebrow">ЭЛЕКТРОННАЯ БИБЛИОТЕКА</span><h2 id="java-title">Java</h2>
-            <p id="library-intro">От первой строки кода — к большим идеям.<br>Книги в PDF, которые можно забрать с собой.</p></div>
-            <button id="java-add" class="button dark" type="button" hidden>Добавить PDF +</button>
+          <div
+            id="categories"
+            class="categories"
+            aria-label="Категории книг"
+          ></div>
+          <section id="java-library" class="java-library" hidden aria-labelledby="java-title">
+            <div class="java-heading">
+              <div><span class="eyebrow">ЭЛЕКТРОННАЯ БИБЛИОТЕКА</span><h2 id="java-title">Java</h2>
+              <p id="library-intro">От первой строки кода — к большим идеям.<br>Книги в PDF, которые можно забрать с собой.</p></div>
+              <button id="java-add" class="button dark" type="button" hidden>Добавить PDF +</button>
+            </div>
+            <form id="java-search-form" class="java-search"><label for="java-search">Найти книгу по Java</label>
+              <div><input id="java-search" type="search" maxlength="255" placeholder="Название или автор"><button class="button light">Найти</button></div>
+            </form>
+            <p id="java-status" role="status" aria-live="polite"></p>
+            <div id="java-list" class="java-grid"></div>
+            <div id="java-pages" class="pagination" aria-label="Страницы библиотеки Java"></div>
+          </section>
+          <div class="catalog-tools">
+            <div class="tabs">
+              <button class="active" data-filter="all">Все книги</button
+              ><button data-filter="favorites">
+                Моя полка <span id="favorite-count">0</span>
+              </button>
+            </div>
+            <label class="sort-label"
+              >Сортировка
+              <select id="sort">
+                <option value="default">Выбор редакции</option>
+                <option value="name">По названию</option>
+                <option value="author">По автору</option>
+              </select></label
+            ><span id="catalog-count" class="muted" aria-live="polite"></span>
           </div>
-          <form id="java-search-form" class="java-search"><label for="java-search">Найти книгу по Java</label>
-            <div><input id="java-search" type="search" maxlength="255" placeholder="Название или автор"><button class="button light">Найти</button></div>
-          </form>
-          <p id="java-status" role="status" aria-live="polite"></p>
-          <div id="java-list" class="java-grid"></div>
-          <div id="java-pages" class="pagination" aria-label="Страницы библиотеки Java"></div>
-        </section>
-        <div class="catalog-tools">
-          <div class="tabs">
-            <button class="active" data-filter="all">Все книги</button
-            ><button data-filter="favorites">
-              Моя полка <span id="favorite-count">0</span>
+          <p id="selection-note" class="selection-note" role="status"></p>
+          <p id="catalog-message" role="status"></p>
+          <div id="books" class="books"></div>
+          <div
+            id="pagination"
+            class="pagination"
+            aria-label="Страницы каталога"
+          ></div>
+          <div class="catalog-bottom">
+            <span>В каждой книге — целый мир.</span
+            ><button id="add-book" class="text-button">
+              Добавить книгу в каталог ＋
             </button>
           </div>
-          <label class="sort-label"
-            >Сортировка
-            <select id="sort">
-              <option value="default">Выбор редакции</option>
-              <option value="name">По названию</option>
-              <option value="author">По автору</option>
-            </select></label
-          ><span id="catalog-count" class="muted" aria-live="polite"></span>
-        </div>
-        <p id="selection-note" class="selection-note" role="status"></p>
-        <p id="catalog-message" role="status"></p>
-        <div id="books" class="books"></div>
-        <div
-          id="pagination"
-          class="pagination"
-          aria-label="Страницы каталога"
-        ></div>
-        <div class="catalog-bottom">
-          <span>В каждой книге — целый мир.</span
-          ><button id="add-book" class="text-button">
-            Добавить книгу в каталог ＋
-          </button>
-        </div>
-      </section>
-      <section id="about" class="about">
-        <span>▤</span>
-        <div>
-          <div class="eyebrow">ПЕРЕПЛЁТ ОБЪЕДИНЯЕТ</div>
-          <h2>Больше, чем просто книги.</h2>
-          <p>
-            Место для любопытства, вдохновения и маленьких открытий.<br />Заходите
-            за новой историей. Оставайтесь ради любви к чтению.
-          </p>
-        </div>
-        <a href="#catalog" class="button">На книжную полку ↗</a>
-      </section>
-    </main>
-    <footer class="site-footer">
-      <a href="#site-feedback">Отзывы и предложения</a>
-      <a class="logo" href="/">▤ переплёт</a><span>Хорошие истории рядом.</span
-      ><span>© 2026 Анцибор А.В.</span>
-    </footer>
+        </section>
+        <section id="about" class="about">
+          <span>▤</span>
+          <div>
+            <div class="eyebrow">ПЕРЕПЛЁТ ОБЪЕДИНЯЕТ</div>
+            <h2>Больше, чем просто книги.</h2>
+            <p>
+              Место для любопытства, вдохновения и маленьких открытий.<br />Заходите
+              за новой историей. Оставайтесь ради любви к чтению.
+            </p>
+          </div>
+          <a href="#catalog" class="button">На книжную полку ↗</a>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <a href="#site-feedback">Отзывы и предложения</a>
+        <a class="logo" href="/">▤ переплёт</a><span>Хорошие истории рядом.</span
+        ><span>© 2026 Анцибор А.В.</span>
+      </footer>
+    </div>
     <dialog id="auth-dialog">
       <button class="close" aria-label="Закрыть">×</button>
       <div class="eyebrow">ВАША ЛИЧНАЯ ИСТОРИЯ</div>
