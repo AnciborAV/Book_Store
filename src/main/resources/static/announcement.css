@@ -16,3 +16,31 @@
   .reading-hero .hero-copy {width:100%;}
   #owner-announcement {flex:none;margin:0;box-sizing:border-box;}
 }
+
+/* Flow layout prevents overlap for long announcements and recommendations. */
+.home-masthead .reading-hero { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:48px; align-items:center; }
+.home-masthead .reading-hero .hero-copy { width:100%; min-width:0; }
+.home-masthead #owner-announcement { position:relative; top:auto; right:auto; width:auto; max-height:none; margin:0; min-width:0; grid-column:2; }
+.hero-editorial-book { position:relative; z-index:2; min-width:0; padding:28px; border:1px solid #e2c78f77; border-radius:6px 6px 24px 6px; background:#211b16e8; box-shadow:0 18px 48px #0005; }
+.hero-editorial-book[hidden] { display:none; }
+.hero-book-content { display:grid; grid-template-columns: minmax(100px,.8fr) minmax(0,1fr); gap:24px; align-items:start; }
+.hero-book-content img { width:100%; aspect-ratio:2/3; object-fit:contain; filter:drop-shadow(0 12px 16px #0008); }
+.reading-hero .hero-editorial-book h2 { font:400 clamp(22px,2vw,30px)/1.25 Georgia,serif; color:#efd29e; margin:0 0 12px; overflow-wrap:anywhere; }
+.reading-hero .hero-editorial-book p { font-size:16px; line-height:1.6; margin:0 0 18px; overflow-wrap:anywhere; }
+.reading-hero .hero-book-comment { display:-webkit-box; -webkit-line-clamp:6; -webkit-box-orient:vertical; overflow:hidden; }
+.hero-editorial-book .button { white-space:normal; }
+.home-masthead .reading-hero.hero-centered { grid-template-columns:minmax(0,1fr); min-height:480px; text-align:center; }
+.reading-hero.hero-centered .hero-copy { max-width:850px; margin-inline:auto; }
+.reading-hero.hero-centered .hero-copy p,.reading-hero.hero-centered .hero-note { margin-inline:auto; }
+.reading-hero.hero-centered .eyebrow,.reading-hero.hero-centered .hero-note { justify-content:center; }
+@media(max-width:1000px) {
+  .home-masthead .reading-hero { grid-template-columns:minmax(0,1fr); gap:32px; }
+  .home-masthead #owner-announcement { grid-column:1; }
+  .hero-editorial-book { width:100%; max-width:620px; margin-inline:auto; box-sizing:border-box; }
+}
+@media(max-width:480px) {
+  .hero-editorial-book { padding:20px; }
+  .hero-book-content { grid-template-columns:minmax(0,1fr); gap:20px; }
+  .hero-book-content img { max-width:160px; margin-inline:auto; }
+  .home-masthead .reading-hero.hero-centered { min-height:0; }
+}

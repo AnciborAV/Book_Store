@@ -17,7 +17,7 @@ const key = b => b.kind + ':' + b.id;
 async function all(refresh = false) {
   if (!pending || refresh) {
     const generation=++cacheGeneration;
-    pending = request('/api/editorial/books?recommended=false').then(data => { if(generation===cacheGeneration)records = data; return data; })
+    pending = request('/api/editorial/books?recommended=false').then(data => { if(generation===cacheGeneration)records = data; renderHeroBook(); return data; })
       .catch(e => { if(generation===cacheGeneration)pending = null; throw e; });
   }
   return pending;
@@ -51,6 +51,29 @@ function picture(b) {
   }
   img.onerror = () => { img.onerror = null; img.src = '/covers/default.svg'; };
   return img;
+}
+function renderHeroBook() {
+  const hero = $('.reading-hero');
+  if (!hero) return;
+  let card = $('#hero-editorial-book');
+  if (!card) { card=element('aside',undefined,'hero-editorial-book'); card.id='hero-editorial-book'; hero.append(card); }
+  const chosen=records.filter(b=>b.lists.length);
+  // A named list allows the owner to explicitly prioritize the cover on the homepage.
+  const b=chosen.find(b=>b.lists.includes('На главной')) || chosen[0];
+  const announcement=$('#owner-announcement');
+  const hasAnnouncement=announcement && !announcement.hidden;
+  card.hidden=hasAnnouncement || !b;
+  hero.classList.toggle('hero-centered',!hasAnnouncement && !b);
+  card.replaceChildren();
+  if (!b || hasAnnouncement) return;
+  card.setAttribute('aria-label','Книга, которую рекомендует редактор');
+  card.append(element('div','РЕКОМЕНДУЮ ПРОЧИТАТЬ','owner-note-label'));
+  const content=element('div',undefined,'hero-book-content');
+  const info=element('div');
+  info.append(element('h2',b.title),element('p',b.author,'hero-book-author'));
+  if(b.comment) info.append(element('p',b.comment,'hero-book-comment'));
+  info.append(button('О книге ↗',()=>showDescription(b.kind,b.id),'button light'));
+  content.append(picture(b),info);card.append(content);
 }
 function renderCollection() {
   const target = $('#editorial-list'); target.replaceChildren();
@@ -126,6 +149,13 @@ async function editBook(kind,id) {
     f.elements.description.value=b.description; f.elements.lists.value=b.lists.join('\n'); f.elements.comment.value=b.comment;
     $('#editorial-error').textContent='';
     $('#editorial-existing').replaceChildren();
+    $('#editorial-existing').append(button('Показывать на главной',()=>{
+      const labels=f.elements.lists.value.split('\n').map(x=>x.trim()).filter(Boolean);
+      if(!labels.includes('На главной'))labels.unshift('На главной');
+      f.elements.lists.value=labels.join('\n');
+    },'category-chip'));
+    $('#editorial-existing').append(element('small','Приоритет у списка «На главной». Если книг в нём несколько, показывается первая по названию. Без этого списка показывается первая рекомендация. Чтобы убрать приоритет книги, удалите строку «На главной».'));
+
     for(const name of [...new Set(records.flatMap(x=>x.lists))].sort()) {
       $('#editorial-existing').append(button(name,()=>{
         const labels=f.elements.lists.value.split('\n').map(x=>x.trim()).filter(Boolean);
@@ -142,6 +172,8 @@ export function updateEditorial() {
 }
 export function setupEditorial(options) {
   getUser=options.getUser;notify=options.toast;
+  document.addEventListener('announcement-changed',renderHeroBook);
+  all().then(renderHeroBook).catch(renderHeroBook);
   document.querySelectorAll('a[href="#collection"], [data-open-editorial]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();openCollection();}));
   document.querySelectorAll('[data-editorial-close]').forEach(b=>b.onclick=()=>{if(b.closest('dialog').id!=='editorial-editor'||!saving)b.closest('dialog').close();});
   $('#editorial-retry').onclick=reloadCollection;

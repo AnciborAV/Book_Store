@@ -46,6 +46,7 @@ async function refresh() {
     const n=await request('/api/announcement');
     $('owner-note-body').textContent=n.body;
     $('owner-announcement').hidden=!n.published;
+    document.dispatchEvent(new CustomEvent('announcement-changed'));
   } catch(_) { /* Keep the rest of the storefront available. */ }
 }
 async function save(published) {
