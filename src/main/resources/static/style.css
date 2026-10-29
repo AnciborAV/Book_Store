@@ -1931,3 +1931,70 @@ textarea:focus-visible {
   .home-masthead .hero-signature { font-size: 14px; bottom: 18px; }
   .page-intro .values { gap: 10px; padding: 18px 0; font-size: 13px; }
 }
+
+/* Approved personal story: readable centered copy over the law/Java study. */
+.catalog-scene .about.about-story {
+  display: block;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(32px, 6vw, 80px) clamp(18px, 4vw, 64px);
+  background: #17100c;
+  border-color: #876a4366;
+  border-radius: 12px;
+  text-align: center;
+  scroll-margin-top: 24px;
+}
+.about-story-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+}
+.about-story::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #130d09a6, #130d09cc 35%, #130d09eb),
+    linear-gradient(90deg, #130d091a, #130d09a6 35%, #130d09a6 65%, #130d091a);
+}
+.about-story-content { max-width: 760px; margin-inline: auto; }
+.about-story h2 {
+  margin: 0 0 28px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  color: #efcf94;
+  line-height: 1.2;
+}
+.about-story p {
+  margin: 0 0 24px;
+  color: #f3e9d9;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.8;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.about-story p.about-story-lead {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(21px, 2.1vw, 28px);
+  line-height: 1.5;
+  color: #f4d9ab;
+}
+.about-story p.about-story-signature {
+  margin-top: 36px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 23px;
+  color: #efcf94;
+}
+.about.about-story .button { margin: 8px auto 0; max-width: 100%; white-space: normal; }
+@media (max-width: 600px) {
+  .about-story-scene { object-position: 32% center; }
+  .about-story::before { background: linear-gradient(180deg, #130d09bd, #130d09e6 40%, #130d09f2); }
+  .about-story p { line-height: 1.7; margin-bottom: 22px; }
+}
