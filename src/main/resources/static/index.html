@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="/announcement.css" />
       <link rel="stylesheet" href="/editorial.css" />
       <link rel="stylesheet" href="/reading-text.css" />
+      <link rel="stylesheet" href="/ai.css" />
   </head>
   <body>
     <div class="home-masthead">
@@ -35,7 +36,7 @@
         </a>
         <button id="menu-toggle" class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation"><span aria-hidden="true">☰</span> Меню</button>
         <nav id="main-navigation" aria-label="Основная навигация">
-          <a href="#about">О магазине</a><a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a>
+          <a href="#about">О магазине</a><a href="#catalog">Каталог</a><a href="#collection">Выбор редакции</a><a href="#ai" data-open-ai>AI</a>
         </nav>
         <button id="open-cart" class="account" aria-label="Открыть корзину">
           Корзина <span id="cart-count" class="cart-badge">0</span></button
@@ -101,6 +102,14 @@
             class="categories"
             aria-label="Категории книг"
           ></div>
+          <div id="library-layout">
+            <section id="ai" class="ai-atlas" hidden aria-labelledby="ai-heading">
+              <div class="ai-heading"><div><span class="eyebrow">АТЛАС ТЕХНОЛОГИЙ</span><h2 id="ai-heading">AI</h2></div>
+                <a class="button light" href="#java-library">Книги об AI ↓</a>
+                <a class="text-button" href="/ai-atlas.html" target="_blank" rel="noopener">Атлас на весь экран ↗</a>
+              </div>
+              <iframe id="ai-frame" title="Атлас направлений применения искусственного интеллекта" data-src="/ai-atlas.html"></iframe>
+            </section>
           <section id="java-library" class="java-library" hidden aria-labelledby="java-title">
             <div class="java-heading">
               <div><span class="eyebrow">ЭЛЕКТРОННАЯ БИБЛИОТЕКА</span><h2 id="java-title">Java</h2>
@@ -116,6 +125,7 @@
             <div id="java-list" class="java-grid"></div>
             <div id="java-pages" class="pagination" aria-label="Страницы библиотеки Java"></div>
           </section>
+          </div>
           <div class="catalog-tools">
             <div class="tabs">
               <button class="active" data-filter="all">Все книги</button

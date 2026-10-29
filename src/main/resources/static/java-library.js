@@ -4,7 +4,7 @@ const $ = s => document.querySelector(s);
 let getUser, toast, page = 0, query = '', generation = 0, editing = null, busy = false;
 let section = 'java', editorSection = 'java';
 let getFavorites, toggleFavorite, isSelectionReady, favoritesOnly = false;
-const sectionTitle = () => section === 'civil-law' ? 'Гражданское право' : 'Java';
+const sectionTitle = () => ({java: 'Java', 'civil-law': 'Гражданское право', ai: 'AI'})[section];
 const el = (tag, text, cls) => {
   const n = document.createElement(tag);
   if (text !== undefined) n.textContent = text;
@@ -52,8 +52,10 @@ export function updateJavaLibrary() {
 }
 export function openJavaLibrary(nextSection = 'java') {
   if (section !== nextSection) { section = nextSection; page = 0; query = ''; $('#java-search').value = ''; }
-  $('#java-title').textContent = sectionTitle();
-  $('#library-intro').textContent = section === 'civil-law'
+  $('#java-title').textContent = section === 'ai' ? 'Книги об AI' : sectionTitle();
+  $('#library-intro').textContent = section === 'ai'
+    ? 'Искусственный интеллект в книгах. Читайте описания, сохраняйте в избранное и скачивайте PDF.'
+    : section === 'civil-law'
     ? 'Книги по гражданскому праву. Скачивайте PDF и изучайте в удобное время.'
     : 'От первой строки кода — к большим идеям. Книги в PDF, которые можно забрать с собой.';
   $('#java-search-form label').textContent = 'Найти книгу — ' + sectionTitle();
