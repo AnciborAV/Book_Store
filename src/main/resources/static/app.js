@@ -193,6 +193,7 @@ function updateCartCount() {
   updateEditorial();
   updateCommerce();
   updateJavaLibrary();
+  void refreshLibraryCounts();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
@@ -260,15 +261,37 @@ function renderCart() {
   $("#clear-cart").disabled = !total;
   updateCartCount();
 }
+const librarySections = { "Java": "java", "Гражданское право": "civil-law", "AI": "ai" };
+let libraryCounts = {}, libraryCountsGeneration = 0;
+async function refreshLibraryCounts() {
+  const ticket = ++libraryCountsGeneration;
+  if (user?.role !== "ADMIN") { libraryCounts = {}; renderCategories(); return; }
+  const results = await Promise.allSettled(Object.entries(librarySections).map(async ([name, section]) => {
+    const data = await request("/api/java-library?" + new URLSearchParams({page: 0, q: "", section}));
+    return [name, data.total];
+  }));
+  if (ticket !== libraryCountsGeneration || user?.role !== "ADMIN") return;
+  for (let i = 0; i < results.length; i++) {
+    const result = results[i];
+    const name = Object.keys(librarySections)[i];
+    if (result.status === "fulfilled") libraryCounts[name] = result.value[1];
+    else delete libraryCounts[name];
+  }
+  renderCategories();
+}
+document.addEventListener("library-books-changed", refreshLibraryCounts);
 function renderCategories() {
   const target = $("#categories");
   target.replaceChildren();
   for (const name of ["all", ...categoryNames, "Java", "AI"]) {
-    const count = books.filter(
+    const catalogCount = books.filter(
       (b) => name === "all" || b.category === name,
     ).length;
+    const count = librarySections[name]
+      ? (libraryCounts[name] === undefined ? null : catalogCount + libraryCounts[name])
+      : catalogCount;
     const button = action(
-      (["Java", "Гражданское право", "AI"].includes(name)) ? name : (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + count : ""),
+      (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + (count ?? "…") : ""),
       () => {
         $("#ai").hidden = true;
         if (location.hash === "#ai") history.replaceState(null, "", "#catalog");
