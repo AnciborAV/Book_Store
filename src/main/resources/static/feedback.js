@@ -37,6 +37,12 @@ export function setupFeedback(ctx) {
         <figure class="feedback-artwork">
           <img src="/covers/nietzsche-java.webp" width="1536" height="1024" loading="lazy" decoding="async"
                alt="Художественная иллюстрация: Фридрих Ницше пишет код Java в IntelliJ IDEA в старинной библиотеке при свечах">
+          <figcaption class="feedback-artwork-caption">
+            <blockquote><p>«Я говорю вам: нужно носить в себе еще хаос, чтобы быть в состоянии родить танцующую звезду».</p></blockquote>
+            <p class="feedback-artwork-author">Фридрих Ницше</p>
+            <cite>«Так говорил Заратустра»<br>Предисловие Заратустры, § 5</cite>
+            <small>Перевод Ю. М. Антоновского</small>
+          </figcaption>
         </figure>
       </div>
     </div>
