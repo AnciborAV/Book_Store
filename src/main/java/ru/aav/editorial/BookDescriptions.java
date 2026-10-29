@@ -1,10 +1,40 @@
 package ru.aav.editorial;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.HashMap;
+import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Editorial summaries, not publisher quotations. Never infer an uploaded PDF's edition. */
 final class BookDescriptions {
-    record Summary(String text, String source) {}
+    record Summary(String text, String source, boolean supplemental) {
+        Summary(String text, String source) { this(text, source, false); }
+    }
+    private record Entry(String title, String author, String text, String source) {}
+    private static final Map<String, Summary> SUPPLEMENTAL = load();
+
+    private static Map<String, Summary> load() {
+        try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-descriptions.json")) {
+            if (stream == null) throw new IllegalStateException("Missing Java descriptions");
+            var entries = new ObjectMapper().readValue(stream, Entry[].class);
+            var result = new HashMap<String, Summary>();
+            for (var entry : entries) {
+                if (entry.title() == null || entry.author() == null || entry.text() == null
+                        || entry.text().isBlank() || entry.source() == null || !entry.source().startsWith("https://"))
+                    throw new IllegalStateException("Invalid Java description");
+                if (result.putIfAbsent(key(entry.title(), entry.author()),
+                        new Summary(entry.text(), entry.source(), true)) != null)
+                    throw new IllegalStateException("Duplicate Java description: " + entry.title());
+            }
+            return Map.copyOf(result);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot read Java descriptions", ex);
+        }
+    }
+    private static String key(String title, String author) {
+        return title.strip().toLowerCase(Locale.ROOT) + "\n" + author.strip().toLowerCase(Locale.ROOT);
+    }
     static Summary find(String title, String author) {
         String name = title.toLowerCase(Locale.ROOT), person = author.toLowerCase(Locale.ROOT);
         if ((name.contains("философия java") || name.contains("thinking in java"))
@@ -45,7 +75,7 @@ final class BookDescriptions {
                 Заметка подготовлена по странице двенадцатого издания «Диалектика-Вильямс», ориентированного на Java SE 17: в нём рассматриваются записи, запечатанные классы и выражения switch. Содержание более ранних редакций отличается. Изучая новые версии Java, дополняйте книгу актуальной документацией к используемой версии JDK.
                 """.strip(), "https://www.williamspublishing.com/Books/978-5-907458-86-4.html");
         }
-        return new Summary("", "");
+        return SUPPLEMENTAL.getOrDefault(key(title, author), new Summary("", ""));
     }
     private BookDescriptions() {}
 }

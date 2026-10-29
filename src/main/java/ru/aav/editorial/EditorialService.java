@@ -29,8 +29,15 @@ public class EditorialService {
         var summary = BookDescriptions.find(r.getString("title"),r.getString("author"));
         String description = r.getString("description"), source = "";
         if (description == null) {
-            description = summary.text().isBlank() ? r.getString("original_description") : summary.text();
-            if (!summary.text().isBlank()) source = summary.source();
+            String original = r.getString("original_description");
+            // New defaults fill empty descriptions only. Explicit editorial edits (including
+            // an intentional empty value) already take precedence above. Keep legacy summaries unchanged.
+            if (summary.text().isBlank() || (summary.supplemental() && original != null && !original.isBlank())) {
+                description = original;
+            } else {
+                description = summary.text();
+                source = summary.source();
+            }
         } else if (description.equals(summary.text())) source = summary.source();
         String lists = r.getString("lists");
         return new Book(r.getString("kind"),r.getString("book_id"),r.getString("title"),r.getString("author"),

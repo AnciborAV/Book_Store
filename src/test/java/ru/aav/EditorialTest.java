@@ -70,6 +70,23 @@ class EditorialTest {
         mvc.perform(get("/api/editorial/books/wrong/12")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/editorial/books/library/00000000-0000-0000-0000-000000000072")).andExpect(status().isNotFound());
     }
+    @Test void newDefaultsPreserveBothOriginalAndEditorialDescriptions() throws Exception {
+        jdbc.update("UPDATE java_library SET title='PostgreSQL изнутри',author='Егор Рогов' WHERE id=?",library);
+        String url="/api/editorial/books/library/"+library;
+        mvc.perform(get(url)).andExpect(jsonPath("$.description").value(org.hamcrest.Matchers.containsString("Егор Рогов")))
+            .andExpect(jsonPath("$.source").value("https://postgrespro.ru/education/books/internals"));
+        jdbc.update("UPDATE java_library SET description='Описание владельца PDF' WHERE id=?",library);
+        mvc.perform(get(url)).andExpect(jsonPath("$.description").value("Описание владельца PDF"))
+            .andExpect(jsonPath("$.source").value(""));
+        jdbc.update("INSERT INTO book_editorial(library_id,description,lists,comment) VALUES(?,?,?,?)",
+            library,"Описание редактора","Моя подборка","Мой комментарий");
+        mvc.perform(get(url)).andExpect(jsonPath("$.description").value("Описание редактора"))
+            .andExpect(jsonPath("$.comment").value("Мой комментарий"))
+            .andExpect(jsonPath("$.lists[0]").value("Моя подборка"))
+            .andExpect(jsonPath("$.source").value(""));
+        jdbc.update("UPDATE book_editorial SET description='' WHERE library_id=?",library);
+        mvc.perform(get(url)).andExpect(jsonPath("$.description").value(""));
+    }
     @Test void sourcedDescriptionsAreTargetedAndCanBeOverridden() throws Exception {
         mvc.perform(get("/api/editorial/books/library/"+library)).andExpect(jsonPath("$.description").value(org.hamcrest.Matchers.containsString("Брюса Эккеля")))
             .andExpect(jsonPath("$.source").value(org.hamcrest.Matchers.containsString("piter.com")));

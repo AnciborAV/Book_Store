@@ -140,7 +140,7 @@ async function showDescription(kind,id) {
       const heading=paragraph.length<65 && !/[.!?…]$/.test(paragraph.trim());
       body.append(element(heading ? 'h3' : 'p',paragraph));
     }
-    if(b.source) { const a=element('a','Источник: страница издательства ↗'); a.href=b.source; a.target='_blank'; a.rel='noopener noreferrer'; $('#description-source').append(a); }
+    if(b.source) { const a=element('a','Источник: об издании ↗'); a.href=b.source; a.target='_blank'; a.rel='noopener noreferrer'; $('#description-source').append(a); }
     if(b.comment) $('#description-comment').append(element('strong','Комментарий редактора'),element('p',b.comment));
     $('#description-comment').hidden=!b.comment;
     $('#description-edit').hidden=!admin(); $('#description-edit').onclick=()=>editBook(kind,id);
