@@ -3,6 +3,7 @@ const views = {
   atlas: {hash:'#ai',src:'/ai-atlas.html',title:'Атлас направлений применения искусственного интеллекта',full:'Атлас на весь экран ↗'},
   architects: {hash:'#ai-architects',src:'/ai-architects.html',title:'Архитекторы AI: фотографии и биографии исследователей',full:'Архитекторы AI на весь экран ↗'},
   models: {hash:'#ai-models',src:'/ai-models.html',title:'Модели AI: что выбрать для вашей профессии',full:'Обзор моделей AI на весь экран ↗'},
+  russia: {hash:'#ai-russia',src:'/ai-russia.html',title:'AI в России: история, модели и перспективы',full:'AI в России на весь экран ↗'},
   history: {hash:'#ai-history',src:'/ai-history.html',title:'История AI: иллюстрированная хронология',full:'История AI на весь экран ↗'},
 };
 export const isAIHash = hash => Object.values(views).some(view => view.hash === hash);

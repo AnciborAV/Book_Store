@@ -1,0 +1,216 @@
+{
+  "checkedAt": "2026-10-30",
+  "methodology": "Primary developer sources establish features, papers establish research context; external rankings establish only listed version/category. Causal analysis and recommendations are editorial inferences. No independent model execution was performed.",
+  "sources": [
+    {
+      "id": "msu",
+      "title": "МГУ: история факультета ВМК",
+      "url": "https://cs.msu.ru/en/node/62",
+      "type": "university",
+      "supports": "Кибернетический семинар Ляпунова с 1955 года."
+    },
+    {
+      "id": "vc",
+      "title": "Вапник и Червоненкис, 1971",
+      "url": "https://www.mathnet.ru/php/archive.phtml?jrnid=tvp&option_lang=rus&paperid=2146&wshow=paper",
+      "type": "paper",
+      "supports": "Равномерная сходимость, математические основания обучения."
+    },
+    {
+      "id": "raai",
+      "title": "Российская ассоциация искусственного интеллекта",
+      "url": "https://www.raai.org/",
+      "type": "association",
+      "supports": "Основание в 1989; регистрация российской ассоциации в 1992."
+    },
+    {
+      "id": "pospelov",
+      "title": "Коллеги и ученики о Д. А. Поспелове",
+      "url": "https://www.mathnet.ru/links/665f9f065971d6e38281a16791b41570/iipr383.pdf",
+      "type": "academic-history",
+      "supports": "Ситуационное управление, организация исследований и ассоциации."
+    },
+    {
+      "id": "yhistory",
+      "title": "История Яндекса",
+      "url": "https://yandex.ru/company/history/",
+      "type": "developer",
+      "supports": "Поиск, MatrixNet, Алиса, перевод и рост сервисов."
+    },
+    {
+      "id": "catboost",
+      "title": "Яндекс: открытие CatBoost, 2017",
+      "url": "https://yandex.ru/company/news/2017-0718",
+      "type": "developer",
+      "supports": "Публикация библиотеки машинного обучения."
+    },
+    {
+      "id": "yalm",
+      "title": "Яндекс: открытие YaLM 100B, 2022",
+      "url": "https://yandex.ru/company/news/2022-06-23",
+      "type": "developer",
+      "supports": "Открытая русско-английская языковая модель."
+    },
+    {
+      "id": "glaunch",
+      "title": "SberDevices: запуск GigaChat, 2023",
+      "url": "https://sberdevices.ru/press/detail/gigachat_vs_chatgpt_sber_otkryvaet_dostup_k_svoei_noveisei_neirosetevoi_modeli/",
+      "type": "developer",
+      "supports": "Анонс закрытого тестирования 24 апреля 2023."
+    },
+    {
+      "id": "gpaper",
+      "title": "GigaChat Family, научный препринт, 2025",
+      "url": "https://arxiv.org/abs/2506.09440",
+      "type": "preprint",
+      "supports": "MoE-архитектура и публикация открытых моделей."
+    },
+    {
+      "id": "alice",
+      "title": "Яндекс: семейство Alice AI",
+      "url": "https://yandex.ru/company/news/28-10-2025-01",
+      "type": "developer",
+      "supports": "LLM, VLM и ART; продуктовые сравнения являются оценками разработчика."
+    },
+    {
+      "id": "ystudio",
+      "title": "Yandex AI Studio: действующие модели",
+      "url": "https://aistudio.yandex.ru/ru/docs/ai-studio/concepts/generation/models",
+      "type": "developer-docs",
+      "supports": "LLM 128k, Flash 64k, ART; наличие иностранных моделей в российском облаке."
+    },
+    {
+      "id": "yfoundation",
+      "title": "AliceAI-Foundation-80B-A3B-Base: карточка",
+      "url": "https://huggingface.co/yandex/AliceAI-Foundation-80B-A3B-Base",
+      "type": "model-card",
+      "supports": "Базовая модель, 80B/3B, контекст 262144, Apache 2.0."
+    },
+    {
+      "id": "yrelease",
+      "title": "Яндекс: открытая Foundation LLM, 21.09.2026",
+      "url": "https://www.yandex.ru/company/news/21-09-2026-03",
+      "type": "developer",
+      "supports": "Обучение с нуля, выпуск весов и фактологических тестов."
+    },
+    {
+      "id": "giga",
+      "title": "GigaChat 3.5 Ultra: карточка модели",
+      "url": "https://huggingface.co/ai-sage/GigaChat3.5-432B-A28B",
+      "type": "model-card",
+      "supports": "MoE 432B/28B; таблица тестов и условия агентного запуска."
+    },
+    {
+      "id": "gigareason",
+      "title": "GigaChat 3.5 Reasoning: карточка",
+      "url": "https://huggingface.co/ai-sage/GigaChat3.5-432B-A28B-Reasoning",
+      "type": "model-card",
+      "supports": "Отдельный вариант для рассуждений; не смешивать с instruct."
+    },
+    {
+      "id": "tpro",
+      "title": "T-pro-it-2.1: карточка модели",
+      "url": "https://huggingface.co/t-tech/T-pro-it-2.1",
+      "type": "model-card",
+      "supports": "На базе Qwen3; инструкции и инструменты; non-thinking."
+    },
+    {
+      "id": "tsearch",
+      "title": "T-Search: карточка модели",
+      "url": "https://huggingface.co/t-tech/T-Search",
+      "type": "model-card",
+      "supports": "Поисковый агент на Qwen3.6-35B-A3B; нужен специальный harness."
+    },
+    {
+      "id": "cotype",
+      "title": "MWS AI: Cotype Pro 3, Light 3 и Nano",
+      "url": "https://mts.ai/product/generative-ai-solutions/",
+      "type": "developer",
+      "supports": "Pro 3: 27B; Light 3: 9B; контекст 262k; корпоративный контур и Nano."
+    },
+    {
+      "id": "cotype-training",
+      "title": "MWS AI: обучение агентных навыков Cotype",
+      "url": "https://habr.com/ru/companies/mts_ai/articles/1060112/",
+      "type": "developer-technical-report",
+      "supports": "Третье поколение, происхождение Light 3, работа с инструментами; самооценка команды."
+    },
+    {
+      "id": "kandinsky",
+      "title": "Kandinsky 6.0: официальный репозиторий",
+      "url": "https://github.com/kandinskylab/kandinsky-6",
+      "type": "developer-repository",
+      "supports": "Открыт 06.10.2026; Lite/Pro; видео и синхронный звук."
+    },
+    {
+      "id": "videoarena",
+      "title": "Text-to-Video Arena: таблица от 21.09.2026",
+      "url": "https://arena.ai/leaderboard/video/text-to-video",
+      "type": "independent-evaluation",
+      "supports": "Kandinsky 5.0 Video Pro и Lite присутствуют; это не оценка 6.0."
+    },
+    {
+      "id": "textarena",
+      "title": "Text Arena: общий рейтинг",
+      "url": "https://arena.ai/leaderboard/chat/text",
+      "type": "independent-evaluation",
+      "supports": "Предпочтения пользователей, интервалы неопределённости; не профессиональный экзамен."
+    },
+    {
+      "id": "aa",
+      "title": "Artificial Analysis: языковые модели",
+      "url": "https://artificialanalysis.ai/leaderboards/models",
+      "type": "independent-evaluation",
+      "supports": "Качество, стоимость, скорость; в доступной таблице не найден сопоставимый актуальный результат Alice/GigaChat."
+    },
+    {
+      "id": "mera",
+      "title": "MERA: публикация ACL 2024",
+      "url": "https://aclanthology.org/2024.acl-long.534/",
+      "type": "peer-reviewed",
+      "supports": "Русскоязычная оценка; организация с участием отрасли и исследователей."
+    },
+    {
+      "id": "meratable",
+      "title": "MERA Text: текущая таблица",
+      "url": "https://mera.a-ai.ru/en/text/leaderboard",
+      "type": "benchmark",
+      "supports": "Есть российские и иностранные модели; не смешивать версии 1.0 и 2.0. Числовое место не фиксируется из-за динамической таблицы."
+    },
+    {
+      "id": "chinchilla",
+      "title": "Hoffmann и соавторы: compute-optimal training",
+      "url": "https://arxiv.org/abs/2203.15556",
+      "type": "paper",
+      "supports": "Связь данных, размера модели и вычислительного бюджета; не оценка российских компаний."
+    },
+    {
+      "id": "cost",
+      "title": "The rising costs of training frontier AI models",
+      "url": "https://arxiv.org/abs/2405.21015",
+      "type": "paper",
+      "supports": "Стоимость оборудования, сети, персонала и обучения; не российская бюджетная статистика."
+    },
+    {
+      "id": "index",
+      "title": "Stanford HAI: AI Index 2026",
+      "url": "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+      "type": "research-report",
+      "supports": "Глобальная концентрация индустрии и инфраструктуры; данные преимущественно за 2025, не рейтинг всех российских систем."
+    },
+    {
+      "id": "bis",
+      "title": "BIS: ограничения поставок в Россию, 2024",
+      "url": "https://www.bis.doc.gov/index.php/documents/about-bis/newsroom/press-releases/3450-2024-02-22-bis-communique-russia-export-controls/file",
+      "type": "government",
+      "supports": "Документированные экспортные ограничения; не количественная оценка влияния на качество моделей."
+    },
+    {
+      "id": "nvidia",
+      "title": "NVIDIA: годовой отчёт за 2026 финансовый год",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+      "type": "company-filing",
+      "supports": "Отчётность производителя о рисках и ограничениях экспортных поставок, включая Россию."
+    }
+  ]
+}
