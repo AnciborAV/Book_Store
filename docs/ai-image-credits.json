@@ -1,0 +1,130 @@
+[
+  {
+    "id": "turing",
+    "path": "/covers/ai-people/turing.jpg",
+    "author": "Elliott & Fry",
+    "license": "Public domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Alan_turing_header.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "mccarthy",
+    "path": "/covers/ai-people/mccarthy.jpg",
+    "author": "null0; обработка WikiPedant",
+    "license": "CC BY-SA 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:John_McCarthy_Stanford.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "minsky",
+    "path": "/covers/ai-people/minsky.jpg",
+    "author": "Sethwoodworth",
+    "license": "CC BY 3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Marvin_Minsky_at_OLPCb_(3x4_cropped).jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "shannon",
+    "path": "/covers/ai-people/shannon.jpg",
+    "author": "Tekniska museet; фотограф не указан",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:C.E._Shannon._Tekniska_museet_43069_(2x3_crop).jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "rosenblatt",
+    "path": "/covers/ai-people/rosenblatt.jpg",
+    "author": "Аноним; Heinz Nixdorf MuseumsForum",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Frank_Rosenblatt.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "hinton",
+    "path": "/covers/ai-people/hinton.jpg",
+    "author": "Cmichel67",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Geoffrey_Hinton_in_2026.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "lecun",
+    "path": "/covers/ai-people/lecun.jpg",
+    "author": "Jérémy Barande / École polytechnique / Institut Polytechnique de Paris",
+    "license": "CC BY-SA 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Laura_Chaubard_&_Yann_Le_Cun_-_2024_(53814052697)_(cropped).jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "bengio",
+    "path": "/covers/ai-people/bengio.jpg",
+    "author": "Xuthoria",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:ICLR_2025_-_Yoshua_Bengio_02.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "newell-simon",
+    "path": "/covers/ai-people/newell-simon.jpg",
+    "author": "Архив AAAI / публикация Paolo Massa",
+    "license": "Public domain; также CC BY-SA 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Herbert_A._Simon_and_Allen_Newell_Chess_Match.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "pearl",
+    "path": "/covers/ai-people/pearl.jpg",
+    "author": "Better Than Bacon",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Judea_Pearl_at_NIPS_2013_(11781981594)_(cropped).jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "russell",
+    "path": "/covers/ai-people/russell.jpg",
+    "author": "Bengt Oberger",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Stuart_Russell_01.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "fei-fei-li",
+    "path": "/covers/ai-people/fei-fei-li.jpg",
+    "author": "ITU Pictures",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Fei-Fei_Li_at_AI_for_Good_2017.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "hassabis",
+    "path": "/covers/ai-people/hassabis.jpg",
+    "author": "John Sears",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Demis_Hassabis,_2024_Nobel_Prize_Laureate_in_Chemistry_7_(cropped).jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "eniac",
+    "path": "/covers/ai-people/eniac.jpg",
+    "author": "U.S. Army; фотограф не установлен",
+    "license": "Public domain",
+    "source": "https://commons.wikimedia.org/wiki/File:Two_women_operating_ENIAC_(full_resolution).jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "shakey",
+    "path": "/covers/ai-people/shakey.jpg",
+    "author": "The wub",
+    "license": "CC BY-SA 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:SRI_Shakey_robot,_1969,_Computer_History_Museum.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  },
+  {
+    "id": "deep-blue",
+    "path": "/covers/ai-people/deep-blue.jpg",
+    "author": "James the photographer",
+    "license": "CC BY 2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Deep_Blue.jpg",
+    "changes": "Уменьшение размера и сжатие JPEG; без ретуши."
+  }
+]
