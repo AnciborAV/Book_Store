@@ -28,7 +28,7 @@ const sections=[{id:'s1',name:'История',position:10,version:0},{id:'s2',n
 const request=async(url,options)=>{
  requests.push({url,options});if(!options)return structuredClone(record);
  if(options.method==='POST'&&url.includes('/books')){
-  const data=options.body;record={kind:'catalog',id:'123',title:data.get('title'),author:data.get('author'),description:data.get('description'),sectionId:data.get('sectionId'),version:record?record.version+1:0,pdfVersion:0,pdfId:data.get('pdf')?'pdf-123':record?.pdfId||null,cover:!!(data.get('cover')||record?.cover)};
+  const data=options.body;record={kind:'catalog',id:'123',title:data.get('title'),author:data.get('author'),description:data.get('description'),price:data.get('price')||null,sectionId:data.get('sectionId'),version:record?record.version+1:0,pdfVersion:0,pdfId:data.get('pdf')?'pdf-123':record?.pdfId||null,cover:!!(data.get('cover')||record?.cover)};
  }
 };
 const document={querySelector:$,querySelectorAll:s=>s.startsWith('.')?all.filter(e=>e.className.split(' ').includes(s.slice(1))):[],createElement:t=>new Element(t),body:new Element('body'),dispatchEvent(){}};
@@ -38,15 +38,17 @@ vm.runInContext(source,context);context.ctx={getUser:()=>user,toast:s=>notices.p
 vm.runInContext('setupCatalogueAdmin(ctx);updateCatalogueAdmin()',context);
 await vm.runInContext('openBookManager(null,"s2")',context);
 const form=$('#managed-book-form');assert.equal(form.elements.sectionId.value,'s2');assert.equal(form.elements.pdf.required,undefined); // PDF is optional.
-form.elements.title.value='Моя книга';form.elements.author.value='Автор';form.elements.description.value='Описание';
+assert.equal(form.elements.price.value,'');
+form.elements.price.value='1250.50';form.elements.title.value='Моя книга';form.elements.author.value='Автор';form.elements.description.value='Описание';
 const chosen=new Blob(['image'],{type:'image/png'});form.elements.cover.files=[chosen];form.elements.cover.onchange();
 await form.onsubmit({preventDefault(){}});assert.equal(record.pdfId,null);assert.equal(record.cover,true);assert.equal(reloads,1);
 await vm.runInContext('openBookManager({kind:"catalog",id:"123"})',context);
-assert.equal(form.elements.title.value,'Моя книга');assert.equal(form.elements.sectionId.value,'s2');assert.equal(form.elements.cover.files.length,0);
+assert.equal(form.elements.price.value,'1250.50');form.elements.price.value='1499.99';assert.equal(form.elements.title.value,'Моя книга');assert.equal(form.elements.sectionId.value,'s2');assert.equal(form.elements.cover.files.length,0);
 form.elements.pdf.files=[{size:100,name:'book.pdf'}];form.elements.pdf.onchange();
 await form.onsubmit({preventDefault(){}});
 const saved=requests.filter(r=>r.options?.method==='POST').at(-1).options.body;
-assert.equal(saved.get('version'),'0');assert.equal(saved.get('pdfVersion'),'0');assert.equal(saved.get('sectionId'),'s2');assert.equal(saved.get('cover'),undefined);assert.equal(record.pdfId,'pdf-123');
+assert.equal(saved.get('price'),'1499.99');assert.equal(saved.get('version'),'0');assert.equal(saved.get('pdfVersion'),'0');assert.equal(saved.get('sectionId'),'s2');assert.equal(saved.get('cover'),undefined);assert.equal(record.pdfId,'pdf-123');
+await vm.runInContext('openBookManager({kind:"catalog",id:"123"})',context);form.elements.price.value='';await form.onsubmit({preventDefault(){}});assert.equal(record.price,null);
 await vm.runInContext('openBookManager({kind:"catalog",id:"123"})',context);form.elements.pdf.files=[{size:501*1024*1024}];
 const before=requests.length;await form.onsubmit({preventDefault(){}});assert.equal(requests.length,before);assert.match($('#managed-book-error').textContent,/500/);
 user=null;vm.runInContext('updateCatalogueAdmin()',context);assert.equal($('#managed-book-editor').open,false);

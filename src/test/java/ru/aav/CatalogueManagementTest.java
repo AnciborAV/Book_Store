@@ -101,6 +101,57 @@ class CatalogueManagementTest {
         mvc.perform(delete("/api/admin/catalogue/books/catalog/"+id).param("version","0").with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isConflict());
         assertThat(entry("catalog",id).get("sectionId").asText()).isEqualTo("ai");
     }
+    @Test void priceCanBeCreatedChangedAndRemovedAndOrdersKeepTheirPrice()throws Exception {
+        String name=title();
+        mvc.perform(multipart("/api/admin/catalogue/books").param("title",name).param("sectionId","java").param("price","1250.50")
+            .with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isCreated());
+        String id=String.valueOf(db.queryForObject("SELECT id FROM books WHERE name=?",Long.class,name));
+        assertThat(entry("catalog",id).get("price").decimalValue()).isEqualByComparingTo("1250.50");
+        db.update("UPDATE books SET stock=5 WHERE id=?",Long.parseLong(id));
+        String email=UUID.randomUUID()+"@example.org";accounts.register(new Registration(email,"Покупатель","test-password"));
+        mvc.perform(put("/api/selection/cart/"+id).with(user(email)).with(csrf()).contentType("application/json").content("{\"quantity\":1}")).andExpect(status().isNoContent());
+        var first=orders.checkout(email,UUID.randomUUID());
+        mvc.perform(edit("catalog",id,entry("catalog",id),"java").param("price","1499.99").with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNoContent());
+        assertThat(entry("catalog",id).get("price").decimalValue()).isEqualByComparingTo("1499.99");
+        assertThat(orders.detail(email,first.order().id()).items().getFirst().unitPrice()).isEqualByComparingTo("1250.50");
+        db.update("UPDATE store_users SET role='ADMIN' WHERE email=?",email);
+        mvc.perform(put("/api/selection/cart/"+id).with(user(email).roles("ADMIN")).with(csrf()).contentType("application/json").content("{\"quantity\":1}")).andExpect(status().isNoContent());
+        assertThat(orders.checkout(email,UUID.randomUUID()).order().total()).isEqualByComparingTo("1499.99");
+        mvc.perform(edit("catalog",id,entry("catalog",id),"java").with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNoContent());
+        assertThat(entry("catalog",id).get("price").isNull()).isTrue();
+        mvc.perform(put("/api/selection/cart/"+id).with(user(email)).with(csrf()).contentType("application/json").content("{\"quantity\":1}")).andExpect(status().isNoContent());
+        assertThatThrownBy(()->orders.checkout(email,UUID.randomUUID())).hasMessageContaining("Не указана цена");
+    }
+    @Test void legacyPdfCanBePricedWithoutLosingFileCoverCollectionsOrFavorites()throws Exception {
+        var result=mvc.perform(multipart("/api/admin/java-library").file(pdf()).file(cover()).param("title",title()).with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isCreated()).andReturn();
+        String pdfId=json.readTree(result.getResponse().getContentAsString()).get("id").asText();
+        byte[] image=mvc.perform(get("/api/java-library/"+pdfId+"/cover")).andReturn().getResponse().getContentAsByteArray();
+        String email=UUID.randomUUID()+"@example.org";accounts.register(new Registration(email,"Читатель","test-password"));
+        mvc.perform(put("/api/selection/library-favorites/"+pdfId).with(user(email)).with(csrf())).andExpect(status().isNoContent());
+        mvc.perform(put("/api/admin/editorial/books/library/"+pdfId).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json")
+            .content(json.writeValueAsString(Map.of("version",-1,"description","Описание","lists",List.of("Любимые PDF"),"comment","Советую")))).andExpect(status().isOk());
+        var initial=entry("library",pdfId);
+        mvc.perform(edit("library",pdfId,initial,"java").param("price","700.01").with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNoContent());
+        String id=String.valueOf(db.queryForObject("SELECT book_id FROM catalog_pdf WHERE library_id=?",Long.class,pdfId));
+        var saved=entry("catalog",id);assertThat(saved.get("price").decimalValue()).isEqualByComparingTo("700.01");assertThat(saved.get("pdfId").asText()).isEqualTo(pdfId);
+        mvc.perform(get("/api/catalogue/covers/"+id)).andExpect(content().bytes(image));
+        mvc.perform(get("/api/java-library/"+pdfId+"/download")).andExpect(content().bytes(pdf().getBytes()));
+        mvc.perform(get("/api/editorial/books/catalog/"+id)).andExpect(jsonPath("$.lists[0]").value("Любимые PDF")).andExpect(jsonPath("$.comment").value("Советую"));
+        mvc.perform(get("/api/selection").with(user(email))).andExpect(jsonPath("$.favorites[0]").value(Long.parseLong(id)));
+        mvc.perform(edit("library",pdfId,initial,"java").param("price","800").with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNotFound());
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM catalog_pdf WHERE library_id=?",Integer.class,pdfId)).isEqualTo(1);
+    }
+    @Test void invalidPricesAndUnauthorizedEditsAreRejected()throws Exception {
+        String id=create(title(),"java",cover());var book=entry("catalog",id);
+        for(String price:List.of("0","-1","10.001","100000000","NaN","abc")) {
+            mvc.perform(edit("catalog",id,book,"java").param("price",price).with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isBadRequest());
+            String name=title();mvc.perform(multipart("/api/admin/catalogue/books").param("title",name).param("sectionId","java").param("price",price).with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isBadRequest());
+            assertThat(db.queryForObject("SELECT COUNT(*) FROM books WHERE name=?",Integer.class,name)).isZero();
+        }
+        mvc.perform(edit("catalog",id,book,"java").param("price","100").with(user("reader")).with(csrf())).andExpect(status().isForbidden());
+        mvc.perform(edit("catalog",id,book,"java").param("price","100").with(user("admin").roles("ADMIN"))).andExpect(status().isForbidden());
+        assertThat(entry("catalog",id).get("price").isNull()).isTrue();
+    }
     @Test void accessControlsAndInvalidUploads()throws Exception {
         mvc.perform(post("/api/admin/catalogue/sections").with(csrf()).contentType("application/json").content("{\"name\":\"Blocked\"}")).andExpect(status().isUnauthorized());
         mvc.perform(post("/api/admin/catalogue/sections").with(user("reader").roles("CUSTOMER")).with(csrf()).contentType("application/json").content("{\"name\":\"Blocked\"}")).andExpect(status().isForbidden());

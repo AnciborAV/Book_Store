@@ -23,6 +23,7 @@ export async function openBookManager(book=null,sectionId='all') {
     if(!admin())return;
     const form=$('#managed-book-form');form.reset();release();refreshSections(editing?.sectionId||sectionId);
     for(const name of names)form.elements[name].value=editing?.[name]||'';
+    form.elements.price.value=editing?.price??'';
     form.elements.description.closest('label').hidden=!!editing;
     $('#managed-book-title').textContent=editing?'Редактировать книгу':'Добавить книгу';
     $('#managed-book-help').textContent='Можно сначала сохранить обложку и описание, а PDF прикрепить позже. Файлы, которые вы не меняете, сохранятся.';
@@ -86,6 +87,8 @@ export function setupCatalogueAdmin(ctx){
     <p id="managed-book-help"></p><form id="managed-book-form">
     <label>Название<input name="title" maxlength="255" required autofocus /></label><label>Автор<input name="author" maxlength="255" /></label>
     <label>Раздел<select name="sectionId" required></select></label><button type="button" class="text-button" id="managed-add-section">Создать новый раздел</button>
+    <label>Цена, ₽<input name="price" type="number" min="0.01" max="99999999.99" step="0.01" inputmode="decimal" /></label>
+    <p>Оставьте цену пустой, если книга не продаётся. После сохранения цены появится кнопка «В корзину». Для оформления заказа добавьте остаток в панели «Управление магазином» → «Поступление на склад». Чтение и скачивание PDF остаются доступными всем.</p>
     <label>Описание<textarea name="description" rows="6" maxlength="3000"></textarea></label>
     <img id="managed-book-preview" alt="Обложка книги" hidden />
     <label>Обложка — PNG или JPEG до 2 МБ<input name="cover" type="file" accept="image/png,image/jpeg" /></label>
@@ -111,6 +114,7 @@ export function setupCatalogueAdmin(ctx){
     const pdf=form.elements.pdf.files[0],cover=form.elements.cover.files[0];
     if(pdf?.size>500*1024*1024||cover?.size>2*1024*1024){$('#managed-book-error').textContent='PDF — до 500 МБ, обложка — до 2 МБ.';return;}
     const data=new FormData(form);if(!pdf)data.delete('pdf');if(!cover)data.delete('cover');
+    if(!form.elements.price.value.trim())data.delete('price');
     if(editing){data.set('version',editing.version);data.set('pdfVersion',editing.pdfVersion);}
     busy=true;const controls=[...form.elements,...editor.querySelectorAll('[data-managed-close]')];controls.forEach(e=>{e.disabled=true;});$('#managed-book-error').textContent='';
     try{await request('/api/admin/catalogue/books'+(editing?`/${editing.kind}/${encodeURIComponent(editing.id)}`:''),{method:'POST',body:data});editor.close();await changed();context.toast(pdf?'Книга сохранена. PDF доступен для чтения и скачивания':'Карточка сохранена');}

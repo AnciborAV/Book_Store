@@ -50,24 +50,38 @@ public class CatalogueService {
         if(kind.equals("library"))return db.query(LIBRARY+" AND b.id=?",this::row,libraryId(id)).stream().findFirst().orElseThrow(this::missing);
         throw missing();
     }
-    @Transactional public void create(String title,String author,String sectionId,String description,LibraryFiles.Prepared files,boolean uploadedCover) {
+    @Transactional public void create(String title,String author,String sectionId,String description,java.math.BigDecimal price,LibraryFiles.Prepared files,boolean uploadedCover) {
         var section=sections.lock(sectionId);
-        var book=new ru.aav.model.Book();book.setName(title.strip());book.setAuthor(author.strip());book.setCategory(section.catalogKey());
+        var book=new ru.aav.model.Book();book.setName(title.strip());book.setAuthor(author.strip());book.setCategory(section.catalogKey());book.setPrice(price);
         books.saveAndFlush(book);
         db.update("INSERT INTO book_editorial(catalog_id,description) VALUES(?,?)",book.getId(),description.strip());
         saveCatalogFile(book.getId(),null,title,author,description,section,files,uploadedCover,false);
     }
-    @Transactional public void update(String kind,String id,long version,long pdfVersion,String title,String author,String sectionId,String description,
+    @Transactional public void update(String kind,String id,long version,long pdfVersion,String title,String author,String sectionId,String description,java.math.BigDecimal price,
         LibraryFiles.Prepared files,boolean uploadedCover,boolean removePdf) {
         var section=sections.lock(sectionId);
         if(kind.equals("library")) {
-            String key=libraryId(id);var current=get(kind,key);if(current.version()!=version)throw conflict();
+            String key=libraryId(id);
+            if(db.queryForList("SELECT id FROM java_library WHERE id=? FOR UPDATE",key).isEmpty())throw missing();
+            var current=get(kind,key);if(current.version()!=version)throw conflict();
             if(removePdf)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Для удаления PDF удалите карточку книги");
             byte[] cover=files.cover();
             if(!uploadedCover && current.customCover() && files.pdf()!=null)cover=library.cover(key).bytes();
             var effective=new LibraryFiles.Prepared(files.pdf(),cover,files.pages(),files.size());
             library.update(key,version,title,author,description,effective);
             db.update("UPDATE java_library SET section=?,custom_cover=? WHERE id=?",section.libraryKey(),uploadedCover||current.customCover(),key);
+            if(price!=null) {
+                // Attach the existing file to a saleable card without copying or replacing it.
+                var book=new ru.aav.model.Book();book.setName(title.strip());book.setAuthor(author.strip());
+                book.setCategory(section.catalogKey());book.setPrice(price);books.saveAndFlush(book);
+                long catalog=book.getId();
+                db.update("INSERT INTO catalog_pdf(book_id,library_id) VALUES(?,?)",catalog,key);
+                if(uploadedCover||current.customCover())db.update("INSERT INTO catalog_covers(book_id,data) VALUES(?,?)",catalog,library.cover(key).bytes());
+                int moved=db.update("UPDATE book_editorial SET catalog_id=?,library_id=NULL,version=version+1 WHERE library_id=?",catalog,key);
+                if(moved==0)db.update("INSERT INTO book_editorial(catalog_id,description) VALUES(?,?)",catalog,description.strip());
+                db.update("INSERT INTO user_favorites(user_id,book_id) SELECT user_id,? FROM library_favorites WHERE book_id=?",catalog,key);
+                db.update("DELETE FROM library_favorites WHERE book_id=?",key);
+            }
             return;
         }
         if(!kind.equals("catalog"))throw missing();
@@ -75,7 +89,7 @@ public class CatalogueService {
         if(book.isArchived())throw missing();if(book.getManagementRevision()!=version)throw conflict();
         var current=get("catalog",id);
         if(current.pdfId()!=null && current.pdfVersion()!=pdfVersion)throw conflict();
-        book.setName(title.strip());book.setAuthor(author.strip());book.setCategory(section.catalogKey());book.setManagementRevision(version+1);
+        book.setName(title.strip());book.setAuthor(author.strip());book.setCategory(section.catalogKey());book.setPrice(price);book.setManagementRevision(version+1);
         books.flush();
         saveCatalogFile(key,current,title,author,description,section,files,uploadedCover,removePdf);
     }
