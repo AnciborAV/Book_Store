@@ -196,7 +196,7 @@ public class CommerceRepository {
     }
 
     public List<Stock> stock() {
-        return jdbc.query("SELECT * FROM books ORDER BY id", (r, n) ->
+        return jdbc.query("SELECT * FROM books WHERE archived=FALSE ORDER BY id", (r, n) ->
             new Stock(
                 r.getLong("id"),
                 r.getString("name"),
@@ -212,7 +212,7 @@ public class CommerceRepository {
 
     public List<Movement> movements(int page) {
         return jdbc.query(
-            "SELECT m.*,b.name,u.display_name,o.order_number FROM stock_movements m JOIN books b ON b.id=m.book_id JOIN store_users u ON u.id=m.actor_id LEFT JOIN store_orders o ON o.id=m.order_id ORDER BY m.id DESC LIMIT 50 OFFSET ?",
+            "SELECT m.*,COALESCE(b.retired_title,b.name) AS name,u.display_name,o.order_number FROM stock_movements m JOIN books b ON b.id=m.book_id JOIN store_users u ON u.id=m.actor_id LEFT JOIN store_orders o ON o.id=m.order_id ORDER BY m.id DESC LIMIT 50 OFFSET ?",
             (r, n) ->
                 new Movement(
                     r.getLong("id"),

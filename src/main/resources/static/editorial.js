@@ -51,10 +51,10 @@ export function addEditorialControls(card, kind, book) {
 }
 function picture(b) {
   const img = element('img'); img.alt = 'Обложка: ' + b.title; img.loading = 'lazy';
-  img.src = b.kind === 'library' ? `/api/java-library/${b.id}/cover` : '/covers/default.svg';
-  if (b.kind === 'catalog') {
+  img.src = b.kind === 'library' ? `/api/java-library/${b.id}/cover` : (b.pdfId || b.customCover) ? `/api/catalogue/covers/${b.id}?v=${b.pdfVersion}` : '/covers/default.svg';
+  if (b.kind === 'catalog' && !b.pdfId && !b.customCover) {
     coverMap ||= fetch('/catalog-covers.json').then(r => r.json()).catch(() => ({}));
-    coverMap.then(c => { img.src = c[b.title] || '/covers/default.svg'; });
+    coverMap.then(c => { img.src = c[b.coverTitle || b.title] || '/covers/default.svg'; });
   }
   img.onerror = () => { img.onerror = null; img.src = '/covers/default.svg'; };
   return img;
@@ -103,12 +103,12 @@ function renderCollection() {
   $('#editorial-status').textContent = visible.length ? `Книг: ${visible.length}` : (query || listName ? 'По этому запросу книг нет.' : manage ? 'В каталоге пока нет книг.' : 'Редактор пока не добавил рекомендации.');
   for (const b of visible) {
     const card = element('article', undefined, 'editorial-book');
-    const info = element('div'); info.append(element('span', b.kind === 'catalog' ? b.section : ({java: 'Java · PDF', 'civil-law': 'Гражданское право · PDF', ai: 'AI · PDF'})[b.section] || 'PDF', 'eyebrow'), element('h3', b.title), element('p', b.author));
+    const info = element('div'); info.append(element('span', b.kind === 'catalog' ? b.section : b.section + ' · PDF', 'eyebrow'), element('h3', b.title), element('p', b.author));
     if (b.lists.length) info.append(element('p', b.lists.join(' · '), 'editorial-membership'));
     if (b.comment) { const note=element('aside',undefined,'editorial-note'); fillCommentPreview(note,b); info.append(note); }
     const actions = element('div', undefined, 'editorial-card-actions');
     actions.append(button('Описание', () => showDescription(b.kind,b.id)));
-    if (b.kind === 'library') { const read=element('a','Читать','button light'); read.href=`/reader.html?id=${encodeURIComponent(b.id)}`; actions.append(read); const a=element('a','Скачать PDF ↓','button dark'); a.href=`/api/java-library/${b.id}/download`; a.setAttribute('download',''); actions.append(a); }
+    if (b.pdfId) { const read=element('a','Читать','button light'); read.href=`/reader.html?id=${encodeURIComponent(b.pdfId)}`; actions.append(read); const a=element('a','Скачать PDF ↓','button dark'); a.href=`/api/java-library/${b.pdfId}/download`; a.setAttribute('download',''); actions.append(a); }
     else actions.append(button('Открыть книгу', () => { $('#editorial-dialog').close(); document.dispatchEvent(new CustomEvent('editorial-open-catalog',{detail:b.id})); }));
     if (admin()) actions.append(button('Редактировать подборки', () => editBook(b.kind,b.id)));
     info.append(actions); card.append(picture(b),info); target.append(card);
@@ -125,7 +125,7 @@ async function reloadCollection() {
   try { await all(true); if(ticket===loadNumber) {renderCollection();paintNotes();} }
   catch(e) { if(ticket===loadNumber) $('#editorial-status').textContent=e.message; }
 }
-async function showDescription(kind,id) {
+export async function showDescription(kind,id) {
   const ticket=++detailNumber;
   $('#description-title').textContent='Описание книги'; $('#description-author').textContent='';
   $('#description-body').textContent='Загружаем описание…'; $('#description-source').replaceChildren();
@@ -180,6 +180,7 @@ export function updateEditorial() {
 export function setupEditorial(options) {
   getUser=options.getUser;notify=options.toast;
   document.addEventListener('announcement-changed',renderHeroBook);
+  document.addEventListener('catalogue-books-changed',()=>{all(true).then(()=>{paintNotes();if($('#editorial-dialog').open)renderCollection();}).catch(()=>{});});
   all().then(renderHeroBook).catch(renderHeroBook);
   document.querySelectorAll('a[href="#collection"], [data-open-editorial]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();openCollection();}));
   document.querySelectorAll('[data-editorial-close]').forEach(b=>b.onclick=()=>{if(b.closest('dialog').id!=='editorial-editor'||!saving)b.closest('dialog').close();});

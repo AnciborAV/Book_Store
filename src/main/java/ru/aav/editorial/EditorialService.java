@@ -13,17 +13,24 @@ import org.springframework.web.server.ResponseStatusException;
 public class EditorialService {
     private final JdbcTemplate jdbc;
     public record Book(String kind, String id, String title, String author, String section,
-                       String description, String source, List<String> lists, String comment, long version) {}
+                       String description, String source, List<String> lists, String comment, long version, String pdfId, long pdfVersion, boolean customCover, String coverTitle) {}
     private static final String CATALOG = """
         SELECT 'catalog' AS kind, CAST(b.id AS varchar) AS book_id, b.name AS title,
-          COALESCE(b.author,'') AS author, COALESCE(b.category,'Каталог') AS section,
-          '' AS original_description, e.description, e.lists, e.comment, e.version
-        FROM books b LEFT JOIN book_editorial e ON e.catalog_id=b.id
+          COALESCE(b.author,'') AS author, COALESCE(s.name,b.category,'Каталог') AS section,
+          '' AS original_description, e.description, e.lists, e.comment, e.version,
+          p.library_id pdf_id,COALESCE(l.version,0) pdf_version,CASE WHEN c.book_id IS NULL THEN FALSE ELSE TRUE END custom_cover,
+          COALESCE(b.cover_title,b.name) cover_title
+        FROM (SELECT * FROM books WHERE archived=FALSE) b LEFT JOIN book_editorial e ON e.catalog_id=b.id
+        LEFT JOIN store_sections s ON s.catalog_key=b.category
+        LEFT JOIN catalog_pdf p ON p.book_id=b.id LEFT JOIN java_library l ON l.id=p.library_id
+        LEFT JOIN catalog_covers c ON c.book_id=b.id
         """;
     private static final String LIBRARY = """
-        SELECT 'library' AS kind, b.id AS book_id, b.title, b.author, b.section,
-          b.description AS original_description, e.description, e.lists, e.comment, e.version
-        FROM java_library b LEFT JOIN book_editorial e ON e.library_id=b.id
+        SELECT 'library' AS kind, b.id AS book_id, b.title, b.author, COALESCE(s.name,b.section) section,
+          b.description AS original_description, e.description, e.lists, e.comment, e.version,
+          b.id pdf_id,b.version pdf_version,b.custom_cover,b.title cover_title
+        FROM (SELECT source.* FROM java_library source WHERE NOT EXISTS(SELECT 1 FROM catalog_pdf p WHERE p.library_id=source.id)) b
+        LEFT JOIN book_editorial e ON e.library_id=b.id LEFT JOIN store_sections s ON s.library_key=b.section
         """;
     private Book row(java.sql.ResultSet r, int n) throws java.sql.SQLException {
         var summary = BookDescriptions.find(r.getString("title"),r.getString("author"));
@@ -43,7 +50,7 @@ public class EditorialService {
         return new Book(r.getString("kind"),r.getString("book_id"),r.getString("title"),r.getString("author"),
             r.getString("section"),description == null ? "" : description,source,
             lists == null || lists.isBlank() ? List.of() : List.of(lists.split("\n")),
-            Objects.requireNonNullElse(r.getString("comment"),""), r.getObject("version") == null ? -1 : r.getLong("version"));
+            Objects.requireNonNullElse(r.getString("comment"),""), r.getObject("version") == null ? -1 : r.getLong("version"),r.getString("pdf_id"),r.getLong("pdf_version"),r.getBoolean("custom_cover"),r.getString("cover_title"));
     }
     @Transactional(readOnly=true)
     public List<Book> list(boolean recommended) {

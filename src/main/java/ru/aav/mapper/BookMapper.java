@@ -17,5 +17,8 @@ public interface BookMapper {
     @org.mapstruct.Mapping(target = "price", ignore = true)
     @org.mapstruct.Mapping(target = "stock", ignore = true)
     @org.mapstruct.Mapping(target = "reserved", ignore = true)
+    @org.mapstruct.Mapping(target = "retiredTitle", ignore = true)
+    @org.mapstruct.Mapping(target = "archived", ignore = true)
+    @org.mapstruct.Mapping(target = "managementRevision", ignore = true)
     Book toEntity(CreateBookRequest request);
 }

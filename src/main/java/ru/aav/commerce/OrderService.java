@@ -65,6 +65,7 @@ public class OrderService {
         // Always lock books in ascending ID order across checkout, shipment and cancellation.
         for (long id : new TreeSet<>(cart.keySet())) {
             var book = inventory.lock(id);
+            if (book.isArchived()) throw conflict("Книга удалена из каталога: " + book.getName());
             int quantity = cart.get(id);
             if (book.getPrice() == null) throw conflict(
                 "Не указана цена: " + book.getName()

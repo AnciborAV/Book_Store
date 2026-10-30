@@ -13,13 +13,13 @@ public class SelectionRepository {
 
     public Selection find(long user) {
         var favorites = jdbc.queryForList(
-            "SELECT book_id FROM user_favorites WHERE user_id=? ORDER BY book_id",
+            "SELECT f.book_id FROM user_favorites f JOIN books b ON b.id=f.book_id WHERE f.user_id=? AND b.archived=FALSE ORDER BY f.book_id",
             Long.class,
             user
         );
         var cart = new LinkedHashMap<Long, Integer>();
         jdbc.query(
-            "SELECT book_id, quantity FROM cart_items WHERE user_id=? ORDER BY book_id",
+            "SELECT c.book_id,c.quantity FROM cart_items c JOIN books b ON b.id=c.book_id WHERE c.user_id=? AND b.archived=FALSE ORDER BY c.book_id",
             (org.springframework.jdbc.core.RowCallbackHandler) rs ->
                 cart.put(rs.getLong("book_id"), rs.getInt("quantity")),
             user

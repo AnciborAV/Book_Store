@@ -32,7 +32,7 @@ public class JavaLibraryService {
     @Transactional(readOnly=true)
     public Page list(int page, String query, String section) {
         String q = "%" + query.strip().toLowerCase(Locale.ROOT).replace("!","!!").replace("%","!%").replace("_","!_") + "%";
-        String where = " WHERE section=? AND (LOWER(title) LIKE ? ESCAPE '!' OR LOWER(author) LIKE ? ESCAPE '!')";
+        String where = " WHERE NOT EXISTS(SELECT 1 FROM catalog_pdf p WHERE p.library_id=java_library.id) AND section=? AND (LOWER(title) LIKE ? ESCAPE '!' OR LOWER(author) LIKE ? ESCAPE '!')";
         long count = jdbc.queryForObject("SELECT COUNT(*) FROM java_library"+where,Long.class,section,q,q);
         return new Page(jdbc.query("SELECT * FROM java_library"+where+" ORDER BY created_at DESC,id LIMIT 12 OFFSET ?",ROW,section,q,q,(long)page*12),count,page,12);
     }
@@ -45,6 +45,8 @@ public class JavaLibraryService {
     }
     @Transactional
     public Book create(String title,String author,String description,String section,LibraryFiles.Prepared files) {
+        if (jdbc.queryForList("SELECT id FROM store_sections WHERE library_key=? FOR UPDATE",section).isEmpty())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Раздел не найден");
         if (files.pdf()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Выберите PDF книги");
         String id=UUID.randomUUID().toString();
         jdbc.update("INSERT INTO java_library(id,title,author,description,file_size,page_count,section) VALUES(?,?,?,?,?,?,?)",

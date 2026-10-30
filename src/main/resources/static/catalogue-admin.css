@@ -1,0 +1,20 @@
+.managed-toolbar,.managed-editor-actions,.managed-book-actions {display:flex;flex-wrap:wrap;gap:12px;margin:14px 0;}
+.catalogue-editor {width:min(900px,calc(100vw - 24px));max-width:900px;max-height:calc(100dvh - 32px);padding:28px;overflow:auto;background:#252019;color:var(--ink);border:1px solid var(--line);}
+.catalogue-editor::backdrop {background:#000b;}
+.managed-editor-heading {display:flex;justify-content:space-between;align-items:start;gap:16px;}
+.catalogue-editor h2 {font:30px/1.3 Georgia,serif;margin:0 0 18px;}
+.catalogue-editor form {display:grid;gap:14px;}
+.catalogue-editor label {display:grid;gap:8px;min-width:0;font-size:17px;}
+.catalogue-editor input:not([type=checkbox]),.catalogue-editor textarea,.catalogue-editor select {width:100%;min-width:0;margin:0;padding:12px;font:16px/1.6 Arial,sans-serif;color:#26211b;background:#f4efe3;border:1px solid #9a896c;border-radius:4px;}
+.catalogue-editor textarea {resize:vertical;}
+#managed-book-preview {width:160px;max-height:240px;object-fit:contain;}
+.catalogue-editor .managed-check {display:flex;align-items:center;gap:12px;}
+.catalogue-editor .managed-check input {width:20px;height:20px;margin:0;}
+#managed-sections {display:grid;gap:20px;margin-top:20px;}
+#managed-sections .managed-section-row {grid-template-columns:minmax(0,1fr) 100px auto auto;align-items:end;border-top:1px solid var(--line);padding-top:16px;}
+.catalogue-editor p {font-size:15px;line-height:1.7;}
+@media(max-width:650px){.catalogue-editor{padding:20px 16px;}#managed-sections .managed-section-row{grid-template-columns:minmax(0,1fr) 100px;} .managed-toolbar>*{width:100%;}}
+.book-actions {flex-wrap:wrap;}
+.book-actions .button,.managed-book-actions button {max-width:100%;white-space:normal;}
+.managed-editor-heading h2 {min-width:0;overflow-wrap:anywhere;}
+.managed-editor-heading .text-button {flex-shrink:0;}
