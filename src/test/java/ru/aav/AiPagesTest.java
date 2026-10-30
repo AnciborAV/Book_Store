@@ -13,12 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 class AiPagesTest {
     @Autowired MockMvc mvc;
     @Test void allAiDocumentsArePublicAndCanOnlyBeEmbeddedByThisSite()throws Exception {
-        for(String path:new String[]{"/ai-atlas.html","/ai-architects.html","/ai-history.html","/ai-models.html"})
+        for(String path:new String[]{"/ai-atlas.html","/ai-architects.html","/ai-history.html","/ai-models.html","/ai-russia.html"})
             mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","SAMEORIGIN"));
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
     }
     @Test void stylesScriptsAndLocalPhotographsArePublic()throws Exception {
-        for(String path:new String[]{"/ai-navigation.js","/ai-story.js","/ai-story.css","/ai-models.js","/ai-models.css","/covers/ai-people/turing.jpg","/covers/ai-people/eniac.jpg","/covers/ai-people/network.svg"})
+        for(String path:new String[]{"/ai-navigation.js","/ai-story.js","/ai-story.css","/ai-models.js","/ai-models.css","/ai-russia.css","/ai-russia.js","/covers/ai-people/turing.jpg","/covers/ai-people/eniac.jpg","/covers/ai-people/network.svg"})
             mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
     }
 }

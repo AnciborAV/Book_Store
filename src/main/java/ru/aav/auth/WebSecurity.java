@@ -59,7 +59,7 @@ public class WebSecurity {
     SecurityFilterChain apiSecurity(HttpSecurity http, org.springframework.security.core.session.SessionRegistry sessions, RememberedLogin rememberedLogin) throws Exception {
         return http
             .headers(h -> h.frameOptions(f -> f.disable()).addHeaderWriter((req, res) ->
-                res.setHeader("X-Frame-Options", java.util.Set.of("/ai-atlas.html", "/ai-architects.html", "/ai-history.html", "/ai-models.html").stream().anyMatch(path -> (req.getContextPath() + path).equals(req.getRequestURI())) ? "SAMEORIGIN" : "DENY")))
+                res.setHeader("X-Frame-Options", java.util.Set.of("/ai-atlas.html", "/ai-architects.html", "/ai-history.html", "/ai-models.html", "/ai-russia.html").stream().anyMatch(path -> (req.getContextPath() + path).equals(req.getRequestURI())) ? "SAMEORIGIN" : "DENY")))
             .authorizeHttpRequests(a ->
                 a
                     .requestMatchers(
@@ -116,6 +116,9 @@ public class WebSecurity {
                         "/ai-story.css",
                         "/ai-story.js",
                         "/ai-models.html",
+                        "/ai-russia.html",
+                        "/ai-russia.css",
+                        "/ai-russia.js",
                         "/ai-models.css",
                         "/ai-models.js",
                         "/ai-atlas.html",
