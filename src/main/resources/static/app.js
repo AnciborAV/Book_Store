@@ -1,3 +1,4 @@
+import {openAI, isAIHash, setupAINavigation} from "./ai-navigation.js";
 import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
 import { setupAbout, updateAbout } from "./about.js";
 import { setupEditorial, updateEditorial, addEditorialControls, showDescription } from "./editorial.js";
@@ -711,7 +712,8 @@ async function init() {
   } catch (_) {}
   await loadProfile().catch((e) => toast(e.message));
   await loadBooks();
-  if (location.hash === "#ai") openAI();
+  if (isAIHash(location.hash)) openAI();
+  else if (location.hash === "#ai-books") openAIBooks();
 }
 setupCatalogueAdmin({getUser:()=>user,toast,getSections:()=>sections,getSection:()=>category,reload:async()=>{await loadBooks();await loadSelection();}});
 setupAbout({ getUser: () => user, toast });
@@ -755,26 +757,10 @@ document.addEventListener("keydown", (event) => {
 window.matchMedia("(max-width: 600px)").addEventListener("change", closeMobileMenu);
 document.documentElement.classList.add("mobile-navigation-ready");
 
-function openAI() {
-  $("#ai").hidden = false;
-  if (!$("#ai-frame").hasAttribute("src")) $("#ai-frame").src = $("#ai-frame").dataset.src;
-  $("#ai").scrollIntoView({block: "start"});
-}
-document.querySelectorAll('[data-open-ai]').forEach(link => link.addEventListener('click', () => openAI()));
 function openAIBooks() {
   $("#ai").hidden = true;
   category = "ai"; page = 1; render();
   $("#catalog").scrollIntoView({block: "start"});
 }
 document.querySelectorAll('[data-open-ai-books]').forEach(link => link.addEventListener('click', openAIBooks));
-document.querySelectorAll('a[href="#catalog"]').forEach(link => link.addEventListener('click', () => { $("#ai").hidden = true; }));
-window.addEventListener('hashchange', () => {
-  if (location.hash === '#ai') openAI();
-  else $("#ai").hidden = true;
-});
-window.addEventListener('message', event => {
-  const frame = $("#ai-frame");
-  if (event.origin !== location.origin || event.source !== frame.contentWindow || event.data?.type !== 'ai-atlas-height') return;
-  const height = event.data.height;
-  if (Number.isFinite(height) && height >= 200 && height <= 30000) frame.style.height = Math.ceil(height) + 'px';
-});
+setupAINavigation({openBooks:openAIBooks});

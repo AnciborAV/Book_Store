@@ -13,3 +13,9 @@
   .ai-books-layout .java-info h3{font-size:20px}
   .ai-books-layout .java-heading p{font-size:17px}
 }
+
+.ai-tabs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;padding-bottom:18px;border-bottom:1px solid #b797633d}
+.ai-tabs a{padding:12px 20px;border:1px solid #b7976366;border-radius:8px;color:inherit;text-decoration:none;font-size:15px;line-height:1.5}
+.ai-tabs a[aria-selected="true"]{background:#292016;color:#f2d59d;border-color:#c9a568}
+.ai-tabs a:focus-visible,#ai-panel:focus-visible{outline:3px solid #c9a568;outline-offset:4px}
+@media(max-width:600px){.ai-tabs{gap:8px}.ai-tabs a{flex:1 1 auto;text-align:center;padding:12px;font-size:14px}}
