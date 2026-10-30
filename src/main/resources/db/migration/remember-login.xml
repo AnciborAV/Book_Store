@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="persistent-browser-logins" author="aav">
+        <sql>
+            CREATE TABLE persistent_logins (
+                username VARCHAR(255) NOT NULL REFERENCES store_users(email) ON DELETE CASCADE,
+                series VARCHAR(64) PRIMARY KEY,
+                token VARCHAR(64) NOT NULL,
+                last_used TIMESTAMP WITH TIME ZONE NOT NULL
+            );
+            CREATE INDEX persistent_logins_username_idx ON persistent_logins(username);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

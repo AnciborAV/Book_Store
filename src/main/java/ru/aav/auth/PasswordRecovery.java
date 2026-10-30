@@ -99,6 +99,7 @@ public class PasswordRecovery {
             String address = db.queryForObject("SELECT email FROM store_users WHERE id = ? FOR UPDATE", String.class, id);
             if (db.update("DELETE FROM password_resets WHERE user_id = ? AND token_hash = ? AND expires_at > CURRENT_TIMESTAMP", id, digest) != 1) throw invalid();
             db.update("UPDATE store_users SET password_hash = ? WHERE id = ?", encoder.encode(password), id);
+            db.update("DELETE FROM persistent_logins WHERE username = ?", address);
             return address;
         });
         for (Object principal : sessions.getAllPrincipals())
