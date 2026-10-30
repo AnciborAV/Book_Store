@@ -69,6 +69,7 @@ public class InventoryService {
         book.setAuthor(author.strip());
         book.setCategory(category == null ? null : category.strip());
         book.setPrice(price);
+        book.setManagementRevision(book.getManagementRevision()+1);
         books.flush();
     }
 

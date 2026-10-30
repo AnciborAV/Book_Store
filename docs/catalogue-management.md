@@ -36,3 +36,12 @@ Writes require ADMIN and CSRF. Book/file and section edits use versions, and a s
 - JavaLibraryTest, EditorialTest, CommerceTest and SelectionTest verify the existing library, recommendations, orders and selections.
 - `node scripts/test-catalogue-manager.mjs` checks the editor's cover-first/PDF-later payloads, section selection, limits and role/logout behavior in a minimal DOM fixture. It is not a browser layout test.
 - PostgreSQL/Testcontainers and real mobile/browser layout checks require infrastructure unavailable in the current execution environment.
+
+
+## Цена и продажа книги
+
+В форме «Добавить книгу» / «Редактировать книгу» поле «Цена, ₽» принимает сумму от 0,01 до 99 999 999,99 с точностью до копеек. Пустое поле убирает книгу из продажи. После сохранения цены карточка показывает стоимость и кнопку «В корзину +» для покупателей и администратора. Остаток задаётся отдельно: личный кабинет → «Управление магазином» → «Поступление на склад». Без доступного остатка оформить заказ нельзя.
+
+Цена в оформленных заказах сохраняется независимо от последующих изменений. Корзина оформляется по текущей цене; после удаления цены оформление блокируется. Ранее загруженный отдельный PDF при первом назначении цены связывается с карточкой каталога: файл и обложка сохраняются, описание, подборки и избранное переносятся, дубликата в каталоге нет. Дальнейшие изменения цены доступны в этой карточке.
+
+Указание цены использует существующий процесс заказа и не закрывает публичное чтение/скачивание PDF. Платный доступ к файлам и онлайн-оплата этим изменением не добавляются.

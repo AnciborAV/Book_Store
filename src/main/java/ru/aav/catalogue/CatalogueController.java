@@ -3,6 +3,7 @@ package ru.aav.catalogue;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
@@ -32,16 +33,18 @@ public class CatalogueController {
     @PostMapping(value="/api/admin/catalogue/books",consumes=MediaType.MULTIPART_FORM_DATA_VALUE) @ResponseStatus(HttpStatus.CREATED)
     public void createBook(@RequestParam @NotBlank @Size(max=255) String title,@RequestParam(defaultValue="") @Size(max=255) String author,
         @RequestParam @NotBlank @Size(max=80) String sectionId,@RequestParam(defaultValue="") @Size(max=3000) String description,
+        @RequestParam(required=false) @DecimalMin("0.01") @Digits(integer=8,fraction=2) BigDecimal price,
         @RequestParam(required=false) MultipartFile pdf,@RequestParam(required=false) MultipartFile cover)throws IOException {
-        try(var prepared=files.prepare(pdf,cover)){catalogue.create(title,author,sectionId,description,prepared,cover!=null&&!cover.isEmpty());}
+        try(var prepared=files.prepare(pdf,cover)){catalogue.create(title,author,sectionId,description,price,prepared,cover!=null&&!cover.isEmpty());}
     }
     @PostMapping(value="/api/admin/catalogue/books/{kind}/{id}",consumes=MediaType.MULTIPART_FORM_DATA_VALUE) @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBook(@PathVariable String kind,@PathVariable String id,@RequestParam @Min(0) long version,
         @RequestParam(defaultValue="0") @Min(0) long pdfVersion,@RequestParam @NotBlank @Size(max=255) String title,
         @RequestParam(defaultValue="") @Size(max=255) String author,@RequestParam @NotBlank @Size(max=80) String sectionId,
         @RequestParam(defaultValue="") @Size(max=3000) String description,@RequestParam(defaultValue="false") boolean removePdf,
+        @RequestParam(required=false) @DecimalMin("0.01") @Digits(integer=8,fraction=2) BigDecimal price,
         @RequestParam(required=false) MultipartFile pdf,@RequestParam(required=false) MultipartFile cover)throws IOException {
-        try(var prepared=files.prepare(pdf,cover)){catalogue.update(kind,id,version,pdfVersion,title,author,sectionId,description,prepared,cover!=null&&!cover.isEmpty(),removePdf);}
+        try(var prepared=files.prepare(pdf,cover)){catalogue.update(kind,id,version,pdfVersion,title,author,sectionId,description,price,prepared,cover!=null&&!cover.isEmpty(),removePdf);}
     }
     @DeleteMapping("/api/admin/catalogue/books/{kind}/{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable String kind,@PathVariable String id,@RequestParam @Min(0) long version,
