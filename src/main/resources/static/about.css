@@ -1,0 +1,21 @@
+#about[hidden], #about [hidden] { display:none !important; }
+#about-edit { float:right; margin:0 0 20px 20px; }
+#about-story-body p, .about-story-lead, .about-story-signature { white-space:pre-line; overflow-wrap:anywhere; }
+#about-editor { width:min(900px,calc(100vw - 24px)); max-width:900px; max-height:calc(100dvh - 32px); padding:28px; overflow:auto; color:var(--ink); background:#252019; border:1px solid var(--line); }
+#about-editor::backdrop { background:#000b; }
+.about-editor-heading { display:flex; align-items:start; justify-content:space-between; gap:16px; }
+#about-editor h2 { margin:0 0 20px; font:30px/1.3 Georgia,serif; }
+#about-editor-form { display:grid; gap:16px; }
+#about-editor-form label { display:grid; gap:8px; font-size:17px; line-height:1.5; }
+#about-editor-form input:not([type=checkbox]), #about-editor-form textarea { width:100%; min-width:0; margin:0; padding:12px; border:1px solid #9a896c; border-radius:4px; font:16px/1.6 Arial,sans-serif; background:#f4efe3; color:#26211b; }
+#about-editor-form textarea { resize:vertical; }
+#about-editor .about-editor-hint { margin:0; font-size:14px; line-height:1.6; color:var(--muted); }
+.about-editor-images { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.about-editor-images fieldset { min-width:0; margin:0; padding:12px; border:1px solid var(--line); }
+.about-editor-images legend { font-size:15px; padding:0 5px; }
+.about-image-preview { width:100%; height:150px; object-fit:contain; background:#17130f; margin:0 0 12px; }
+#about-editor-form .about-remove-photo { display:flex; align-items:center; gap:10px; margin-top:12px; }
+#about-editor-form .about-remove-photo input { width:20px; height:20px; margin:0; padding:0; flex:0 0 20px; accent-color:var(--green); }
+.about-editor-actions { display:flex; flex-wrap:wrap; gap:12px; }
+#about-editor button:disabled { opacity:.6; cursor:wait; }
+@media(max-width:650px) { #about-editor { padding:20px 16px; } .about-editor-images { grid-template-columns:1fr; } #about-edit { float:none; display:block; margin:0 0 20px; } }
