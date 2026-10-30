@@ -108,7 +108,7 @@ function renderCollection() {
     if (b.comment) { const note=element('aside',undefined,'editorial-note'); fillCommentPreview(note,b); info.append(note); }
     const actions = element('div', undefined, 'editorial-card-actions');
     actions.append(button('Описание', () => showDescription(b.kind,b.id)));
-    if (b.kind === 'library') { const a=element('a','Скачать PDF ↓','button dark'); a.href=`/api/java-library/${b.id}/download`; a.setAttribute('download',''); actions.append(a); }
+    if (b.kind === 'library') { const read=element('a','Читать','button light'); read.href=`/reader.html?id=${encodeURIComponent(b.id)}`; actions.append(read); const a=element('a','Скачать PDF ↓','button dark'); a.href=`/api/java-library/${b.id}/download`; a.setAttribute('download',''); actions.append(a); }
     else actions.append(button('Открыть книгу', () => { $('#editorial-dialog').close(); document.dispatchEvent(new CustomEvent('editorial-open-catalog',{detail:b.id})); }));
     if (admin()) actions.append(button('Редактировать подборки', () => editBook(b.kind,b.id)));
     info.append(actions); card.append(picture(b),info); target.append(card);

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Читальный зал · Переплёт</title>
+  <link rel="stylesheet" href="/pdfjs/5.6.205/web/pdf_viewer.css" />
+  <link rel="stylesheet" href="/reader.css" />
+  <script type="module" src="/reader.js"></script>
+</head>
+<body>
+  <header class="reader-header">
+    <a href="/#catalog" id="reader-back">← В библиотеку</a>
+    <div class="reader-heading"><span>ЧИТАЛЬНЫЙ ЗАЛ · ПЕРЕПЛЁТ</span><h1 id="reader-title">Открываем книгу…</h1></div>
+    <a id="reader-download" hidden download>Скачать PDF ↓</a>
+  </header>
+  <nav class="reader-tools" aria-label="Управление чтением">
+    <button id="previous" type="button" disabled aria-label="Предыдущая страница">←</button>
+    <form id="page-form"><label for="page-number">Страница</label> <input id="page-number" type="number" min="1" value="1" inputmode="numeric" disabled /> <span id="page-total">из …</span><button type="submit" disabled>Перейти</button></form>
+    <button id="next" type="button" disabled aria-label="Следующая страница">→</button>
+    <label class="zoom-label">Масштаб <select id="zoom" disabled><option value="width">По ширине</option><option value="page">Вся страница</option><option value="0.75">75%</option><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option><option value="3">300%</option></select></label>
+    <button id="fullscreen" type="button" hidden>Во весь экран</button>
+  </nav>
+  <div class="reader-status" role="status" aria-live="polite" id="status">Подготовка к чтению…</div>
+  <main id="stage" tabindex="0" aria-label="Страница книги. Стрелки влево и вправо перелистывают страницы.">
+    <div id="paper" hidden><canvas id="page-canvas" aria-hidden="true"></canvas><div id="text-layer" class="textLayer"></div></div>
+    <section id="reader-error" hidden><h2>Не удалось открыть книгу</h2><p id="error-message"></p><button id="retry" type="button">Повторить</button><p>Можно скачать оригинальный PDF и открыть его в приложении для чтения.</p></section>
+  </main>
+  <footer>← → Листать · Текст выделяется, если PDF содержит текстовый слой · На телефоне доступны масштаб и прокрутка</footer>
+</body>
+</html>

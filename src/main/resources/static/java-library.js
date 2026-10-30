@@ -38,7 +38,9 @@ function downloadControls(book, info) {
     link.title = seen ? 'Повторное скачивание. Отметка не подтверждает сохранение файла.' : 'Скачать оригинальный PDF';
   };
   link.addEventListener('click', () => { history().add(book.id); saveHistory(); paint(); });
-  info.append(link, note, reset); paint();
+  const read = el('a', 'Читать', 'button light');
+  read.href = `/reader.html?id=${encodeURIComponent(book.id)}`;
+  info.append(read, link, note, reset); paint();
 }
 const admin = () => getUser?.()?.role === 'ADMIN';
 const mb = bytes => (bytes / 1024 / 1024).toLocaleString('ru', { maximumFractionDigits: 1 }) + ' МБ';
@@ -54,7 +56,7 @@ export function openJavaLibrary(nextSection = 'java') {
   if (section !== nextSection) { section = nextSection; page = 0; query = ''; $('#java-search').value = ''; }
   $('#java-title').textContent = section === 'ai' ? 'Книги об AI' : sectionTitle();
   $('#library-intro').textContent = section === 'ai'
-    ? 'Искусственный интеллект в книгах. Читайте описания, сохраняйте в избранное и скачивайте PDF.'
+    ? 'Искусственный интеллект в книгах. Читайте описания, сохраняйте в избранное, читайте на сайте и скачивайте PDF.'
     : section === 'civil-law'
     ? 'Книги по гражданскому праву. Скачивайте PDF и изучайте в удобное время.'
     : 'От первой строки кода — к большим идеям. Книги в PDF, которые можно забрать с собой.';
@@ -81,7 +83,7 @@ async function load() {
     } else data = await request('/api/java-library?' + new URLSearchParams({ page, q: query, section }));
     if (ticket !== generation) return;
     if (page && !data.items.length) { page = Math.max(0, Math.ceil(data.total / 12) - 1); return load(); }
-    $('#java-status').textContent = data.total ? `Книг: ${data.total}. Скачивание доступно без регистрации.` : `Полка «${sectionTitle()}» пока пуста. Здесь появятся книги для свободного скачивания.`;
+    $('#java-status').textContent = data.total ? `Книг: ${data.total}. Чтение и скачивание доступны без регистрации.` : `Полка «${sectionTitle()}» пока пуста. Здесь появятся книги для свободного скачивания.`;
     if (!data.total && favoritesOnly) $('#java-status').textContent = query ? 'В избранном нет книг по этому запросу.' : 'В этом разделе пока нет избранных PDF. Нажмите сердечко на обложке книги.';
     for (const book of data.items) {
       const card = el('article', undefined, 'java-card');
