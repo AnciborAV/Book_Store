@@ -41,7 +41,22 @@ public class WebSecurity {
     }
 
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http, org.springframework.security.core.session.SessionRegistry sessions) throws Exception {
+    org.springframework.security.web.authentication.rememberme.PersistentTokenRepository rememberedTokens(javax.sql.DataSource dataSource) {
+        var repository = new org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl();
+        repository.setDataSource(dataSource);
+        return repository;
+    }
+
+    @Bean
+    RememberedLogin rememberedLogin(UserDetailsService users,
+        org.springframework.security.web.authentication.rememberme.PersistentTokenRepository tokens,
+        org.springframework.security.core.session.SessionRegistry sessions,
+        @org.springframework.beans.factory.annotation.Value("${bookstore.remember-me.secure:true}") boolean secure) {
+        return new RememberedLogin(users, tokens, sessions, secure);
+    }
+
+    @Bean
+    SecurityFilterChain apiSecurity(HttpSecurity http, org.springframework.security.core.session.SessionRegistry sessions, RememberedLogin rememberedLogin) throws Exception {
         return http
             .headers(h -> h.frameOptions(f -> f.disable()).addHeaderWriter((req, res) ->
                 res.setHeader("X-Frame-Options", (req.getContextPath() + "/ai-atlas.html").equals(req.getRequestURI()) ? "SAMEORIGIN" : "DENY")))
@@ -121,6 +136,7 @@ public class WebSecurity {
             .exceptionHandling(e ->
                 e.authenticationEntryPoint((req, res, ex) -> res.sendError(401))
             )
+            .rememberMe(r -> r.key(RememberedLogin.PROVIDER_KEY).rememberMeServices(rememberedLogin))
             .formLogin(f ->
                 f
                     .loginProcessingUrl("/api/auth/login")

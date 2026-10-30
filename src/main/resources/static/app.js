@@ -629,6 +629,7 @@ $("#auth-form").onsubmit = async (e) => {
       body: new URLSearchParams({
         email: data.email.trim().toLowerCase(),
         password: data.password,
+        "remember-me": data["remember-me"] === "true" ? "true" : "false",
       }),
     });
     resetCsrf();
