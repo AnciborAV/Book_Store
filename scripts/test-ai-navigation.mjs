@@ -9,7 +9,7 @@ class Element {
  getBoundingClientRect(){return {top:120};}
 }
 const elements=Object.fromEntries(['ai','ai-frame','ai-panel','ai-fullscreen'].map(id=>['#'+id,new Element(id)]));
-const tabs=['atlas','architects','history'].map(view=>new Element('ai-tab-'+view,{aiView:view}));
+const tabs=['atlas','architects','history','models'].map(view=>new Element('ai-tab-'+view,{aiView:view}));
 const frame=elements['#ai-frame'];frame.contentWindow={};
 const listeners={},location={hash:'#ai-history',origin:'https://bookstore.example'},scrolls=[];
 let books=0;
@@ -23,6 +23,10 @@ tabs[1].listeners.click();assert.equal(frame.src,'/ai-architects.html');assert.e
 let prevented=false;tabs[1].listeners.keydown({key:'ArrowRight',preventDefault(){prevented=true;}});assert.equal(prevented,true);assert.equal(tabs[2].focused,true);assert.equal(location.hash,'#ai-history');
 tabs[2].listeners.keydown({key:'Home',preventDefault(){}});assert.equal(location.hash,'#ai');assert.equal(frame.src,'/ai-atlas.html');
 const send=(data,origin=location.origin,from=frame.contentWindow)=>listeners.message({data,origin,source:from});
+location.hash='#ai-models';listeners.hashchange();assert.equal(frame.src,'/ai-models.html');assert.equal(elements['#ai-fullscreen'].href,'/ai-models.html');assert.equal(tabs[3].attrs['aria-selected'],'true');
+tabs[3].listeners.keydown({key:'ArrowRight',preventDefault(){}});assert.equal(frame.src,'/ai-atlas.html');
+tabs[0].listeners.keydown({key:'End',preventDefault(){}});assert.equal(frame.src,'/ai-models.html');
+
 send({type:'ai-atlas-height',height:21000});assert.equal(frame.style.height,'21000px');
 for(const height of [NaN,Infinity,-1,100,60001,'5000'])send({type:'ai-atlas-height',height});assert.equal(frame.style.height,'21000px');
 send({type:'ai-atlas-height',height:999},'https://other.example');send({type:'ai-atlas-height',height:999},location.origin,{});assert.equal(frame.style.height,'21000px');

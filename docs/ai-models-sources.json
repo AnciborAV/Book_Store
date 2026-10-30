@@ -1,0 +1,240 @@
+{
+  "checkedAt": "2026-10-30",
+  "selection": "Редакционная подборка по задачам, не общий рейтинг",
+  "models": [
+    {
+      "id": "openai",
+      "name": "GPT-6 Astra",
+      "kind": "Универсальная модель",
+      "roles": [
+        "legal",
+        "code",
+        "humanities",
+        "math",
+        "research",
+        "business",
+        "video",
+        "education"
+      ],
+      "source": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "extra": "https://learn.chatgpt.com/docs/models"
+    },
+    {
+      "id": "claude",
+      "name": "Claude Opus 5.5",
+      "kind": "Универсальная модель",
+      "roles": [
+        "legal",
+        "code",
+        "humanities",
+        "math",
+        "research",
+        "business",
+        "education"
+      ],
+      "source": "https://www.anthropic.com/claude-opus-5-5"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini 4 Argon",
+      "kind": "Универсальная модель",
+      "roles": [
+        "legal",
+        "code",
+        "humanities",
+        "math",
+        "research",
+        "business",
+        "education"
+      ],
+      "source": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-argon/",
+      "extra": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/"
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek V4.1 Flash",
+      "kind": "Универсальная модель",
+      "roles": [
+        "code",
+        "math",
+        "research",
+        "business",
+        "education"
+      ],
+      "source": "https://deepseek.com/en/news/deepseek-v4-1-flash/"
+    },
+    {
+      "id": "qwen",
+      "name": "Qwen3.8-Max",
+      "kind": "Универсальная модель",
+      "roles": [
+        "code",
+        "math",
+        "research",
+        "business",
+        "education"
+      ],
+      "source": "https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity Research",
+      "kind": "Исследовательский сервис",
+      "roles": [
+        "legal",
+        "humanities",
+        "research",
+        "business",
+        "education"
+      ],
+      "source": "https://www.perplexity.ai/help-center/en/articles/10738684-what-is-research-mode"
+    },
+    {
+      "id": "midjourney",
+      "name": "Midjourney V8.2",
+      "kind": "Модель генерации изображений",
+      "roles": [
+        "design",
+        "video"
+      ],
+      "source": "https://docs.midjourney.com/hc/en-us/articles/32199405667853-Version"
+    },
+    {
+      "id": "firefly",
+      "name": "Adobe Firefly Image 5",
+      "kind": "Модель в творческой экосистеме",
+      "roles": [
+        "design",
+        "business"
+      ],
+      "source": "https://helpx.adobe.com/firefly/web/work-with-images/generate-images/generate-images-from-text-descriptions.html",
+      "extra": "https://helpx.adobe.com/firefly/web/get-started/learn-the-basics/adobe-firefly-faq.html"
+    },
+    {
+      "id": "flux",
+      "name": "FLUX 3 Image Klein",
+      "kind": "Модель с открытыми весами",
+      "roles": [
+        "design",
+        "code",
+        "business"
+      ],
+      "source": "https://bfl.ai/blog/flux-3-image-klein",
+      "extra": "https://bfl.ai/models/flux-3-image-klein"
+    },
+    {
+      "id": "runway",
+      "name": "Runway Gen-4.5",
+      "kind": "Модель генерации видео",
+      "roles": [
+        "video",
+        "design"
+      ],
+      "source": "https://help.runwayml.com/hc/en-us/articles/46974685288467-Creating-with-Gen-4-5",
+      "extra": "https://help.runwayml.com/hc/en-us/articles/37425232841875-Getting-Started-with-Generative-Video"
+    }
+  ],
+  "professions": [
+    {
+      "id": "legal",
+      "name": "Юристам",
+      "models": [
+        "claude",
+        "openai",
+        "perplexity",
+        "gemini"
+      ]
+    },
+    {
+      "id": "design",
+      "name": "Дизайнерам",
+      "models": [
+        "midjourney",
+        "firefly",
+        "flux",
+        "runway"
+      ]
+    },
+    {
+      "id": "code",
+      "name": "Программистам",
+      "models": [
+        "openai",
+        "claude",
+        "gemini",
+        "deepseek",
+        "qwen",
+        "flux"
+      ]
+    },
+    {
+      "id": "humanities",
+      "name": "Гуманитариям и редакторам",
+      "models": [
+        "claude",
+        "openai",
+        "gemini",
+        "perplexity"
+      ]
+    },
+    {
+      "id": "math",
+      "name": "Математикам",
+      "models": [
+        "openai",
+        "claude",
+        "gemini",
+        "deepseek",
+        "qwen"
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Исследователям",
+      "models": [
+        "perplexity",
+        "openai",
+        "claude",
+        "gemini",
+        "deepseek",
+        "qwen"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Аналитикам и предпринимателям",
+      "models": [
+        "openai",
+        "claude",
+        "gemini",
+        "perplexity",
+        "qwen",
+        "deepseek",
+        "firefly",
+        "flux"
+      ]
+    },
+    {
+      "id": "video",
+      "name": "Видеографам",
+      "models": [
+        "runway",
+        "midjourney",
+        "openai"
+      ]
+    },
+    {
+      "id": "education",
+      "name": "Преподавателям и студентам",
+      "models": [
+        "openai",
+        "claude",
+        "gemini",
+        "deepseek",
+        "qwen",
+        "perplexity"
+      ]
+    }
+  ],
+  "methodology": "https://artificialanalysis.ai/articles/artificial-analysis-intelligence-index-v5"
+}
