@@ -1,3 +1,4 @@
+import { setupAbout, updateAbout } from "./about.js";
 import { setupEditorial, updateEditorial, addEditorialControls } from "./editorial.js";
 import { setupAdminReviews, updateAdminReviews } from "./admin-reviews.js";
 import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
@@ -550,6 +551,7 @@ async function loadProfile() {
   updateFeedback();
   updateAdminReviews();
   updateAnnouncement();
+  updateAbout();
   if (previous !== user?.email || !selectionReady) await loadSelection();
 }
 $("#search").oninput = () => {
@@ -763,6 +765,7 @@ async function init() {
   await loadBooks();
   if (location.hash === "#ai") openAI();
 }
+setupAbout({ getUser: () => user, toast });
 setupAnnouncement({ getUser: () => user });
 setupAdminReviews({ getUser: () => user });
 setupFeedback({ getUser: () => user });
@@ -824,10 +827,4 @@ window.addEventListener('message', event => {
   if (event.origin !== location.origin || event.source !== frame.contentWindow || event.data?.type !== 'ai-atlas-height') return;
   const height = event.data.height;
   if (Number.isFinite(height) && height >= 200 && height <= 30000) frame.style.height = Math.ceil(height) + 'px';
-});
-
-// The original image remains accessible when JavaScript is unavailable.
-document.querySelector(".about-author-zoom").addEventListener("click", (event) => {
-  event.preventDefault();
-  document.querySelector("#author-photo-dialog").showModal();
 });

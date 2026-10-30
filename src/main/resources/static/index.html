@@ -13,6 +13,7 @@
       <link rel="stylesheet" href="/editorial.css" />
       <link rel="stylesheet" href="/reading-text.css" />
       <link rel="stylesheet" href="/ai.css" />
+  <link rel="stylesheet" href="/about.css" />
   </head>
   <body>
     <div class="home-masthead">
@@ -157,27 +158,24 @@
             </button>
           </div>
         </section>
-        <section id="about" class="about about-story" aria-labelledby="about-heading">
+        <section id="about" class="about about-story" aria-label="О магазине" aria-busy="true">
           <div class="about-story-backdrop" aria-hidden="true">
-            <img class="about-story-development" src="/covers/scene/about-development.jpeg" alt="" loading="lazy" decoding="async" />
-            <img class="about-story-library" src="/covers/scene/catalog-library.jpg" alt="" loading="lazy" decoding="async" />
+            <img class="about-story-development" alt="" loading="lazy" decoding="async" hidden />
+            <img class="about-story-library" alt="" loading="lazy" decoding="async" hidden />
           </div>
           <div class="about-story-content">
-            <h2 id="about-heading">О магазине</h2>
-            <figure class="about-author">
-              <a class="about-author-zoom" href="/covers/author-andrey.jpeg" aria-label="Увеличить фотографию Андрея Анцибора" aria-haspopup="dialog">
-              <img src="/covers/author-andrey.jpeg" width="960" height="1280" loading="lazy" decoding="async" alt="Андрей Анцибор, автор проекта «Переплёт»" />
+            <h2 id="about-heading" hidden></h2>
+            <figure class="about-author" hidden>
+              <a class="about-author-zoom" aria-label="Увеличить фотографию" aria-haspopup="dialog">
+                <img alt="" loading="lazy" decoding="async" />
               </a>
             </figure>
-            <p class="about-story-lead">«Переплёт» начался с любопытства и желания освоить новое.</p>
-            <p>Большую часть своей профессиональной жизни я посвятил юриспруденции. В сорок лет решил начать изучать программирование на Java. Примерно через полгода появился замысел первого самостоятельного проекта: создать веб-приложение, в котором можно соединить любовь к книгам, интерес к технологиям и собственное представление об эстетике.</p>
-            <p>Так постепенно складывался этот книжный магазин. Сначала появилась его внутренняя часть: работа с данными, пользователями, каталогом и заказами. За каждой возможностью стояли изучение, попытки, ошибки и поиск решения. Когда основная логика заработала, захотелось придать ей видимую форму. Следующим этапом стал интерфейс: страницы, обложки, шрифты, свет и тени книжных полок. Приложение обрело облик, и его стало возможно показать другим.</p>
-            <p>Название «Переплёт» оказалось созвучно этой истории. Здесь встретились право и программирование, привычная профессия и новое увлечение, содержание книги и искусство её оформления.</p>
-            <p>У проекта нет коммерческой цели. Облик книжного магазина помогает наглядно показать, как устроено полноценное веб-приложение и что можно создать, последовательно осваивая разработку на Java. При этом мне важно, чтобы результат был полезен: уже сейчас здесь можно найти и скачать некоторые книги, выбрать чтение и познакомиться с рекомендациями.</p>
-            <p>«Переплёт» продолжает развиваться. Я буду совершенствовать приложение, дополнять библиотеку и расширять возможности сайта. В нём ещё многое предстоит сделать, и эта работа остаётся частью моего обучения.</p>
-            <p>Для меня этот проект стал личным опытом освоения нового дела. Буду рад, если для вас он станет местом, где найдётся нужная книга, интересная мысль или повод начать что-то своё.</p>
-            <p class="about-story-signature">Андрей Анцибор</p>
-            <a href="#catalog" class="button">На книжную полку ↗</a>
+            <p class="about-story-lead" hidden></p>
+            <div id="about-story-body"></div>
+            <p class="about-story-signature" hidden></p>
+            <a id="about-catalog-link" href="#catalog" class="button" hidden></a>
+            <p id="about-load-status" role="status">Загружаем раздел…</p>
+            <button id="about-retry" type="button" class="text-button" hidden>Повторить загрузку</button>
           </div>
         </section>
       </main>
@@ -188,9 +186,9 @@
       </footer>
     </div>
 
-    <dialog id="author-photo-dialog" class="author-photo-dialog" aria-label="Фотография Андрея Анцибора">
+    <dialog id="author-photo-dialog" class="author-photo-dialog" aria-label="Фотография">
       <button type="button" class="close author-photo-close" aria-label="Закрыть фотографию" autofocus>×</button>
-      <img src="/covers/author-andrey.jpeg" width="960" height="1280" loading="lazy" alt="Андрей Анцибор" />
+      <img alt="Фотография" />
     </dialog>
 
     <dialog id="editorial-dialog" class="editorial-dialog" aria-labelledby="editorial-heading">
