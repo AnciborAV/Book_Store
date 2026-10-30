@@ -23,6 +23,7 @@ public class InventoryService {
     private final BookRepository books;
     private final CommerceRepository repository;
     private final CurrentAccount accounts;
+    private final ru.aav.catalogue.CatalogueOrderService ordering;
 
     public StoreUser admin(String email) {
         var user = accounts.require(email);
@@ -64,6 +65,7 @@ public class InventoryService {
         BigDecimal price
     ) {
         admin(email);
+        ordering.lock();
         var book = lock(id);
         book.setName(name.strip());
         book.setAuthor(author.strip());

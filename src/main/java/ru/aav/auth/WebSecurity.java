@@ -102,6 +102,8 @@ public class WebSecurity {
                         "/editorial.js",
                         "/catalogue-admin.js",
                         "/catalogue-admin.css",
+                        "/book-ordering.js",
+                        "/book-ordering.css",
                         "/api/catalogue",
                         "/api/catalogue/books/*/*",
                         "/api/catalogue/covers/*",

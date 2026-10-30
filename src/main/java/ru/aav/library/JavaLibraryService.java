@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class JavaLibraryService {
     private final JdbcTemplate jdbc;
+    private final ru.aav.catalogue.CatalogueOrderService ordering;
     public record Book(String id, String title, String author, String description, long fileSize,
                        int pageCount, long version, Instant updatedAt, String section) {}
     public record Page(List<Book> items, long total, int page, int pageSize) {}
@@ -45,6 +46,7 @@ public class JavaLibraryService {
     }
     @Transactional
     public Book create(String title,String author,String description,String section,LibraryFiles.Prepared files) {
+        ordering.lock();
         if (jdbc.queryForList("SELECT id FROM store_sections WHERE library_key=? FOR UPDATE",section).isEmpty())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Раздел не найден");
         if (files.pdf()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Выберите PDF книги");
@@ -57,6 +59,7 @@ public class JavaLibraryService {
     }
     @Transactional
     public Book update(String id,long version,String title,String author,String description,LibraryFiles.Prepared files) {
+        ordering.lock();
         lock(id,version);
         jdbc.update("UPDATE java_library SET title=?,author=?,description=?,version=version+1,updated_at=CURRENT_TIMESTAMP WHERE id=?",
             title.strip(),author.strip(),description.strip(),id);
@@ -69,7 +72,7 @@ public class JavaLibraryService {
         return get(id);
     }
     @Transactional
-    public void delete(String id,long version) { lock(id,version); jdbc.update("DELETE FROM java_library WHERE id=?",id); }
+    public void delete(String id,long version) { ordering.lock(); lock(id,version); ordering.remove("library",id); jdbc.update("DELETE FROM java_library WHERE id=?",id); }
     private void lock(String id,long version) {
         var rows=jdbc.queryForList("SELECT version FROM java_library WHERE id=? FOR UPDATE",id);
         if(rows.isEmpty()) throw missing();
