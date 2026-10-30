@@ -73,7 +73,6 @@ public class WebSecurity {
                         "/commerce.js",
                         "/java-library.js",
                         "/reader.html",
-                        "/handbook/AI-Handbook-2026.pdf",
                         "/reader.js",
                         "/reader.css",
                         "/pdfjs/5.6.205/**",

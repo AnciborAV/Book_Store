@@ -1,7 +1,5 @@
 const $ = selector => document.querySelector(selector);
-const params = new URLSearchParams(location.search);
-const handbook = params.get('document') === 'ai-handbook';
-const id = handbook ? 'ai-handbook' : params.get('id');
+const id = new URLSearchParams(location.search).get('id');
 let pdf, task, rendering, textLayer, serial = 0, wanted = 1, shown = 0, loading = false;
 let resizeTimer, storageKey;
 const status = message => { $('#status').textContent = message; };
@@ -61,20 +59,16 @@ async function open() {
   if(loading)return;loading=true;++serial;rendering?.cancel();textLayer?.cancel();
   if(task){try{await task.destroy();}catch(_){}task=null;}pdf=null;shown=0;controls();$('#paper').hidden=true;$('#reader-error').hidden=true;
   try {
-    if(!handbook && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id||''))throw Error('Некорректная ссылка на книгу. Откройте её из каталога.');
-    let book;
-    if (handbook) book = {title:'Погружение в AI',version:'2026-10-30'};
-    else {
-      const response=await fetch('/api/java-library/metadata?'+new URLSearchParams({ids:id}));
-      if(!response.ok)throw Error('Не удалось получить сведения о книге.');
-      [book]=await response.json();if(!book)throw Error('Книга больше не доступна в библиотеке.');
-    }
+    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id||''))throw Error('Некорректная ссылка на книгу. Откройте её из каталога.');
+    const response=await fetch('/api/java-library/metadata?'+new URLSearchParams({ids:id}));
+    if(!response.ok)throw Error('Не удалось получить сведения о книге.');
+    const [book]=await response.json();if(!book)throw Error('Книга больше не доступна в библиотеке.');
     $('#reader-title').textContent=book.title;document.title=book.title+' · Переплёт';
-    const download=$('#reader-download');download.href=handbook ? '/handbook/AI-Handbook-2026.pdf' : `/api/java-library/${id}/download`;download.hidden=false;
+    const download=$('#reader-download');download.href= `/api/java-library/${id}/download`;download.hidden=false;
     status('Загружаем PDF…');
     const lib=await import('/pdfjs/5.6.205/build/pdf.min.mjs');
     lib.GlobalWorkerOptions.workerSrc='/pdfjs/5.6.205/build/pdf.worker.min.mjs';
-    task=lib.getDocument({url:handbook ? '/handbook/AI-Handbook-2026.pdf' : `/api/java-library/${id}/content?version=${book.version}`,cMapUrl:'/pdfjs/5.6.205/cmaps/',cMapPacked:true,standardFontDataUrl:'/pdfjs/5.6.205/standard_fonts/',wasmUrl:'/pdfjs/5.6.205/wasm/',isEvalSupported:false,enableXfa:false,disableAutoFetch:true,disableStream:true,rangeChunkSize:262144});
+    task=lib.getDocument({url: `/api/java-library/${id}/content?version=${book.version}`,cMapUrl:'/pdfjs/5.6.205/cmaps/',cMapPacked:true,standardFontDataUrl:'/pdfjs/5.6.205/standard_fonts/',wasmUrl:'/pdfjs/5.6.205/wasm/',isEvalSupported:false,enableXfa:false,disableAutoFetch:true,disableStream:true,rangeChunkSize:262144});
     task.onPassword=()=>{fail('Этот PDF защищён паролем. Скачайте оригинал и откройте его в подходящем приложении.');task.destroy().catch(()=>{});};
     pdf=await task.promise;
     storageKey=`bookstore-reading-v1:${id}:${book.version}`;let saved=1;
