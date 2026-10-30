@@ -59,6 +59,25 @@ abstract class JavaLibraryContract {
         mvc.perform(get("/api/java-library").param("section",section)).andExpect(jsonPath("$.total").value(0));
         mvc.perform(get("/api/java-library")).andExpect(jsonPath("$.total").value(1));
     }
+    @Test void readerServesRangesAndRejectsStaleVersions() throws Exception {
+        String id=create("Reader");
+        String url="/api/java-library/"+id+"/content";
+        mvc.perform(get(url).param("version","0")).andExpect(status().isOk())
+            .andExpect(content().bytes(original)).andExpect(header().string("Accept-Ranges","bytes"))
+            .andExpect(header().string("Content-Disposition",org.hamcrest.Matchers.startsWith("inline;")));
+        mvc.perform(get(url).param("version","0").header("Range","bytes=0-9"))
+            .andExpect(status().isPartialContent()).andExpect(content().bytes(java.util.Arrays.copyOfRange(original,0,10)));
+        mvc.perform(get(url).param("version","0").header("Range","bytes=-10"))
+            .andExpect(status().isPartialContent()).andExpect(content().bytes(java.util.Arrays.copyOfRange(original,original.length-10,original.length)));
+        mvc.perform(get(url).param("version","0").header("Range","bytes=10-"))
+            .andExpect(status().isPartialContent()).andExpect(content().bytes(java.util.Arrays.copyOfRange(original,10,original.length)));
+        for(String range:new String[]{"bytes=99999999-","bytes=0-1,4-5","bytes=-0","invalid"})
+            mvc.perform(get(url).param("version","0").header("Range",range)).andExpect(status().isRequestedRangeNotSatisfiable());
+        mvc.perform(get(url).param("version","1")).andExpect(status().isConflict());
+        for(String path:new String[]{"/reader.html","/reader.js","/reader.css","/handbook/AI-Handbook-2026.pdf","/pdfjs/5.6.205/build/pdf.min.mjs","/pdfjs/5.6.205/build/pdf.worker.min.mjs","/pdfjs/5.6.205/web/pdf_viewer.css"})
+            mvc.perform(get(path)).andExpect(status().isOk());
+        mvc.perform(get("/pdfjs/5.6.205/build/missing.mjs")).andExpect(status().isNotFound());
+    }
     @Test void atlasAssetsArePublic() throws Exception {
         mvc.perform(get("/ai-atlas.html")).andExpect(header().string("X-Frame-Options", "SAMEORIGIN"));
         mvc.perform(get("/")).andExpect(header().string("X-Frame-Options", "DENY"));
@@ -134,6 +153,8 @@ abstract class JavaLibraryContract {
         String id=json.readTree(response.getResponse().getContentAsString()).get("id").asText();
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM java_library_pdf_chunks WHERE book_id=?",Integer.class,id)).isGreaterThan(30);
         mvc.perform(get("/api/java-library/"+id+"/download")).andExpect(content().bytes(large));
+        mvc.perform(get("/api/java-library/"+id+"/content").param("version","0").header("Range","bytes=1048570-1048590"))
+            .andExpect(status().isPartialContent()).andExpect(content().bytes(java.util.Arrays.copyOfRange(large,1048570,1048591)));
     }
 
 }

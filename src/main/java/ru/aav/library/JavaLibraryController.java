@@ -31,6 +31,11 @@ public class JavaLibraryController {
     public void download(@PathVariable UUID id, HttpServletResponse response) throws IOException {
         library.download(id.toString(),response);
     }
+    @GetMapping("/api/java-library/{id}/content")
+    public void content(@PathVariable UUID id, @RequestParam @Min(0) long version,
+        @RequestHeader(value="Range", required=false) String range, HttpServletResponse response) throws IOException {
+        library.read(id.toString(), version, range, response);
+    }
     @GetMapping("/api/java-library/{id}/cover")
     public ResponseEntity<byte[]> cover(@PathVariable UUID id) {
         var file=library.cover(id.toString());

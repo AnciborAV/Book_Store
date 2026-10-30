@@ -105,5 +105,38 @@ public class JavaLibraryService {
         }
         out.flush();
     }
+    // Version matching protects separate range requests from mixing editions.
+    @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
+    public void read(String id,long version,String range,HttpServletResponse response) throws IOException {
+        Book book=get(id);
+        if (book.version()!=version) throw new ResponseStatusException(HttpStatus.CONFLICT,"Книга обновлена. Откройте её заново.");
+        long size=book.fileSize(), start=0, end=size-1;
+        response.setHeader("Accept-Ranges","bytes");
+        response.setHeader("Cache-Control","no-store");
+        if (range!=null) {
+            try {
+                var ranges=org.springframework.http.HttpRange.parseRanges(range);
+                if(ranges.size()!=1) throw new IllegalArgumentException();
+                start=ranges.getFirst().getRangeStart(size); end=ranges.getFirst().getRangeEnd(size);
+                if(start<0 || start>=size || end<start) throw new IllegalArgumentException();
+            } catch(IllegalArgumentException ex) {
+                response.setStatus(416);response.setHeader("Content-Range","bytes */"+size);return;
+            }
+            response.setStatus(206);response.setHeader("Content-Range","bytes "+start+"-"+end+"/"+size);
+        }
+        response.setContentType("application/pdf");response.setContentLengthLong(end-start+1);
+        response.setHeader("X-Content-Type-Options","nosniff");
+        response.setHeader("Content-Disposition",ContentDisposition.inline().filename("book.pdf").build().toString());
+        final int chunkSize=1024*1024;
+        var out=response.getOutputStream();
+        for(long offset=start;offset<=end;) {
+            int part=(int)(offset/chunkSize), local=(int)(offset%chunkSize);
+            byte[] block=jdbc.queryForObject("SELECT data FROM java_library_pdf_chunks WHERE book_id=? AND part=?",byte[].class,id,part);
+            if(block==null || local>=block.length) throw new IOException("Incomplete PDF storage");
+            int count=(int)Math.min(block.length-local,end-offset+1);
+            out.write(block,local,count); offset+=count;
+        }
+        out.flush();
+    }
     private ResponseStatusException missing() { return new ResponseStatusException(HttpStatus.NOT_FOUND,"Книга не найдена"); }
 }
