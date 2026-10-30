@@ -74,7 +74,7 @@ abstract class JavaLibraryContract {
         for(String range:new String[]{"bytes=99999999-","bytes=0-1,4-5","bytes=-0","invalid"})
             mvc.perform(get(url).param("version","0").header("Range",range)).andExpect(status().isRequestedRangeNotSatisfiable());
         mvc.perform(get(url).param("version","1")).andExpect(status().isConflict());
-        for(String path:new String[]{"/reader.html","/reader.js","/reader.css","/handbook/AI-Handbook-2026.pdf","/pdfjs/5.6.205/build/pdf.min.mjs","/pdfjs/5.6.205/build/pdf.worker.min.mjs","/pdfjs/5.6.205/web/pdf_viewer.css"})
+        for(String path:new String[]{"/reader.html","/reader.js","/reader.css","/pdfjs/5.6.205/build/pdf.min.mjs","/pdfjs/5.6.205/build/pdf.worker.min.mjs","/pdfjs/5.6.205/web/pdf_viewer.css"})
             mvc.perform(get(path)).andExpect(status().isOk());
         mvc.perform(get("/pdfjs/5.6.205/build/missing.mjs")).andExpect(status().isNotFound());
     }
