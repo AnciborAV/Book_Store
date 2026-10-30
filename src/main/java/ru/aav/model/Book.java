@@ -20,6 +20,10 @@ public class Book extends BasicEntity {
     @jakarta.persistence.Column(precision = 10, scale = 2)
     private java.math.BigDecimal price;
 
+    private String retiredTitle;
+    private boolean archived;
+    private long managementRevision;
+
     private int stock;
     private int reserved;
 }

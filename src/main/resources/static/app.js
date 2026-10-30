@@ -1,5 +1,6 @@
+import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
 import { setupAbout, updateAbout } from "./about.js";
-import { setupEditorial, updateEditorial, addEditorialControls } from "./editorial.js";
+import { setupEditorial, updateEditorial, addEditorialControls, showDescription } from "./editorial.js";
 import { setupAdminReviews, updateAdminReviews } from "./admin-reviews.js";
 import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
 import { setupFeedback, updateFeedback } from "./feedback.js";
@@ -7,7 +8,7 @@ import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-lib
 import { setupCommerce, updateCommerce } from "./commerce.js";
 import { request, csrf, resetCsrf } from "./api-client.js";
 const $ = (s) => document.querySelector(s);
-let books = [],
+let books = [], libraryBooks = [], sections = [],
   user = null,
   register = false,
   filter = "all",
@@ -16,13 +17,6 @@ let books = [],
   selectedBook = null,
   covers = {},
   favorites = new Set(), libraryFavorites = new Set();
-const categoryNames = [
-  "Российские авторы",
-  "Зарубежные авторы",
-  "История",
-  "Философия",
-  "Гражданское право",
-];
 const pageSize = 12;
 let cart = {},
   selectionBusy = false,
@@ -67,7 +61,7 @@ function toast(message) {
 }
 function coverImage(book) {
   const image = node("img", undefined, "catalog-cover");
-  image.src = covers[book.name] || "/covers/default.svg";
+  image.src = book.coverUrl || covers[book.coverTitle || book.name] || "/covers/default.svg";
   image.alt = "Обложка: " + book.name + " — " + book.author;
   image.loading = "lazy";
   image.decoding = "async";
@@ -194,7 +188,7 @@ function updateCartCount() {
   updateEditorial();
   updateCommerce();
   updateJavaLibrary();
-  void refreshLibraryCounts();
+  updateCatalogueAdmin();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
@@ -262,67 +256,34 @@ function renderCart() {
   $("#clear-cart").disabled = !total;
   updateCartCount();
 }
-const librarySections = { "Java": "java", "Гражданское право": "civil-law", "AI": "ai" };
-let libraryCounts = {}, libraryCountsGeneration = 0;
-async function refreshLibraryCounts() {
-  const ticket = ++libraryCountsGeneration;
-  if (user?.role !== "ADMIN") { libraryCounts = {}; renderCategories(); return; }
-  const results = await Promise.allSettled(Object.entries(librarySections).map(async ([name, section]) => {
-    const data = await request("/api/java-library?" + new URLSearchParams({page: 0, q: "", section}));
-    return [name, data.total];
-  }));
-  if (ticket !== libraryCountsGeneration || user?.role !== "ADMIN") return;
-  for (let i = 0; i < results.length; i++) {
-    const result = results[i];
-    const name = Object.keys(librarySections)[i];
-    if (result.status === "fulfilled") libraryCounts[name] = result.value[1];
-    else delete libraryCounts[name];
-  }
-  renderCategories();
-}
-document.addEventListener("library-books-changed", refreshLibraryCounts);
 function renderCategories() {
-  const target = $("#categories");
-  target.replaceChildren();
-  for (const name of ["all", ...categoryNames, "Java", "AI"]) {
-    const catalogCount = books.filter(
-      (b) => name === "all" || b.category === name,
-    ).length;
-    const count = librarySections[name]
-      ? (libraryCounts[name] === undefined ? null : catalogCount + libraryCounts[name])
-      : catalogCount;
-    const button = action(
-      (name === "all" ? "Все разделы" : name) + (user?.role === "ADMIN" ? " · " + (count ?? "…") : ""),
-      () => {
-        $("#ai").hidden = true;
-        if (location.hash === "#ai") history.replaceState(null, "", "#catalog");
-        category = name;
-        page = 1;
-        render();
-      },
-      "category-chip" + (category === name ? " active" : ""),
-    );
-    button.setAttribute("aria-pressed", category === name);
-    target.append(button);
+  const target = $("#categories"); target.replaceChildren();
+  if (category !== 'all' && !sections.some(section => section.id === category)) category = 'all';
+  for (const section of [{id:'all',name:'Все разделы'}, ...sections]) {
+    const count = [...books, ...libraryBooks].filter(b => section.id === 'all' || b.sectionId === section.id).length;
+    const button = action(section.name + (user?.role === 'ADMIN' ? ` · ${count}` : ''), () => {
+      $("#ai").hidden = true; if(location.hash === '#ai') history.replaceState(null,'','#catalog');
+      category = section.id; page = 1; render();
+    }, 'category-chip' + (category === section.id ? ' active' : ''));
+    button.setAttribute('aria-pressed',String(category === section.id)); target.append(button);
   }
+}
+function appendPDFControls(target, book) {
+  if (!book.pdfId) return;
+  const read = node('a','Читать','button light'); read.href = `/reader.html?id=${encodeURIComponent(book.pdfId)}`;
+  const download = node('a','Скачать PDF ↓','button dark'); download.href = `/api/java-library/${book.pdfId}/download`; download.setAttribute('download','');
+  target.append(read,download);
 }
 function render() {
-  const isAI = category === "AI";
-  $("#library-layout").classList.toggle("ai-books-layout", isAI);
-  const isJava = category === "Java";
-  const isCivilLaw = category === "Гражданское право";
-  $("#java-library").hidden = !(isJava || isCivilLaw || isAI);
-  if (isCivilLaw) openJavaLibrary("civil-law");
-  for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"])
-    $(selector).hidden = isJava || isAI;
-  if (isJava || isAI) { renderCategories(); openJavaLibrary(isAI ? "ai" : "java"); return; }
-
+  $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;
+  for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) $(selector).hidden = false;
+  renderCategories();
   const q = $("#search").value.trim().toLocaleLowerCase("ru");
-  const visible = books.filter(
+  const visible = [...books, ...libraryBooks].filter(
     (b) =>
       (b.name + " " + b.author).toLocaleLowerCase("ru").includes(q) &&
-      (filter !== "favorites" || favorites.has(String(b.id))) &&
-      (category === "all" || b.category === category),
+      (filter !== "favorites" || (b.kind === "library" ? libraryFavorites : favorites).has(String(b.id))) &&
+      (category === "all" || b.sectionId === category),
   );
   const sort = $("#sort").value;
   if (sort !== "default")
@@ -331,9 +292,7 @@ function render() {
   page = Math.min(page, pages);
   $("#books").replaceChildren();
   $("#catalog-count").textContent = `Найдено: ${visible.length}`;
-  $("#favorite-count").textContent = books.filter((b) =>
-    favorites.has(String(b.id)),
-  ).length;
+  $("#favorite-count").textContent = [...books,...libraryBooks].filter(b => (b.kind === 'library' ? libraryFavorites : favorites).has(String(b.id))).length;
   renderCategories();
   if (!visible.length)
     $("#books").append(
@@ -347,14 +306,15 @@ function render() {
   visible.slice((page - 1) * pageSize, page * pageSize).forEach((b) => {
     const card = node("article", undefined, "book-card");
     const image = node("div", undefined, "book-image");
-    const open = action("", () => openBook(b), "cover-button");
+    const show = () => b.kind === "library" ? showDescription("library",String(b.id)) : openBook(b);
+    const open = action("", show, "cover-button");
     open.setAttribute("aria-label", "Подробнее: " + b.name);
     open.append(coverImage(b));
     image.append(open);
-    const saved = favorites.has(String(b.id));
+    const saved = (b.kind === "library" ? libraryFavorites : favorites).has(String(b.id));
     const button = action(
       saved ? "♥" : "♡",
-      () => toggleFavorite(b),
+      () => b.kind === "library" ? toggleLibraryFavorite(b) : toggleFavorite(b),
       "favorite" + (saved ? " selected" : ""),
     );
     button.setAttribute(
@@ -364,33 +324,24 @@ function render() {
     button.setAttribute("aria-pressed", saved);
     image.append(button);
     const title = node("h3");
-    title.append(action(b.name, () => openBook(b), "book-title"));
+    title.append(action(b.name, show, "book-title"));
     card.append(
       image,
       node("span", b.category || "Каталог", "category-label"),
       title,
       node("p", b.author),
     );
-    card.append(
-      node(
-        "strong",
-        b.price === null
-          ? "Цена уточняется"
-          : new Intl.NumberFormat("ru-RU", {
-              style: "currency",
-              currency: "RUB",
-            }).format(b.price),
-        "book-price",
-      ),
-      node("p", "Доступно: " + b.availableStock, "stock-caption"),
-    );
-    const actions = node("div", undefined, "book-actions");
-    actions.append(
-      action("В корзину +", () => addToCart(b), "button dark small-button"),
-      action("Отзывы ↗", () => openBook(b), "text-button"),
-    );
-    card.append(actions);
-    addEditorialControls(card, "catalog", b);
+    const actions = node('div',undefined,'book-actions');
+    if (b.pdfId) appendPDFControls(actions,b);
+    else card.append(node('p','PDF пока не добавлен','stock-caption'));
+    if (b.kind === 'catalog') {
+      if (b.price !== null) {
+        card.append(node('strong',new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB'}).format(b.price),'book-price'),node('p','Доступно: '+b.availableStock,'stock-caption'));
+        actions.append(action('В корзину +',()=>addToCart(b),'button dark small-button'));
+      }
+      actions.append(action('Отзывы ↗',()=>openBook(b),'text-button'));
+    }
+    card.append(actions); addEditorialControls(card,b.kind,b); addManagementControls(card,b);
     $("#books").append(card);
   });
   const pager = $("#pagination");
@@ -422,9 +373,12 @@ function render() {
 }
 async function loadBooks() {
   try {
-    const data = await request("/books");
-    books = data;
-    $("#catalog-message").textContent = data.length
+    const data = await request("/api/catalogue");
+    sections = data.sections;
+    const entries = data.books.map(b => ({...b,name:b.title,category:b.sectionName,
+      coverUrl:b.kind === 'catalog' ? (b.cover ? `/api/catalogue/covers/${b.id}?v=${b.version}-${b.pdfVersion}` : null) : `/api/java-library/${b.id}/cover?v=${b.version}`}));
+    books = entries.filter(b => b.kind === 'catalog'); libraryBooks = entries.filter(b => b.kind === 'library');
+    $("#catalog-message").textContent = data.books.length
       ? "Найдите свою книгу по названию, автору или разделу."
       : "Каталог пока пуст. Добавьте первую книгу.";
     render();
@@ -443,8 +397,9 @@ async function openBook(book) {
     node("div", book.category || "Каталог", "eyebrow"),
     node("h2", book.name),
     node("p", book.author),
-    action("Добавить в корзину +", () => addToCart(book)),
+    ...(book.price !== null ? [action("Добавить в корзину +", () => addToCart(book))] : []),
   );
+  appendPDFControls(info,book);
   target.append(cover, info);
   $("#review-form").reset();
   $("#review-error").textContent = "";
@@ -686,14 +641,7 @@ $("#logout").onclick = async () => {
     toast(e.message);
   }
 };
-$("#add-book").onclick = () => {
-  if (user?.role !== "ADMIN") {
-    toast("Добавлять книги может администратор");
-    $("#auth-dialog").showModal();
-    return;
-  }
-  $("#book-dialog").showModal();
-};
+$("#add-book").onclick = () => openBookManager(null,category);
 $("#book-form").onsubmit = async (e) => {
   e.preventDefault();
   const button = e.target.querySelector("button");
@@ -765,6 +713,7 @@ async function init() {
   await loadBooks();
   if (location.hash === "#ai") openAI();
 }
+setupCatalogueAdmin({getUser:()=>user,toast,getSections:()=>sections,getSection:()=>category,reload:async()=>{await loadBooks();await loadSelection();}});
 setupAbout({ getUser: () => user, toast });
 setupAnnouncement({ getUser: () => user });
 setupAdminReviews({ getUser: () => user });
@@ -781,6 +730,7 @@ setupCommerce({
   },
 });
 setupEditorial({ getUser: () => user, toast });
+document.addEventListener("library-books-changed",loadBooks);
 document.addEventListener("editorial-open-catalog", e => { const book = books.find(b => String(b.id) === e.detail); if (book) openBook(book); });
 init();
 
@@ -813,7 +763,7 @@ function openAI() {
 document.querySelectorAll('[data-open-ai]').forEach(link => link.addEventListener('click', () => openAI()));
 function openAIBooks() {
   $("#ai").hidden = true;
-  category = "AI"; page = 1; render();
+  category = "ai"; page = 1; render();
   $("#catalog").scrollIntoView({block: "start"});
 }
 document.querySelectorAll('[data-open-ai-books]').forEach(link => link.addEventListener('click', openAIBooks));
