@@ -18,6 +18,10 @@ public class CatalogueController {
     private final CatalogueService catalogue;
     private final SectionService sections;
     private final LibraryFiles files;
+    private final CatalogueOrderService ordering;
+    public record OrderEdit(@Min(0) long version,@Valid @NotNull @Size(max=10000) java.util.List<CatalogueOrderService.BookKey> books) {}
+    @PutMapping("/api/admin/catalogue/order") @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void reorder(@Valid @RequestBody OrderEdit input){ordering.save(input.version(),input.books());}
     public record NewSection(@NotBlank @Size(max=80) String name) {}
     public record SectionEdit(@NotBlank @Size(max=80) String name,@Min(0) int position,@Min(0) long version) {}
     @GetMapping("/api/catalogue") public CatalogueService.Catalogue list(){return catalogue.list();}

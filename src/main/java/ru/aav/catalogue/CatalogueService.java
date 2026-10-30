@@ -17,10 +17,11 @@ public class CatalogueService {
     private final SectionService sections;
     private final BookRepository books;
     private final JavaLibraryService library;
+    private final CatalogueOrderService ordering;
     public record Entry(String kind,String id,String title,String author,String sectionId,String sectionName,
         String description,long version,String pdfId,long pdfVersion,boolean customCover,boolean cover,
         java.math.BigDecimal price,int availableStock,String coverTitle) {}
-    public record Catalogue(List<SectionService.Section> sections,List<Entry> books) {}
+    public record Catalogue(List<SectionService.Section> sections,List<Entry> books,long orderVersion) {}
     private static final String CATALOG="""
         SELECT 'catalog' kind,CAST(b.id AS VARCHAR) book_id,b.name title,COALESCE(b.author,'') author,
         s.id section_id,s.name section_name,COALESCE(e.description,'') description,b.management_revision revision,
@@ -44,13 +45,14 @@ public class CatalogueService {
             r.getString("description"),r.getLong("revision"),pdf,r.getLong("pdf_version"),custom,custom||pdf!=null,r.getBigDecimal("price"),r.getInt("available"),r.getString("cover_title"));
     }
     @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
-    public Catalogue list(){return new Catalogue(sections.list(),db.query(CATALOG+" UNION ALL "+LIBRARY+" ORDER BY title,kind,book_id",this::row));}
+    public Catalogue list(){return new Catalogue(sections.list(),ordering.sort(db.query(CATALOG+" UNION ALL "+LIBRARY+" ORDER BY title,kind,book_id",this::row)),ordering.version());}
     @Transactional(readOnly=true) public Entry get(String kind,String id) {
         if(kind.equals("catalog"))return db.query(CATALOG+" AND b.id=?",this::row,catalogId(id)).stream().findFirst().orElseThrow(this::missing);
         if(kind.equals("library"))return db.query(LIBRARY+" AND b.id=?",this::row,libraryId(id)).stream().findFirst().orElseThrow(this::missing);
         throw missing();
     }
     @Transactional public void create(String title,String author,String sectionId,String description,java.math.BigDecimal price,LibraryFiles.Prepared files,boolean uploadedCover) {
+        ordering.lock();
         var section=sections.lock(sectionId);
         var book=new ru.aav.model.Book();book.setName(title.strip());book.setAuthor(author.strip());book.setCategory(section.catalogKey());book.setPrice(price);
         books.saveAndFlush(book);
@@ -59,6 +61,7 @@ public class CatalogueService {
     }
     @Transactional public void update(String kind,String id,long version,long pdfVersion,String title,String author,String sectionId,String description,java.math.BigDecimal price,
         LibraryFiles.Prepared files,boolean uploadedCover,boolean removePdf) {
+        ordering.lock();
         var section=sections.lock(sectionId);
         if(kind.equals("library")) {
             String key=libraryId(id);
@@ -75,6 +78,7 @@ public class CatalogueService {
                 var book=new ru.aav.model.Book();book.setName(title.strip());book.setAuthor(author.strip());
                 book.setCategory(section.catalogKey());book.setPrice(price);books.saveAndFlush(book);
                 long catalog=book.getId();
+                ordering.promote(key,catalog);
                 db.update("INSERT INTO catalog_pdf(book_id,library_id) VALUES(?,?)",catalog,key);
                 if(uploadedCover||current.customCover())db.update("INSERT INTO catalog_covers(book_id,data) VALUES(?,?)",catalog,library.cover(key).bytes());
                 int moved=db.update("UPDATE book_editorial SET catalog_id=?,library_id=NULL,version=version+1 WHERE library_id=?",catalog,key);
@@ -120,6 +124,7 @@ public class CatalogueService {
         }
     }
     @Transactional public void delete(String kind,String id,long version,long pdfVersion) {
+        ordering.lock();
         if(kind.equals("library")){get(kind,id);library.delete(libraryId(id),version);return;}
         if(!kind.equals("catalog"))throw missing();
         long key=catalogId(id);var book=books.findLockedById(key).orElseThrow(this::missing);
@@ -128,6 +133,7 @@ public class CatalogueService {
         // Keep historical foreign keys while freeing the active catalogue title for reuse.
         book.setRetiredTitle(book.getName());book.setName("[archived:"+key+"] "+UUID.randomUUID());
         book.setArchived(true);book.setManagementRevision(version+1);
+        ordering.remove("catalog",id);
         db.update("DELETE FROM user_favorites WHERE book_id=?",key);db.update("DELETE FROM cart_items WHERE book_id=?",key);
         db.update("DELETE FROM book_editorial WHERE catalog_id=?",key);db.update("DELETE FROM catalog_covers WHERE book_id=?",key);
     }

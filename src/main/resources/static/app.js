@@ -1,3 +1,4 @@
+import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
 import {openAI, isAIHash, setupAINavigation} from "./ai-navigation.js";
 import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
 import { setupAbout, updateAbout } from "./about.js";
@@ -190,6 +191,7 @@ function updateCartCount() {
   updateCommerce();
   updateJavaLibrary();
   updateCatalogueAdmin();
+  updateBookOrderingAdmin();
   $("#cart-count").textContent = Object.values(cart).reduce(
     (sum, n) => sum + n,
     0,
@@ -289,6 +291,7 @@ function render() {
   const sort = $("#sort").value;
   if (sort !== "default")
     visible.sort((a, b) => a[sort].localeCompare(b[sort], "ru"));
+  else visible.sort((a,b)=>a.catalogOrder-b.catalogOrder);
   const pages = Math.max(1, Math.ceil(visible.length / pageSize));
   page = Math.min(page, pages);
   $("#books").replaceChildren();
@@ -372,12 +375,15 @@ function render() {
   }
   updateCartCount();
 }
+function catalogueEntry(b,index) {
+  return {...b,name:b.title,category:b.sectionName,catalogOrder:index,
+    coverUrl:b.kind==='catalog'?(b.cover?`/api/catalogue/covers/${b.id}?v=${b.version}-${b.pdfVersion}`:null):`/api/java-library/${b.id}/cover?v=${b.version}`};
+}
 async function loadBooks() {
   try {
     const data = await request("/api/catalogue");
     sections = data.sections;
-    const entries = data.books.map(b => ({...b,name:b.title,category:b.sectionName,
-      coverUrl:b.kind === 'catalog' ? (b.cover ? `/api/catalogue/covers/${b.id}?v=${b.version}-${b.pdfVersion}` : null) : `/api/java-library/${b.id}/cover?v=${b.version}`}));
+    const entries = data.books.map(catalogueEntry);
     books = entries.filter(b => b.kind === 'catalog'); libraryBooks = entries.filter(b => b.kind === 'library');
     $("#catalog-message").textContent = data.books.length
       ? "Найдите свою книгу по названию, автору или разделу."
@@ -716,6 +722,11 @@ async function init() {
   else if (location.hash === "#ai-books") openAIBooks();
 }
 setupCatalogueAdmin({getUser:()=>user,toast,getSections:()=>sections,getSection:()=>category,reload:async()=>{await loadBooks();await loadSelection();}});
+setupBookOrdering({getUser:()=>user,toast,getSection:()=>category,createCover:b=>coverImage(catalogueEntry(b,0)),onSaved:async section=>{
+  category=section;page=1;filter='all';$('#search').value='';$('#sort').value='default';
+  document.querySelectorAll('[data-filter]').forEach(button=>button.classList.toggle('active',button.dataset.filter==='all'));
+  await loadBooks();await loadSelection();$('#catalog').scrollIntoView({block:'start'});
+}});
 setupAbout({ getUser: () => user, toast });
 setupAnnouncement({ getUser: () => user });
 setupAdminReviews({ getUser: () => user });

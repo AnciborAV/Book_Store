@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="persistent-catalogue-book-order" author="aav">
+    <sql>
+      ALTER TABLE catalogue_state ADD COLUMN order_version BIGINT NOT NULL DEFAULT 0;
+      CREATE TABLE catalogue_book_order (
+        kind VARCHAR(7) NOT NULL CHECK(kind IN ('catalog','library')),
+        book_key VARCHAR(36) NOT NULL,
+        sort_order BIGINT NOT NULL CHECK(sort_order >= 0),
+        PRIMARY KEY(kind,book_key)
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>
