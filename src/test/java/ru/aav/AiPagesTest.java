@@ -17,6 +17,10 @@ class AiPagesTest {
             mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","SAMEORIGIN"));
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
     }
+    @Test void readingAtlasPagesAndAssetsArePublicWithoutFramePermission()throws Exception {
+        for(String path:new String[]{"/reading-atlas.html","/reading-atlas.js","/reading-atlas-data.js","/reading-atlas.css","/atlas-navigation.js","/atlas-navigation.css"})
+            mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
+    }
     @Test void stylesScriptsAndLocalPhotographsArePublic()throws Exception {
         for(String path:new String[]{"/ai-navigation.js","/ai-story.js","/ai-story.css","/ai-models.js","/ai-models.css","/ai-russia.css","/ai-russia.js","/covers/ai-people/turing.jpg","/covers/ai-people/eniac.jpg","/covers/ai-people/network.svg"})
             mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
