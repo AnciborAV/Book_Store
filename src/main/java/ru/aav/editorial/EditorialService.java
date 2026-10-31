@@ -12,12 +12,13 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class EditorialService {
     private final JdbcTemplate jdbc;
+    private final ru.aav.text.TextStyles styles;
     public record Book(String kind, String id, String title, String author, String section,
-                       String description, String source, List<String> lists, String comment, long version, String pdfId, long pdfVersion, boolean customCover, String coverTitle) {}
+                       String description, String source, List<String> lists, String comment, long version, String pdfId, long pdfVersion, boolean customCover, String coverTitle, List<ru.aav.text.TextStyles.Mark> descriptionStyle,List<ru.aav.text.TextStyles.Mark> commentStyle) {}
     private static final String CATALOG = """
         SELECT 'catalog' AS kind, CAST(b.id AS varchar) AS book_id, b.name AS title,
           COALESCE(b.author,'') AS author, COALESCE(s.name,b.category,'Каталог') AS section,
-          '' AS original_description, e.description, e.lists, e.comment, e.version,
+          '' AS original_description, e.description, e.lists, e.comment, e.version, e.description_style, e.comment_style,
           p.library_id pdf_id,COALESCE(l.version,0) pdf_version,CASE WHEN c.book_id IS NULL THEN FALSE ELSE TRUE END custom_cover,
           COALESCE(b.cover_title,b.name) cover_title
         FROM (SELECT * FROM books WHERE archived=FALSE) b LEFT JOIN book_editorial e ON e.catalog_id=b.id
@@ -27,7 +28,7 @@ public class EditorialService {
         """;
     private static final String LIBRARY = """
         SELECT 'library' AS kind, b.id AS book_id, b.title, b.author, COALESCE(s.name,b.section) section,
-          b.description AS original_description, e.description, e.lists, e.comment, e.version,
+          b.description AS original_description, e.description, e.lists, e.comment, e.version, e.description_style, e.comment_style,
           b.id pdf_id,b.version pdf_version,b.custom_cover,b.title cover_title
         FROM (SELECT source.* FROM java_library source WHERE NOT EXISTS(SELECT 1 FROM catalog_pdf p WHERE p.library_id=source.id)) b
         LEFT JOIN book_editorial e ON e.library_id=b.id LEFT JOIN store_sections s ON s.library_key=b.section
@@ -50,7 +51,7 @@ public class EditorialService {
         return new Book(r.getString("kind"),r.getString("book_id"),r.getString("title"),r.getString("author"),
             r.getString("section"),description == null ? "" : description,source,
             lists == null || lists.isBlank() ? List.of() : List.of(lists.split("\n")),
-            Objects.requireNonNullElse(r.getString("comment"),""), r.getObject("version") == null ? -1 : r.getLong("version"),r.getString("pdf_id"),r.getLong("pdf_version"),r.getBoolean("custom_cover"),r.getString("cover_title"));
+            Objects.requireNonNullElse(r.getString("comment"),""), r.getObject("version") == null ? -1 : r.getLong("version"),r.getString("pdf_id"),r.getLong("pdf_version"),r.getBoolean("custom_cover"),r.getString("cover_title"),styles.read(r.getString("description_style")),styles.read(r.getString("comment_style")));
     }
     @Transactional(readOnly=true)
     public List<Book> list(boolean recommended) {
@@ -82,11 +83,13 @@ public class EditorialService {
             lists.add(label);
         }
         String names=String.join("\n",lists);
+        String descriptionStyle=styles.write(styles.resolve(edit.description(),edit.descriptionStyle(),current.description(),current.descriptionStyle()));
+        String commentStyle=styles.write(styles.resolve(edit.comment(),edit.commentStyle(),current.comment(),current.commentStyle()));
         if(current.version()<0)
-            jdbc.update("INSERT INTO book_editorial("+column+",description,lists,comment) VALUES(?,?,?,?)",
-                key,edit.description().strip(),names,edit.comment().strip());
-        else jdbc.update("UPDATE book_editorial SET description=?,lists=?,comment=?,version=version+1 WHERE "+column+"=?",
-            edit.description().strip(),names,edit.comment().strip(),key);
+            jdbc.update("INSERT INTO book_editorial("+column+",description,lists,comment,description_style,comment_style) VALUES(?,?,?,?,?,?)",
+                key,edit.description().strip(),names,edit.comment().strip(),descriptionStyle,commentStyle);
+        else jdbc.update("UPDATE book_editorial SET description=?,lists=?,comment=?,description_style=?,comment_style=?,version=version+1 WHERE "+column+"=?",
+            edit.description().strip(),names,edit.comment().strip(),descriptionStyle,commentStyle,key);
         return get(kind,id);
     }
     private Object key(String kind,String id) {

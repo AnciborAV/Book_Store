@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="/announcement.css" />
       <link rel="stylesheet" href="/editorial.css" />
       <link rel="stylesheet" href="/reading-text.css" />
+      <link rel="stylesheet" href="/text-formatting.css" />
       <link rel="stylesheet" href="/ai.css" />
   <link rel="stylesheet" href="/about.css" />
   <link rel="stylesheet" href="/catalogue-admin.css" />
@@ -235,13 +236,13 @@ record Chapter(String title, int pages) { }</pre>
       <h2 id="editorial-edit-title"></h2>
       <form id="editorial-form">
         <label>Описание книги<textarea name="description" maxlength="3000" rows="9"></textarea></label>
-        <small>Короткая заметка до 3000 символов. Абзацы отделяйте пустой строкой. Текст публикуется как обычный текст, без HTML. Ниже показан предпросмотр оформления.</small>
+        <small>Короткая заметка до 3000 символов. Абзацы отделяйте пустой строкой. Текст публикуется как обычный текст, без HTML. Выделите фрагмент в поле и используйте панель оформления. Результат виден в предпросмотре.</small>
         <label>Подборки редактора<textarea name="lists" maxlength="407" rows="3" placeholder="Выбор редакции&#10;Изучаем Java"></textarea></label>
         <small>По одному названию в строке: до 8 списков по 50 символов. Новое название создаёт подборку. Без списков книга не показывается в «Выборе редакции».</small>
         <div id="editorial-existing" class="editorial-card-actions" aria-label="Добавить в существующий список"></div>
         <button id="editorial-clear-lists" type="button" class="text-button">Убрать из всех подборок</button>
         <label>Закреплённый комментарий редактора<textarea name="comment" rows="10" placeholder="Почему вы рекомендуете эту книгу?"></textarea></label>
-        <small>Виден всем в карточке и описании книги, даже вне подборки. Чтобы убрать комментарий, очистите поле и сохраните.</small>
+        <small>Виден всем в карточке и описании книги, даже вне подборки. Абзацы отделяйте пустой строкой: у каждого будет красная строка. Выделение слов видно в предпросмотре. Чтобы убрать комментарий, очистите поле и сохраните.</small>
         <p id="editorial-error" role="alert"></p><button id="editorial-save" type="submit" class="button dark">Сохранить и опубликовать</button>
       </form>
     </dialog>

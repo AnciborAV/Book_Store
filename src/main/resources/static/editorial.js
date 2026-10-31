@@ -1,5 +1,6 @@
 import { request } from './api-client.js';
 import {setupProsePreviews} from './editorial-prose.js';
+import {setupTextFormatting,appendStyledText,decorateProse,renderComment} from './text-formatting.js';
 const $ = s => document.querySelector(s);
 const element = (tag, text, cls) => {
   const n = document.createElement(tag);
@@ -13,7 +14,7 @@ function button(text, run, cls = 'button light') {
 let getUser = () => null, notify = () => {}, records = [], pending, editing, saving = false;
 let cacheGeneration = 0, coverMap;
 let manage = false, listName = '', query = '', loadNumber = 0, detailNumber = 0;
-let refreshProsePreviews=()=>{};
+let refreshProsePreviews=()=>{}, textEditors={};
 const admin = () => getUser()?.role === 'ADMIN';
 const key = b => b.kind + ':' + b.id;
 async function all(refresh = false) {
@@ -26,7 +27,8 @@ async function all(refresh = false) {
 }
 function fillCommentPreview(note, book) {
   note.classList.add('editorial-note-preview');
-  note.append(element('strong', 'Комментарий редактора'), element('p', book.comment));
+  const paragraph=element('div');renderComment(paragraph,book.comment,book.commentStyle);
+  note.append(element('strong', 'Комментарий редактора'),paragraph);
   const more = button('Читать полностью', () => showDescription(book.kind, String(book.id)), 'text-button editorial-read-more');
   more.setAttribute('aria-label', 'Читать комментарий полностью: ' + book.title);
   note.append(more);
@@ -81,7 +83,7 @@ function renderHeroBook() {
   const content=element('div',undefined,'hero-book-content');
   const info=element('div');
   info.append(element('h2',b.title),element('p',b.author,'hero-book-author'));
-  if(b.comment) info.append(element('p',b.comment,'hero-book-comment'));
+  if(b.comment) {const paragraph=element('div',undefined,'hero-book-comment');renderComment(paragraph,b.comment,b.commentStyle);info.append(paragraph);}
   info.append(button('О книге ↗',()=>showDescription(b.kind,b.id),'button light'));
   content.append(picture(b),info);card.append(content);
 }
@@ -193,7 +195,8 @@ export async function showDescription(kind,id,initialTab='description') {
       const heading=paragraph.length<65 && !/[.!?…]$/.test(paragraph.trim());
       body.append(element(heading ? 'h3' : 'p',paragraph));
     }
-    if(b.comment) $('#description-comment').append(element('strong','Комментарий редактора'),element('p',b.comment));
+    decorateProse(body,b.description,b.descriptionStyle);
+    if(b.comment){const prose=element('div');renderComment(prose,b.comment,b.commentStyle);$('#description-comment').append(element('strong','Комментарий редактора'),prose);}
     $('#description-comment').hidden=!b.comment;
     $('#description-edit').hidden=!admin(); $('#description-edit').onclick=()=>editBook(kind,id);
   } catch(e) { if(ticket===detailNumber)$('#description-body').textContent=e.message; }
@@ -205,7 +208,7 @@ async function editBook(kind,id) {
     if(!admin())return;
     editing=b; const f=$('#editorial-form'); f.reset();
     $('#editorial-edit-title').textContent=b.title;
-    f.elements.description.value=b.description; f.elements.lists.value=b.lists.join('\n'); f.elements.comment.value=b.comment;refreshProsePreviews();
+    textEditors.description.setValue(b.description,b.descriptionStyle);f.elements.lists.value=b.lists.join('\n');textEditors.comment.setValue(b.comment,b.commentStyle);refreshProsePreviews();
     $('#editorial-error').textContent='';
     $('#editorial-existing').replaceChildren();
     $('#editorial-existing').append(button('Показывать на главной',()=>{
@@ -231,6 +234,7 @@ export function updateEditorial() {
 }
 export function setupEditorial(options) {
   getUser=options.getUser;notify=options.toast;
+  for(const name of ['description','comment'])textEditors[name]=setupTextFormatting($('#editorial-form').elements[name],name==='description'?'Описание книги':'Комментарий редактора');
   refreshProsePreviews=setupProsePreviews($('#editorial-form'));
   document.addEventListener('announcement-changed',renderHeroBook);
   document.addEventListener('catalogue-books-changed',()=>{all(true).then(()=>{paintNotes();if($('#editorial-dialog').open)renderCollection();}).catch(()=>{});});
@@ -248,7 +252,7 @@ export function setupEditorial(options) {
     if(lists.length>8 || lists.some(x=>x.length>50)){$('#editorial-error').textContent='До 8 списков, каждое название — не более 50 символов.';return;}
     saving=true;$('#editorial-save').disabled=true;$('#editorial-error').textContent='';
     try {
-      await request(`/api/admin/editorial/books/${editing.kind}/${editing.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:editing.version,description:f.elements.description.value,lists,comment:f.elements.comment.value})});
+      await request(`/api/admin/editorial/books/${editing.kind}/${editing.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:editing.version,description:f.elements.description.value,lists,comment:f.elements.comment.value,descriptionStyle:textEditors.description.getStyles(),commentStyle:textEditors.comment.getStyles()})});
       $('#editorial-editor').close();$('#description-dialog').close();notify('Описание, подборки и комментарий опубликованы');
       await all(true);paintNotes();if($('#editorial-dialog').open)renderCollection();
     } catch(err) {$('#editorial-error').textContent=err.message;notify(err.message);}

@@ -41,6 +41,19 @@ class EditorialTest {
             mvc.perform(get("/api/editorial/books/"+key)).andExpect(jsonPath("$.comment").value(edited));
         }
     }
+    @Test void formattingPersistsAndPlainLegacyEditsCannotLeaveStaleRanges()throws Exception {
+        for(String key:java.util.List.of("library/"+library,"catalog/"+catalog)) {
+            var data=(com.fasterxml.jackson.databind.node.ObjectNode)json.readTree(payload(-1,"Выбор редакции","Комментарий"));
+            data.putArray("descriptionStyle").addObject().put("start",0).put("end",3).put("bold",true);
+            data.putArray("commentStyle").addObject().put("start",0).put("end",5).put("underline",true).put("color","#d6b576").put("size",24);
+            mvc.perform(put("/api/admin/editorial/books/"+key).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(json.writeValueAsString(data))).andExpect(status().isOk());
+            mvc.perform(get("/api/editorial/books/"+key)).andExpect(jsonPath("$.descriptionStyle[0].bold").value(true)).andExpect(jsonPath("$.commentStyle[0].size").value(24));
+            data.put("version",0);((com.fasterxml.jackson.databind.node.ObjectNode)data.withArray("commentStyle").get(0)).put("end",999);
+            mvc.perform(put("/api/admin/editorial/books/"+key).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(json.writeValueAsString(data))).andExpect(status().isBadRequest());
+            mvc.perform(put("/api/admin/editorial/books/"+key).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(0,"Выбор редакции","Новый текст"))).andExpect(status().isOk());
+            mvc.perform(get("/api/editorial/books/"+key)).andExpect(jsonPath("$.descriptionStyle[0].bold").value(true)).andExpect(jsonPath("$.commentStyle.length()").value(0));
+        }
+    }
     @Test void allHomeStylesheetsArePublic() throws Exception {
         String html = new String(new org.springframework.core.io.ClassPathResource("static/index.html")
             .getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
@@ -52,6 +65,7 @@ class EditorialTest {
             count++;
         }
         assertThat(count).isGreaterThan(0);
+        for(String path:java.util.List.of("/text-formatting.js","/text-style-model.js","/text-formatting.css"))mvc.perform(get(path)).andExpect(status().isOk());
         mvc.perform(get("/editorial-prose.js")).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
         mvc.perform(get("/reading-text.css")).andExpect(status().isOk())
             .andExpect(content().string(org.hamcrest.Matchers.containsString(".editorial-note p")))

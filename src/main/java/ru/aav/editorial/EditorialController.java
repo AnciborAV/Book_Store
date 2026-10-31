@@ -1,6 +1,7 @@
 package ru.aav.editorial;
 
 import jakarta.validation.Valid;
+import ru.aav.text.TextStyles.Mark;
 import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,9 @@ public class EditorialController {
     private final AuthorProfiles authors;
     public record Edit(@Min(-1) long version, @NotNull @Size(max=3000) String description,
                        @NotNull @Size(max=8) List<@NotBlank @Size(max=50) String> lists,
-                       @NotNull String comment) {}
+                       @NotNull String comment,
+                       @Size(max=5000) List<@Valid Mark> descriptionStyle,
+                       @Size(max=5000) List<@Valid Mark> commentStyle) {}
     @GetMapping("/api/editorial/books")
     public List<EditorialService.Book> books(@RequestParam(defaultValue="true") boolean recommended) {
         return service.list(recommended);
