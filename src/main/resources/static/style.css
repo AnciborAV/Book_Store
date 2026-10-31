@@ -2084,3 +2084,12 @@ html:has(#author-photo-dialog[open]) {overflow:hidden;}
 #auth-form .remember-choice { display:flex; align-items:center; gap:12px; cursor:pointer; font-size:16px; line-height:1.5; }
 #auth-form .remember-choice input { flex:0 0 20px; width:20px; height:20px; min-height:20px; margin:0; padding:0; accent-color:var(--green); }
 #auth-form .remember-hint { margin:6px 0 16px; font-size:14px; line-height:1.5; color:var(--muted); }
+
+/* A secondary explanation beside PDF actions, never a replacement for reading. */
+.pdf-source-link {
+  display: inline-flex; align-items: center; min-height: 44px;
+  max-width: 100%; padding: 8px 0; color: #dfbd81;
+  font-size: 14px; line-height: 1.5; text-decoration: underline;
+  text-underline-offset: 3px; white-space: normal; overflow-wrap: anywhere;
+}
+.pdf-source-link:focus-visible { outline: 2px solid #dfbd81; outline-offset: 4px; }

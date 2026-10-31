@@ -1,6 +1,13 @@
 .site-feedback { padding: 60px 5%; border-top: 1px solid var(--line); }
 .site-feedback h2 { margin: 12px 0; }
-.feedback-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 32px; }
+.feedback-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; }
+.feedback-layout > div:first-child { max-width: 760px; }
+#feedback-login { margin: 0; }
+.feedback-reader-column h3 { margin: 0 0 20px; }
+#feedback-public { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+#feedback-public > .feedback-card { min-width: 0; margin: 0; }
+#feedback-public > :not(.feedback-card),
+#feedback-public > .feedback-card:has(details[open]) { grid-column: 1 / -1; }
 .site-feedback label { display: block; margin: 16px 0; }
 .site-feedback textarea, .site-feedback select { display: block; width: 100%; padding: 12px; margin-top: 8px; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
 .site-feedback textarea { resize: vertical; }
@@ -13,7 +20,7 @@
 .site-feedback [hidden] { display: none !important; }
 .site-feedback button:disabled { opacity: .6; cursor: wait; }
 .site-footer { flex-wrap: wrap; gap: 16px; }
-@media(max-width: 760px) { .feedback-layout { grid-template-columns: 1fr; gap: 24px; } .site-feedback { padding: 36px 20px; } }
+@media(max-width: 760px) { #feedback-public { grid-template-columns: minmax(0, 1fr); gap: 16px; } .site-feedback { padding: 36px 20px; } }
 
 .java-card .button.java-downloaded { background: #315b49; color: #f3f7ef; border: 1px solid #8fbda2; }
 .java-download-note { display: block; margin: 10px 0; color: var(--muted); line-height: 1.5; }
