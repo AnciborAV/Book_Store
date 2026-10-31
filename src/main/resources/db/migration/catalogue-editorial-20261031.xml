@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+  <changeSet id="catalogue-editorial-20261031" author="aav">
+    <comment>Reviewed descriptions for empty fields and exact-pair bibliographic corrections. Runs once; later admin edits remain authoritative.</comment>
+    <sql>
+      CREATE TABLE catalogue_description_seed(title VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, text VARCHAR(3000) NOT NULL, PRIMARY KEY(title,author));
+      CREATE TABLE catalogue_metadata_seed(old_title VARCHAR(255) NOT NULL, old_author VARCHAR(255) NOT NULL, new_title VARCHAR(255) NOT NULL, new_author VARCHAR(255) NOT NULL, PRIMARY KEY(old_title,old_author));
+    </sql>
+    <loadData file="data/catalogue-descriptions-20261031.csv" relativeToChangelogFile="true" tableName="catalogue_description_seed" encoding="UTF-8">
+      <column name="title" type="STRING"/><column name="author" type="STRING"/><column name="text" type="STRING"/>
+    </loadData>
+    <loadData file="data/catalogue-metadata-20261031.csv" relativeToChangelogFile="true" tableName="catalogue_metadata_seed" encoding="UTF-8">
+      <column name="old_title" type="STRING"/><column name="old_author" type="STRING"/><column name="new_title" type="STRING"/><column name="new_author" type="STRING"/>
+    </loadData>
+    <sqlFile path="data/catalogue-editorial-20261031.sql" relativeToChangelogFile="true" encoding="UTF-8"/>
+  </changeSet>
+</databaseChangeLog>
