@@ -42,7 +42,7 @@ class CatalogueEditorialMigrationTest {
             assertThat(value(s,"SELECT COUNT(*) FROM book_editorial WHERE catalog_id IS NOT NULL")).isEqualTo("147");
             assertThat(value(s,"SELECT COUNT(*) FROM book_editorial WHERE library_id IN ('original','empty','linked')")).isEqualTo("0");
             assertThat(value(s,"SELECT title || '/' || author FROM java_library WHERE id='blank'")).isEqualTo("Исповедь/Августин Блаженный");
-            assertThat(value(s,"SELECT LENGTH(description)>300 FROM book_editorial WHERE library_id='blank'")).isEqualTo("TRUE");
+            assertThat(value(s,"SELECT CASE WHEN LENGTH(description)>300 THEN 'filled' ELSE 'empty' END FROM book_editorial WHERE library_id='blank'")).isEqualTo("filled");
             assertThat(value(s,"SELECT COUNT(*) FROM books WHERE price=125 AND sort_order=id")).isEqualTo("171");
             assertThat(value(s,"SELECT library_id FROM catalog_pdf WHERE book_id=1")).isEqualTo("linked");
             assertThat(value(s,"SELECT cover_title FROM books WHERE name='Жизнь Арсеньева'")).isEqualTo("Жизнь Арсентьева");
