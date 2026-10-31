@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="История языков программирования: от машинных команд и Lisp до Java, Rust и современных платформ. Карта применения, код и пошаговые объяснения.">
+  <title>Атлас языков программирования · Переплёт</title>
+  <link rel="stylesheet" href="/reading-atlas.css"><link rel="stylesheet" href="/programming-atlas.css">
+  <script type="module" src="/programming-atlas.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#language-map">Перейти к карте языков</a>
+<header class="atlas-header">
+  <a class="wordmark" href="/index.html#catalog">Переплёт<span>КНИГИ · МЫСЛЬ · ТЕХНОЛОГИИ</span></a>
+  <nav aria-label="Атласы"><a href="/reading-atlas.html?atlas=foreign">Зарубежная литература</a><a href="/reading-atlas.html?atlas=russian">Русская литература</a><a href="/reading-atlas.html?atlas=philosophy">Философия</a><a href="/programming-atlas.html" aria-current="page">Языки программирования</a></nav>
+  <a class="back" href="/index.html#catalog">К каталогу ↗</a>
+</header>
+<main>
+  <section class="language-hero" aria-labelledby="language-title">
+    <div><p class="eyebrow">ПЕРЕПЛЁТ / JAVA И МИР ПРОГРАММИРОВАНИЯ</p><h1 id="language-title">Атлас языков<br><em>программирования</em></h1>
+      <p class="hero-deck">От команды машине к способу мыслить.</p><p class="prose">Языки менялись вместе с задачами: считать орбиты, управлять устройством, хранить знания, строить интерфейс. Эта карта показывает, какие идеи за ними стоят и почему старое и новое продолжают работать рядом.</p>
+      <div class="hero-index"><span><b>37</b> языков и уровней кода</span><span><b>1949</b> архивный листинг</span><span><b>55</b> одна задача, разные решения</span></div>
+    </div>
+    <div class="code-orbit" aria-label="Три уровня записи одной операции сложения двух и трёх">
+      <div class="orbit-label">ОДНА МЫСЛЬ / ТРИ ЗАПИСИ</div>
+      <div class="orbit-layer"><span>01 / БАЙТЫ 6502</span><code>A9 02 · 18 · 69 03</code></div>
+      <div class="orbit-line" aria-hidden="true">↓</div>
+      <div class="orbit-layer"><span>02 / СИМВОЛЫ</span><code>LDA #$02<br>CLC<br>ADC #$03</code></div>
+      <div class="orbit-line" aria-hidden="true">↓</div>
+      <div class="orbit-layer"><span>03 / ВЫРАЖЕНИЕ JAVA</span><code>int result = 2 + 3;</code></div>
+      <p>Общий смысл не означает одинаковый машинный код: компилятор Java вправе заранее вычислить константу.</p>
+    </div>
+  </section>
+  <nav class="chapter-nav" aria-label="Разделы атласа"><a href="#origins">01 Истоки</a><a href="#language-map">02 Карта языков</a><a href="#code-lab">03 Внутри машины</a><a href="#comparison">04 Одна задача</a><a href="#future">05 Горизонт</a></nav>
+
+  <section id="origins" class="atlas-section" aria-labelledby="origins-title">
+    <div class="section-heading"><p class="eyebrow">01 / ДО ПРИВЫЧНЫХ ЯЗЫКОВ</p><h2 id="origins-title">Сначала нужно было<br>научиться задавать порядок.</h2></div>
+    <div class="origin-timeline">
+      <article><span>1843</span><h3>Замысел программы</h3><p>В примечаниях Ады Лавлейс к описанию аналитической машины Бэббиджа появляется таблица вычисления чисел Бернулли. Машина тогда не была построена, поэтому это проект вычисления, а не выполненная компьютерная программа.</p></article>
+      <article><span>1936</span><h3>Модель вычисления</h3><p>Алан Тьюринг исследует формальное выполнение инструкций и пределы вычислимости. Машина Тьюринга является математической моделью, а не языком прикладной разработки.</p></article>
+      <article><span>1940-е</span><h3>От схемы к памяти</h3><p>Первые электронные машины программируют через устройства управления, коммутацию и машинные команды. Параллельно Конрад Цузе разрабатывает Plankalkül, но его идеи не становятся тогда массовым рабочим языком.</p></article>
+      <article><span>1948 / 1949</span><h3>Программа хранится в машине</h3><p>Manchester Baby выполняет программу в памяти в июне 1948 года. В мае 1949-го начинает работать кембриджский EDSAC. Следующий важный шаг состоит в том, чтобы облегчить не только выполнение, но и запись программы.</p></article>
+    </div>
+    <div class="archive-panel">
+      <div><p class="eyebrow">ИЗ АРХИВА / EDSAC</p><h3>Три строки из 1949 года</h3><p class="prose">Фрагмент опубликованного Кембриджем листинга программы квадратов Мориса Уилкса, датированной июнем 1949 года. Это отдельный документ, который не следует смешивать с первым успешным запуском 6 мая.</p><p class="prose">T123S сохраняет аккумулятор в ячейке 123 и очищает аккумуляторные регистры. E84S передаёт управление на позицию 84 при неотрицательном значении аккумулятора. PS здесь задаёт слово данных с нулём.</p><a href="https://www.cl.cam.ac.uk/~mr10/Edsac/edsacposter.pdf" target="_blank" rel="noopener noreferrer">Архивный листинг и пояснения Кембриджа ↗</a></div>
+      <figure><figcaption>Адрес · двоичное слово · символическая запись</figcaption><pre tabindex="0"><code>31  00101 0 0001111011 0   T123S
+32  00011 0 0001010100 0   E84S
+33  00000 0 0000000000 0   PS</code></pre><p>Пробелы делят поля слова. Это запись EDSAC, а не код современного процессора.</p></figure>
+    </div>
+  </section>
+
+  <section id="language-map" class="atlas-section" aria-labelledby="map-title">
+    <div class="section-heading"><p class="eyebrow">02 / КАРТА ИДЕЙ И ПРИМЕНЕНИЯ</p><h2 id="map-title">У каждого языка<br>свой способ видеть задачу.</h2><p class="prose">Порядок отражает выбранные исторические вехи, а не рейтинг качества. Нажмите карточку: внутри находятся история, области применения, ограничения и пример кода с обозначенным диалектом.</p></div>
+    <div class="mission-strip"><label for="language-mission">С какой целью вы пришли?</label><select id="language-mission"><option value="">Исследовать всю карту</option><option value="backend">Создавать серверы и бизнес-системы</option><option value="web">Разрабатывать веб-интерфейсы</option><option value="science">Работать с наукой и данными</option><option value="systems">Понимать системы и устройства</option><option value="mobile">Создавать мобильные приложения</option><option value="start">Начать изучение программирования</option></select><p id="mission-note" aria-live="polite">Задача помогает выбрать направление; конкретный язык зависит также от команды, платформы и существующего кода.</p></div>
+    <form class="language-controls" role="search" aria-label="Поиск по языкам">
+      <label class="language-search">Поиск<input id="language-search" type="search" placeholder="Язык, автор, идея или задача" autocomplete="off"></label>
+      <label>Историческая группа<select id="language-era"><option value="all">Все периоды</option></select></label>
+      <label>Подход<select id="language-paradigm"><option value="all">Все подходы</option></select></label>
+      <label>Применение<select id="language-use"><option value="all">Все области</option></select></label>
+      <button id="language-reset" type="button">Сбросить</button>
+    </form>
+    <div class="map-caption"><p>Время ↓ · идеи пересекаются · один язык может поддерживать несколько подходов</p><output id="language-count" aria-live="polite"></output></div>
+    <div id="language-groups"></div><p id="language-empty" role="status" hidden>Ничего не найдено. Попробуйте другое слово или сбросьте фильтры.</p>
+    <noscript><p>Для интерактивной карты включите JavaScript. История, архивный пример и раздел о перспективах доступны и без него.</p></noscript>
+  </section>
+
+  <section id="code-lab" class="atlas-section" aria-labelledby="lab-title">
+    <div class="section-heading"><p class="eyebrow">03 / МАСТЕРСКАЯ МАШИННОГО КОДА</p><h2 id="lab-title">Что происходит<br>между 2 + 3 и числом 5?</h2><p class="prose">Проследите шесть инструкций MOS 6502, процессора 1975 года. Это более поздняя и компактная архитектура, удобная для знакомства с низким уровнем. Пример не выдаётся за первую программу в истории.</p></div>
+    <div class="machine-workbench">
+      <div><div class="code-bar"><span>АДРЕС / БАЙТЫ / КОМАНДА</span><span>6502 · учебная модель</span></div><ol id="machine-list" class="machine-list" aria-label="Инструкции учебной программы"></ol></div>
+      <div class="machine-state"><div class="register-grid"><div><span>PC / следующий адрес</span><output id="machine-pc">$0600</output></div><div><span>A / аккумулятор</span><output id="machine-a">0</output></div><div><span>C / перенос</span><output id="machine-c">1</output></div><div><span>D / десятичный режим</span><output id="machine-d">1</output></div></div><div class="memory-slot"><span>ПАМЯТЬ / $0010</span><output id="machine-memory">0</output><span id="machine-binary">00000000</span></div><div class="machine-buttons"><button id="machine-step" type="button">Следующая инструкция →</button><button id="machine-reset" type="button">Сначала</button></div><p id="machine-status" role="status" aria-live="polite">Начальные значения для демонстрации: A = 0, C = 1, D = 1. Первые команды явно устанавливают нужные режимы.</p></div>
+    </div>
+    <details class="explanation"><summary>Почему здесь важны режим, перенос и последняя команда?</summary><p>ADC складывает значение аккумулятора, операнд и флаг переноса. Поэтому CLC очищает перенос перед сложением. CLD выбирает двоичную арифметику вместо десятичного режима.</p><p>BRK у реального 6502 вызывает программное прерывание и использует стек и вектор обработчика. В этой учебной модели показаны только A, C, D, адрес следующей инструкции и одна ячейка памяти; на BRK разбор останавливается. Это не полноценный эмулятор процессора и не средство запуска произвольного кода.</p><p>Источник системы команд: <a href="https://syncopate.us/books/Synertek6502ProgrammingManual.html" target="_blank" rel="noopener noreferrer">руководство семейства MCS6500, переиздание документации MOS Technology</a>.</p></details>
+  </section>
+
+  <section id="comparison" class="atlas-section" aria-labelledby="compare-title">
+    <div class="section-heading"><p class="eyebrow">04 / ОДНА ЗАДАЧА, РАЗНЫЕ МОДЕЛИ</p><h2 id="compare-title">Сумма квадратов:<br>1² + 2² + 3² + 4² + 5².</h2><p class="prose">Во всех вариантах результат равен 55. Мы сравниваем запись и организацию мысли, а не скорость: без одинаковых реализаций, среды и измерений такой тест ничего не доказывает.</p></div>
+    <div class="comparison-pickers"><label>Левая сторона<select id="compare-left"></select></label><span aria-hidden="true">↔</span><label>Правая сторона<select id="compare-right"></select></label></div>
+    <div id="comparison-panels" class="comparison-panels"></div>
+    <div class="comparison-comment"><h3>Lisp старше Java, но функциональный стиль не устарел.</h3><p>В функциональной записи мы выделяем преобразование и свёртку значений. Объектный подход помогает объединить состояние и операции над ним. Эти идеи совместимы: Java-объект в примере использует функциональный конвейер внутри метода. Ещё раньше Simula и Smalltalk исследовали объекты, а современные функциональные языки продолжают развиваться.</p></div>
+    <div class="paradigm-grid"><article><h3>Императивный</h3><p>Опишите, какие шаги и изменения состояния приведут к результату.</p></article><article><h3>Функциональный</h3><p>Составьте вычисление из функций и преобразований значений.</p></article><article><h3>Объектный</h3><p>Определите объекты, их обязанности, состояние и взаимодействие.</p></article><article><h3>Декларативный и логический</h3><p>Задайте нужный результат или отношения, оставив часть стратегии системе.</p></article></div>
+  </section>
+
+  <section class="atlas-section" aria-labelledby="other-title"><div class="section-heading"><p class="eyebrow">ДРУГИЕ ВЕТВИ</p><h2 id="other-title">За пределами основной карты</h2><p class="prose">Это не список «незначительных» языков. Здесь собраны другие влиятельные традиции, специализированные инструменты и менее распространённые направления, которые требуют отдельного разговора.</p></div>
+    <div class="other-branches"><article><h3>Функции, макросы, композиция</h3><p>Scheme, Racket, Clojure, F#, Elixir. Семейства различаются по типам, модели выполнения и отношению к изменяемому состоянию.</p></article><article><h3>Компактность и встраивание</h3><p>Forth, APL, Lua, Nim, Zig, Crystal. Среди них есть и языки со значительной промышленной историей, и более новые эксперименты.</p></article><article><h3>Платформы и прикладные среды</h3><p>Objective-C, Object Pascal / Delphi, Visual Basic, Groovy, PowerShell. Их роль часто определяется большой экосистемой существующего программного обеспечения.</p></article><article><h3>Особые предметные области</h3><p>Verilog и VHDL описывают цифровую аппаратуру; Solidity применяется для смарт-контрактов; Q# предназначен для квантовых алгоритмов. Их нельзя оценивать только по задачам обычного сайта.</p></article></div>
+    <details class="explanation"><summary>А где HTML, CSS и WebAssembly?</summary><p>HTML описывает структуру документа, CSS его представление. Они необходимы вебу, но их назначение отличается от универсального прикладного программирования.</p><p>WebAssembly является форматом инструкций и целью компиляции, а не очередным высокоуровневым языком вместо JavaScript. Программу для него можно получать из разных языков; доступ к окружению зависит от среды выполнения.</p></details>
+  </section>
+
+  <section id="future" class="atlas-section" aria-labelledby="future-title"><div class="section-heading"><p class="eyebrow">05 / ГОРИЗОНТ РАЗВИТИЯ</p><h2 id="future-title">Будущее складывается<br>из нескольких направлений.</h2><p class="prose">Срез на 31 октября 2026 года. Ниже разделены уже существующие возможности и направления дальнейшего развития. Здесь нет обещания, что один язык вытеснит остальные.</p></div>
+    <div class="future-grid">
+      <article><span>01 / ПАМЯТЬ</span><h3>Больше гарантий до запуска</h3><p><strong>Уже существует:</strong> владение и заимствование Rust, проверяемые ограничения типов, статические анализаторы.</p><p><strong>Направление:</strong> сокращать число ошибок времени жизни и постепенно улучшать безопасность больших существующих систем. Одного нового синтаксиса для этого недостаточно.</p></article>
+      <article><span>02 / КОНКУРЕНТНОСТЬ</span><h3>Задачи легче создавать, важнее завершать</h3><p><strong>Уже существует:</strong> процессы Erlang, горутины Go, async/await и виртуальные потоки Java, окончательно включённые в Java 21.</p><p><strong>Направление:</strong> яснее выражать отмену, границы задачи и управление ресурсами. Простота запуска не устраняет гонки и взаимные блокировки.</p></article>
+      <article><span>03 / ТИПЫ</span><h3>Модель данных ближе к задаче</h3><p><strong>Уже существует:</strong> вывод типов, nullable-типы, перечисления с данными и сопоставление с образцом в разных языках.</p><p><strong>Направление:</strong> раньше обнаруживать противоречия и точнее описывать допустимые состояния, сохраняя понятность повседневного кода.</p></article>
+      <article><span>04 / СОСУЩЕСТВОВАНИЕ</span><h3>Система говорит на нескольких языках</h3><p><strong>Уже существует:</strong> Python вызывает нативные численные библиотеки, Java и Kotlin работают рядом в JVM, SQL обслуживает данные приложения.</p><p><strong>Направление:</strong> улучшать межъязыковые интерфейсы и переносимость. WebAssembly расширяет варианты исполнения, но не отменяет различий платформ.</p></article>
+      <article><span>05 / ОБОРУДОВАНИЕ</span><h3>Данные движутся к ускорителю</h3><p><strong>Уже существует:</strong> GPU-библиотеки, специализированные ядра и векторные операции.</p><p><strong>Направление:</strong> удобнее описывать вычисление и размещение данных. Знакомый высокоуровневый код может скрывать сложную цепочку компиляторов и устройств.</p></article>
+      <article><span>06 / JAVA</span><h3>Развитие без разрыва экосистемы</h3><p><strong>Уже существует:</strong> записи record, лямбда-выражения, сопоставление с образцом и виртуальные потоки.</p><p><strong>Направление:</strong> проекты OpenJDK исследуют более эффективные модели данных и дальнейшее упрощение конкурентного кода. Включение конкретной возможности зависит от принятой спецификации, а не от календарного обещания.</p></article>
+      <article><span>07 / AI И ИНСТРУМЕНТЫ</span><h3>Код писать проще, проверять важнее</h3><p><strong>Уже существует:</strong> генерация фрагментов кода и помощь в поиске объяснений.</p><p><strong>Направление:</strong> связывать помощника с тестами, анализом и проверяемым контекстом проекта. Сгенерированный текст не заменяет понимание требований, архитектуры и ответственности за результат.</p></article>
+      <article><span>08 / НАСЛЕДИЕ</span><h3>Старый код продолжит жить рядом с новым</h3><p><strong>Уже существует:</strong> важные системы на C, COBOL и Fortran и современные средства их сопровождения.</p><p><strong>Направление:</strong> обновлять постепенно, сохраняя проверенное поведение. Возраст языка сам по себе не определяет ни качество системы, ни стоимость её замены.</p></article>
+    </div>
+    <aside class="closing-note"><h3>Выбирайте не победителя, а подходящий инструмент.</h3><p>Начните с задачи, среды, доступных библиотек и опыта команды. Изучение второго языка ценно уже тем, что помогает иначе увидеть первый. Для Java-разработчика знакомство с Lisp, SQL или Rust может оказаться способом точнее мыслить о собственном коде.</p><a href="/index.html#catalog">Вернуться к книгам и продолжить чтение ↗</a></aside>
+  </section>
+
+  <details class="atlas-sources"><summary>Источники, датировки и примеры</summary><p class="prose">Это самостоятельный редакционный обзор. Даты обозначают подписанные вехи: начало работы, публичный анонс, реализацию или стандарт. Примеры являются учебными, кроме явно отмеченного фрагмента EDSAC. Старый язык может быть показан в позднейшем диалекте; версия указана у каждого фрагмента. Фрагмент не всегда является самостоятельной программой. Результаты не являются сравнением производительности.</p><ul>
+    <li><a href="https://www.sciencemuseum.org.uk/objects-and-stories/women-computing" target="_blank" rel="noopener noreferrer">Science Museum: Ада Лавлейс и история программирования</a></li>
+    <li><a href="https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf" target="_blank" rel="noopener noreferrer">Алан Тьюринг: On Computable Numbers, 1936</a></li>
+    <li><a href="https://zuse.zib.de/pdfs" target="_blank" rel="noopener noreferrer">Архив Конрада Цузе: документы о Plankalkül</a></li>
+    <li><a href="https://www.cs.manchester.ac.uk/about/history-and-heritage/" target="_blank" rel="noopener noreferrer">Манчестер: история Baby</a></li>
+    <li><a href="https://www.cl.cam.ac.uk/~mr10/Edsac.html" target="_blank" rel="noopener noreferrer">Кембридж: EDSAC и архив программы квадратов</a></li>
+    <li><a href="https://www.ibm.com/history/fortran" target="_blank" rel="noopener noreferrer">IBM: история Fortran</a>; <a href="https://jmc.stanford.edu/articles/recursive/recursive.pdf" target="_blank" rel="noopener noreferrer">Джон Маккарти: работа о рекурсивных функциях и Lisp, 1960</a></li>
+    <li><a href="https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html" target="_blank" rel="noopener noreferrer">Oracle: виртуальные потоки Java 21</a>; <a href="https://openjdk.org/projects/valhalla/" target="_blank" rel="noopener noreferrer">OpenJDK: проект Valhalla</a></li>
+    <li><a href="https://webassembly.org/docs/high-level-goals/" target="_blank" rel="noopener noreferrer">WebAssembly: цели и модель платформы</a>; <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html" target="_blank" rel="noopener noreferrer">Rust: владение</a></li>
+  </ul><p>Документация конкретных языков доступна в их карточках. Карта не утверждает наличие всех упомянутых книг в магазине. Проверено 31.10.2026.</p></details>
+</main>
+<dialog id="language-detail" aria-labelledby="language-detail-title"><button id="language-close" type="button" aria-label="Закрыть карточку языка">×</button><p class="eyebrow" id="language-detail-year"></p><h2 id="language-detail-title"></h2><p id="language-detail-people" class="language-people"></p><div id="language-detail-tags" class="language-tags"></div><div id="language-detail-body"></div><h3>Что учитывать</h3><p id="language-detail-limit"></p><div class="code-bar"><span id="language-detail-dialect"></span><button id="language-copy" type="button">Копировать код</button></div><pre tabindex="0"><code id="language-detail-code"></code></pre><p id="language-detail-explain"></p><p id="language-copy-status" role="status" aria-live="polite"></p><a id="language-detail-source" target="_blank" rel="noopener noreferrer">Документация и историческая справка ↗</a><h3>Связанные идеи</h3><div id="language-related"></div><button id="language-locate" type="button">Показать на карте</button></dialog>
+<footer>ПЕРЕПЛЁТ · АТЛАС ЯЗЫКОВ ПРОГРАММИРОВАНИЯ<span>© 2026 Анцибор А.В.</span></footer>
+</body></html>
