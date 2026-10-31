@@ -281,6 +281,9 @@ function appendPDFControls(target, book) {
   const source = node('a', 'Как работает чтение PDF · Java', 'pdf-source-link');
   source.href = '/pdf-reading-code.html'; source.target = '_blank'; source.rel = 'noopener';
   target.append(source);
+  const downloadSource = node('a', 'Как работает скачивание · Java', 'pdf-source-link');
+  downloadSource.href = '/pdf-download-code.html'; downloadSource.target = '_blank'; downloadSource.rel = 'noopener';
+  target.append(downloadSource);
 }
 function render() {
   $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;

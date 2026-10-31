@@ -91,6 +91,7 @@ public class WebSecurity {
                         "/reader.js",
                         "/reader.css",
                         "/pdf-reading-code.html",
+                        "/pdf-download-code.html",
                         "/pdf-reading-code.css",
                         "/pdfjs/5.6.205/**",
                         "/api/java-library/*/content",

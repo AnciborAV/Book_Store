@@ -44,6 +44,9 @@ function downloadControls(book, info) {
   const source = el('a', 'Как работает чтение PDF · Java', 'pdf-source-link');
   source.href = '/pdf-reading-code.html'; source.target = '_blank'; source.rel = 'noopener';
   info.append(source);
+  const downloadSource = el('a', 'Как работает скачивание · Java', 'pdf-source-link');
+  downloadSource.href = '/pdf-download-code.html'; downloadSource.target = '_blank'; downloadSource.rel = 'noopener';
+  info.append(downloadSource);
 }
 const admin = () => getUser?.()?.role === 'ADMIN';
 const mb = bytes => (bytes / 1024 / 1024).toLocaleString('ru', { maximumFractionDigits: 1 }) + ' МБ';
