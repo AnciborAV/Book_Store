@@ -13,6 +13,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AnnouncementTest {
  @Autowired MockMvc mvc;
  @Autowired JdbcTemplate jdbc;
+ @Test void formattedDraftRemainsPrivateAndCanBePublished()throws Exception {
+  jdbc.update("UPDATE site_announcement SET body='',body_style='[]',published=FALSE,version=0 WHERE id=1");
+  String payload="{\"body\":\"Hello\",\"published\":false,\"version\":0,\"bodyStyle\":[{\"start\":0,\"end\":5,\"bold\":true,\"size\":24}]}";
+  mvc.perform(put("/api/admin/announcement").with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload)).andExpect(status().isNoContent());
+  mvc.perform(get("/api/announcement")).andExpect(jsonPath("$.body").value("")).andExpect(jsonPath("$.bodyStyle.length()").value(0));
+  mvc.perform(get("/api/admin/announcement").with(user("admin").roles("ADMIN"))).andExpect(jsonPath("$.bodyStyle[0].size").value(24));
+  mvc.perform(put("/api/admin/announcement").with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content("{\"body\":\"Hello\",\"published\":true,\"version\":1}")).andExpect(status().isNoContent());
+  mvc.perform(get("/api/announcement")).andExpect(jsonPath("$.bodyStyle[0].bold").value(true));
+ }
  @Test void adminPublicationIsProtectedAndHiddenTextStaysPrivate() throws Exception {
   jdbc.update("UPDATE site_announcement SET body='',published=FALSE,version=0 WHERE id=1");
   String payload="{\"body\":\"Welcome\",\"published\":true,\"version\":0}";

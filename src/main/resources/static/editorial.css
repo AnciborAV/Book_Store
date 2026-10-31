@@ -44,7 +44,7 @@
 #description-body h3 { font-family: inherit; font-weight: 600; font-size: 16px; line-height: 1.5; color: #e1bd81; margin: 22px 0 8px; }
 
 /* Keep catalogue previews compact; the description dialog retains the full text. */
-.editorial-note-preview p {
+.editorial-note-preview > .editorial-comment-prose {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;

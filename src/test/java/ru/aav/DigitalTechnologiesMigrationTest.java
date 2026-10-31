@@ -19,6 +19,18 @@ class DigitalTechnologiesMigrationTest {
         s.execute("CREATE TABLE store_sections(id VARCHAR(80) PRIMARY KEY,name VARCHAR(80) NOT NULL UNIQUE,catalog_key VARCHAR(255) NOT NULL UNIQUE,library_key VARCHAR(32) NOT NULL UNIQUE,sort_order INTEGER NOT NULL DEFAULT 0,version BIGINT NOT NULL DEFAULT 0)");
     }
     String value(Statement s,String sql)throws SQLException {try(var result=s.executeQuery(sql)){result.next();return result.getString(1);}}
+    @Test void formattingMigrationKeepsLegacyTextAndAddsEmptyFormatting()throws Exception {
+        try(var c=connection();var s=c.createStatement()) {
+            s.execute("CREATE TABLE book_editorial(id INTEGER PRIMARY KEY,description TEXT,comment TEXT)");
+            s.execute("CREATE TABLE site_announcement(id INTEGER PRIMARY KEY,body TEXT)");
+            s.execute("INSERT INTO book_editorial VALUES(1,'Описание с абзацами','Комментарий редактора')");
+            s.execute("INSERT INTO site_announcement VALUES(1,'Прежнее объявление')");
+            migrate(c,"text-formatting.xml");
+            assertThat(value(s,"SELECT description || '/' || comment FROM book_editorial")).isEqualTo("Описание с абзацами/Комментарий редактора");
+            assertThat(value(s,"SELECT description_style || '/' || comment_style FROM book_editorial")).isEqualTo("[]/[]");
+            assertThat(value(s,"SELECT body || '/' || body_style FROM site_announcement")).isEqualTo("Прежнее объявление/[]");
+        }
+    }
     @Test void createsAnEmptyManagedSectionEvenInAnEmptyCatalogue()throws Exception {
         try(var c=connection();var s=c.createStatement()) {
             sections(s);migrate(c,"digital-technologies-section.xml");

@@ -1,3 +1,4 @@
+import {decorateProse,fieldStyles,renderComment} from './text-formatting.js';
 // Preview only: saved text and public rendering are not changed.
 export function fillPreview(target,text,kind) {
   target.replaceChildren();
@@ -18,7 +19,7 @@ export function setupProsePreviews(form) {
     const body=document.createElement('div');body.id='editorial-preview-'+name;body.dataset.proseKind=name;
     preview.setAttribute('aria-label','Предпросмотр: '+label.toLocaleLowerCase('ru'));preview.append(title,body);
     field.closest('label').after(preview);
-    const refresh=()=>{fillPreview(body,field.value,name);preview.hidden=!field.value.trim();};
+    const refresh=()=>{if(name==='comment')renderComment(body,field.value,fieldStyles(field));else{fillPreview(body,field.value,name);decorateProse(body,field.value,fieldStyles(field));}preview.hidden=!field.value.trim();};
     field.addEventListener('input',refresh);refreshers.push(refresh);refresh();
   }
   return ()=>refreshers.forEach(refresh=>refresh());

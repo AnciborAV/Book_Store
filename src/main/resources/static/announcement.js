@@ -1,5 +1,6 @@
 import { request } from './api-client.js';
-let context, version=0;
+import {setupTextFormatting,appendStyledText} from './text-formatting.js';
+let context, version=0, textEditor;
 const $=id=>document.getElementById(id);
 export function setupAnnouncement(ctx) {
   context=ctx;
@@ -17,17 +18,23 @@ export function setupAnnouncement(ctx) {
     <div class="eyebrow">ОБРАЩЕНИЕ К ЧИТАТЕЛЯМ</div><h2 id="announcement-title">Объявление на сайте</h2>
     <form id="announcement-form"><label for="announcement-text">Ваш текст</label>
     <textarea id="announcement-text" maxlength="1500" rows="7" required placeholder="Дорогие читатели! Наш сайт активно развивается…"></textarea>
-    <p class="announcement-help">До 1500 символов. Подпись «С уважением, Анцибор Андрей» добавится автоматически.</p>
+    <p class="announcement-help">До 1500 символов. Выделите слова в поле и используйте панель оформления; результат виден в предпросмотре. Подпись «С уважением, Анцибор Андрей» добавится автоматически.</p>
     <p id="announcement-error" role="alert"></p><div class="announcement-actions">
     <button class="button dark" type="submit">Опубликовать</button>
     <button class="button light" type="button" id="announcement-hide">Скрыть объявление</button></div></form>`;
   document.body.append(dialog);
+  textEditor=setupTextFormatting($('announcement-text'),'Объявление');
+  const preview=document.createElement('section');preview.className='announcement-style-preview';
+  const title=document.createElement('h3');title.textContent='Предпросмотр объявления';
+  const body=document.createElement('p');preview.append(title,body);$('announcement-text').after(preview);
+  const previewText=()=>{preview.hidden=!$('announcement-text').value.trim();appendStyledText(body,$('announcement-text').value,textEditor.getStyles());};
+  $('announcement-text').addEventListener('input',previewText);previewText();
   dialog.querySelector('.close').onclick=()=>dialog.close();
   open.onclick=async()=>{
     open.disabled=true;
     try {
       const n=await request('/api/admin/announcement'); version=n.version;
-      $('announcement-text').value=n.body; $('announcement-hide').hidden=!n.published;
+      textEditor.setValue(n.body,n.bodyStyle);previewText(); $('announcement-hide').hidden=!n.published;
       $('announcement-error').textContent=''; $('profile-dialog').close(); dialog.showModal();
     } catch(e) { open.textContent=e.message; }
     finally {open.disabled=false;}
@@ -45,6 +52,7 @@ async function refresh() {
   try {
     const n=await request('/api/announcement');
     $('owner-note-body').textContent=n.body;
+    if(n.bodyStyle?.length)appendStyledText($('owner-note-body'),n.body,n.bodyStyle);
     $('owner-announcement').hidden=!n.published;
     document.dispatchEvent(new CustomEvent('announcement-changed'));
   } catch(_) { /* Keep the rest of the storefront available. */ }
@@ -54,7 +62,7 @@ async function save(published) {
   buttons.forEach(b=>b.disabled=true); $('announcement-error').textContent='';
   try {
     await request('/api/admin/announcement',{method:'PUT',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({body:$('announcement-text').value.trim(),published,version})});
+      body:JSON.stringify({body:$('announcement-text').value,published,version,bodyStyle:textEditor.getStyles()})});
     $('announcement-editor').close(); await refresh();
   } catch(e) { $('announcement-error').textContent=e.message; }
   finally { buttons.forEach(b=>b.disabled=false); }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+ <changeSet id="text-formatting-20261031" author="aav"><sql>
+ ALTER TABLE book_editorial ADD COLUMN description_style TEXT NOT NULL DEFAULT '[]';
+ ALTER TABLE book_editorial ADD COLUMN comment_style TEXT NOT NULL DEFAULT '[]';
+ ALTER TABLE site_announcement ADD COLUMN body_style TEXT NOT NULL DEFAULT '[]';
+ </sql></changeSet>
+</databaseChangeLog>
