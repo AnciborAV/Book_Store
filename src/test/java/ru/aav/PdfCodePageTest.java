@@ -29,4 +29,17 @@ class PdfCodePageTest {
     @Test void sourcePageDoesNotGrantAccessToPrivateActions() throws Exception {
         mvc.perform(get("/api/admin/site-feedback")).andExpect(status().isUnauthorized());
     }
+
+    @Test void projectWorkshopIsPublicAndLinkedFromAbout() throws Exception {
+        for (String path : new String[]{"/inside-pereplet.html", "/inside-pereplet.css"}) {
+            mvc.perform(get(path)).andExpect(status().isOk())
+                .andExpect(header().string("X-Frame-Options", "DENY"));
+        }
+        for (String path : new String[]{"/covers/inside-library.webp", "/covers/inside-feedback.webp"}) {
+            mvc.perform(get(path)).andExpect(status().isOk())
+                .andExpect(content().contentType("image/webp"));
+        }
+        mvc.perform(get("/index.html")).andExpect(status().isOk())
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("href=\"/inside-pereplet.html\"")));
+    }
 }

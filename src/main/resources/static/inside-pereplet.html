@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Как устроен «Переплёт» изнутри</title>
+    <meta name="description" content="Авторская мастерская «Переплёта»: Java-код библиотеки, устройство проекта и путь читательского отзыва в базу данных." />
+    <link rel="stylesheet" href="/pdf-reading-code.css" />
+    <link rel="stylesheet" href="/inside-pereplet.css" />
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/index.html#about">← О магазине</a>
+      <header class="workshop-heading">
+        <p class="eyebrow">АВТОРСКАЯ МАСТЕРСКАЯ · JAVA 21</p>
+        <h1>Как устроен<br /><em>«Переплёт» изнутри</em></h1>
+        <p class="intro">За каждой книгой на экране стоят строки кода, связи данных и множество небольших решений. Здесь можно увидеть рабочую среду, в которой создаётся «Переплёт», и проследить путь от привычного действия на сайте до его обработки внутри приложения.</p>
+      </header>
+      <nav class="workshop-nav" aria-label="Мастерская проекта">
+        <a href="#library">Библиотека и код</a>
+        <a href="#feedback">Отзывы и данные</a>
+      </nav>
+      <section id="library" class="workshop-chapter" aria-labelledby="library-title">
+        <span class="chapter-number">01 / БИБЛИОТЕКА</span>
+        <h2 id="library-title">От кнопки к книге</h2>
+        <p>Читатель нажимает «Читать», а приложение находит PDF, проверяет его версию и передаёт запрошенные данные браузеру. На снимке открыт метод <code>read</code> класса <code>JavaLibraryService</code>: часть механизма, который позволяет работать с книгой прямо на сайте.</p>
+        <figure>
+          <a href="/covers/inside-library.webp" target="_blank" rel="noopener" aria-label="Открыть снимок устройства библиотеки в полном размере">
+            <img src="/covers/inside-library.webp" width="2698" height="1690" alt="Рабочая среда IntelliJ IDEA: дерево пакетов Переплёта, классы библиотеки и фрагмент метода JavaLibraryService.read." />
+          </a>
+          <figcaption>Библиотека в рабочей среде IntelliJ IDEA. Слева видны части проекта, в центре открыт Java-код, внизу находится консоль запуска. Нажмите на снимок, чтобы рассмотреть детали.</figcaption>
+        </figure>
+        <div class="workshop-details">
+          <h3>У каждой части своя задача</h3>
+          <p>Пакет <code>library</code> объединяет работу с электронными книгами. Контроллер принимает запрос, сервис выполняет операции с книгой, а вспомогательные классы готовят файлы и ресурсы для чтения. Рядом находятся другие части магазина: аккаунты, каталог, заказы и отзывы.</p>
+          <div class="workshop-links"><a href="/pdf-reading-code.html">Код чтения PDF →</a><a href="/pdf-download-code.html">Код скачивания →</a></div>
+        </div>
+      </section>
+      <section id="feedback" class="workshop-chapter" aria-labelledby="feedback-title">
+        <span class="chapter-number">02 / ОБРАТНАЯ СВЯЗЬ</span>
+        <h2 id="feedback-title">От сообщения к записи в базе</h2>
+        <p>Отзыв, который виден на странице магазина, сначала проходит через Java-метод и сохраняется в PostgreSQL. На втором снимке код <code>FeedbackService.create</code> показан рядом со структурой таблиц и результатом запроса. Внизу можно узнать опубликованные отзывы посетителей.</p>
+        <figure>
+          <a href="/covers/inside-feedback.webp" target="_blank" rel="noopener" aria-label="Открыть снимок кода и базы отзывов в полном размере">
+            <img src="/covers/inside-feedback.webp" width="2694" height="1686" loading="lazy" decoding="async" alt="IntelliJ IDEA: FeedbackService.create, связь таблиц store_users и site_feedback и строки опубликованных отзывов в PostgreSQL." />
+          </a>
+          <figcaption>Одна функция в трёх представлениях: Java-код, схема данных и сохранённые сообщения. Снимок показывает опубликованные отзывы. Нажмите на изображение для увеличения.</figcaption>
+        </figure>
+        <div class="workshop-details">
+          <h3>У слов читателя есть свой путь</h3>
+          <p>Метод проверяет повторную отправку, ограничивает частоту сообщений и сохраняет текст вместе с автором и согласием на публикацию. Затем уведомление ставится в очередь для редактора. На сайт отзыв попадает после проверки и только с разрешения автора.</p>
+          <a class="back" href="/index.html#site-feedback">К отзывам посетителей →</a>
+        </div>
+      </section>
+      <footer class="workshop-footer"><p>Эти два снимка показывают часть ежедневной работы над «Переплётом»: соединение книг, читательского опыта и программирования.</p><span>© 2026 Анцибор А.В.</span></footer>
+    </main>
+  </body>
+</html>
