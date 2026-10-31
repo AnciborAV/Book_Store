@@ -1,5 +1,5 @@
 import { request } from './api-client.js';
-import {fillProse,setupProsePreviews} from './editorial-prose.js';
+import {setupProsePreviews} from './editorial-prose.js';
 const $ = s => document.querySelector(s);
 const element = (tag, text, cls) => {
   const n = document.createElement(tag);
@@ -26,8 +26,7 @@ async function all(refresh = false) {
 }
 function fillCommentPreview(note, book) {
   note.classList.add('editorial-note-preview');
-  const prose=element('div');fillProse(prose,book.comment);
-  note.append(element('strong', 'Комментарий редактора'),prose);
+  note.append(element('strong', 'Комментарий редактора'), element('p', book.comment));
   const more = button('Читать полностью', () => showDescription(book.kind, String(book.id)), 'text-button editorial-read-more');
   more.setAttribute('aria-label', 'Читать комментарий полностью: ' + book.title);
   note.append(more);
@@ -82,7 +81,7 @@ function renderHeroBook() {
   const content=element('div',undefined,'hero-book-content');
   const info=element('div');
   info.append(element('h2',b.title),element('p',b.author,'hero-book-author'));
-  if(b.comment) { const prose=element('div',undefined,'hero-book-comment');fillProse(prose,b.comment);info.append(prose); }
+  if(b.comment) info.append(element('p',b.comment,'hero-book-comment'));
   info.append(button('О книге ↗',()=>showDescription(b.kind,b.id),'button light'));
   content.append(picture(b),info);card.append(content);
 }
@@ -190,11 +189,11 @@ export async function showDescription(kind,id,initialTab='description') {
     if(ticket!==detailNumber || !$('#description-dialog').open)return;
     $('#description-title').textContent=b.title; $('#description-author').textContent=b.author;
     const body=$('#description-body'); body.replaceChildren();
-    fillProse(body,b.description || 'Описание этой книги пока не добавлено.');
-    if(b.comment) {
-      const prose=element('div');fillProse(prose,b.comment);
-      $('#description-comment').append(element('strong','Комментарий редактора'),prose);
+    for(const paragraph of (b.description || 'Описание этой книги пока не добавлено.').split(/\n\s*\n/)) {
+      const heading=paragraph.length<65 && !/[.!?…]$/.test(paragraph.trim());
+      body.append(element(heading ? 'h3' : 'p',paragraph));
     }
+    if(b.comment) $('#description-comment').append(element('strong','Комментарий редактора'),element('p',b.comment));
     $('#description-comment').hidden=!b.comment;
     $('#description-edit').hidden=!admin(); $('#description-edit').onclick=()=>editBook(kind,id);
   } catch(e) { if(ticket===detailNumber)$('#description-body').textContent=e.message; }

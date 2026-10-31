@@ -34,36 +34,16 @@ pre, code {
   hyphens: none;
 }
 
-/* Editorial prose uses real paragraphs, including single Enter line breaks. */
-.reading-prose > p,
-#description-body.reading-prose > p,
-.reading-hero .hero-editorial-book .reading-prose > p {
-  text-align: justify;
-  text-align-last: left;
-  text-indent: 1em;
-  text-justify: inter-word;
-  white-space: normal;
-  hyphens: none;
-  -webkit-hyphens: none;
-  overflow-wrap: break-word;
-}
-textarea[name="description"], textarea[name="comment"] {
+/* Editor-only typography; published content retains its existing styles. */
+#editorial-form textarea[name="description"],
+#editorial-form textarea[name="comment"] {
   text-align: justify;
   text-align-last: left;
   text-indent: 1em;
   line-height: 1.7;
 }
-.editorial-prose-preview {
-  padding: 18px 22px;
-  border: 1px solid #96774766;
-  border-radius: 5px;
-  background: #dcb87b08;
-}
-.editorial-prose-preview h3 {
-  margin: 0 0 14px;
-  color: #dfbc81;
-  font: 14px/1.5 Georgia, serif;
-}
-.editorial-prose-preview p { margin: 12px 0; font-size: 16px; line-height: 1.7; }
-.editorial-prose-preview .reading-prose > p:first-child { margin-top: 0; }
-.editorial-prose-preview .reading-prose > p:last-child { margin-bottom: 0; }
+.editorial-prose-preview { padding:18px 22px; border:1px solid #96774766; border-radius:5px; background:#dcb87b08; }
+.editorial-prose-preview h3 { margin:0 0 14px; color:#dfbc81; font:14px/1.5 Georgia,serif; }
+.editorial-prose-preview p { text-align:justify; text-align-last:left; text-indent:1em; margin:12px 0; font-size:16px; line-height:1.7; hyphens:none; -webkit-hyphens:none; overflow-wrap:break-word; }
+.editorial-prose-preview [data-prose-kind="comment"] p { white-space:pre-wrap; }
+.editorial-prose-preview [data-prose-kind="description"] p { white-space:normal; }
