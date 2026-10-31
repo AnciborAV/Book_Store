@@ -67,3 +67,25 @@
   .home-hero-quiet .hero-quote { margin-bottom: 32px; }
   .home-hero-quiet h1 { font-size: clamp(30px, 8vw, 38px); letter-spacing: -.5px; }
 }
+
+/* Keep the shortened opening near the masthead, with or without a recommendation. */
+.home-masthead .reading-hero.home-hero-quiet {
+  align-items: start;
+  align-content: start;
+  min-height: 0;
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+.home-masthead .home-hero-quiet .hero-copy { margin-inline: 0; }
+.home-masthead .home-hero-quiet .hero-quote { margin: 0 0 28px; }
+.home-masthead .home-hero-quiet h1 {
+  margin: 0;
+  font-size: clamp(34px, 3.7vw, 50px);
+}
+@media (max-width: 1000px) {
+  .home-masthead .reading-hero.home-hero-quiet { padding-top: 28px; gap: 28px; }
+}
+@media (max-width: 480px) {
+  .home-masthead .reading-hero.home-hero-quiet { padding-top: 24px; padding-bottom: 32px; }
+  .home-masthead .home-hero-quiet h1 { font-size: clamp(30px, 8vw, 38px); }
+}
