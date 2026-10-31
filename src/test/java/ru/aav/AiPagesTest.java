@@ -18,7 +18,7 @@ class AiPagesTest {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
     }
     @Test void readingAtlasPagesAndAssetsArePublicWithoutFramePermission()throws Exception {
-        for(String path:new String[]{"/programming-atlas.html","/programming-atlas.js","/programming-atlas-core.js","/programming-atlas-data.js","/programming-atlas.css","/reading-atlas.html","/reading-atlas.js","/reading-atlas-data.js","/reading-atlas.css","/atlas-navigation.js","/atlas-navigation.css"})
+        for(String path:new String[]{"/digital-atlas.html","/digital-atlas.css","/digital-atlas.js","/digital-atlas-core.js","/digital-atlas-data.js","/covers/digital-atlas/constellation.svg","/programming-atlas.html","/programming-atlas.js","/programming-atlas-core.js","/programming-atlas-data.js","/programming-atlas.css","/reading-atlas.html","/reading-atlas.js","/reading-atlas-data.js","/reading-atlas.css","/atlas-navigation.js","/atlas-navigation.css"})
             mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
     }
     @Test void stylesScriptsAndLocalPhotographsArePublic()throws Exception {

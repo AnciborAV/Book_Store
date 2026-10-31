@@ -4,6 +4,7 @@ export function atlasForSection(section) {
   if (/^зарубежн(?:ая литература|ые авторы)$/.test(name)) return {id:'foreign',label:'Атлас зарубежной литературы'};
   if (/^(?:русская литература|русские авторы|российские авторы)$/.test(name)) return {id:'russian',label:'Атлас русской литературы'};
   if (section?.id === 'java' || name === 'java') return {id:'programming',label:'Атлас языков программирования',href:'/programming-atlas.html'};
+  if (section?.id === 'digital-technologies' || name === 'современные цифровые технологии') return {id:'digital',label:'Атлас современных цифровых технологий',href:'/digital-atlas.html'};
   if (/^философия$/.test(name)) return {id:'philosophy',label:'Атлас философских направлений'};
   return null;
 }
