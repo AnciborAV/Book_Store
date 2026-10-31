@@ -10,6 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EditorialController {
     private final EditorialService service;
+    private final AuthorProfiles authors;
     public record Edit(@Min(-1) long version, @NotNull @Size(max=3000) String description,
                        @NotNull @Size(max=8) List<@NotBlank @Size(max=50) String> lists,
                        @NotNull @Size(max=1000) String comment) {}
@@ -20,6 +21,11 @@ public class EditorialController {
     @GetMapping("/api/editorial/books/{kind}/{id}")
     public EditorialService.Book book(@PathVariable String kind, @PathVariable String id) {
         return service.get(kind,id);
+    }
+    @GetMapping("/api/editorial/books/{kind}/{id}/authors")
+    public AuthorProfiles.Detail authors(@PathVariable String kind, @PathVariable String id) {
+        var book=service.get(kind,id);
+        return authors.find(book.title(),book.author());
     }
     @PutMapping("/api/admin/editorial/books/{kind}/{id}")
     public EditorialService.Book save(@PathVariable String kind, @PathVariable String id, @Valid @RequestBody Edit edit) {

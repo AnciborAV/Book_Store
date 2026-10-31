@@ -228,8 +228,14 @@ interface Reader {
 // Каждая книга открывает новый мир.
 record Chapter(String title, int pages) { }</pre>
       <div class="description-content"><div class="editorial-dialog-head"><span class="eyebrow">О КНИГЕ</span><button type="button" class="text-button" data-editorial-close>Закрыть ✕</button></div>
-      <h2 id="description-title"></h2><p id="description-author" class="description-author"></p><div id="description-body" lang="ru"></div>
+      <h2 id="description-title"></h2><p id="description-author" class="description-author"></p><div class="book-detail-tabs" role="tablist" aria-label="О книге и авторе">
+        <button id="book-description-tab" type="button" role="tab" aria-selected="true" aria-controls="book-description-panel">Описание</button>
+        <button id="book-author-tab" type="button" role="tab" aria-selected="false" aria-controls="book-author-panel" tabindex="-1">Автор</button>
+      </div>
+      <section id="book-description-panel" role="tabpanel" aria-labelledby="book-description-tab"><div id="description-body" lang="ru"></div>
       <p id="description-source"></p><aside id="description-comment" class="editorial-note"></aside>
+      </section>
+      <section id="book-author-panel" role="tabpanel" aria-labelledby="book-author-tab" lang="ru" hidden><div id="book-authors" aria-live="polite"></div></section>
       <button id="description-edit" type="button" class="button light" hidden>Редактировать описание и рекомендацию</button></div>
     </dialog>
     <dialog id="editorial-editor" class="editorial-dialog" aria-labelledby="editorial-edit-title">
