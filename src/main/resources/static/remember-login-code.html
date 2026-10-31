@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Как сайт запоминает меня · Переплёт</title>
+    <link rel="stylesheet" href="/pdf-reading-code.css" />
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/index.html">← В «Переплёт»</a>
+      <p class="eyebrow">ПО ТУ СТОРОНУ ЛИЧНОГО КАБИНЕТА · JAVA 21</p>
+      <h1>Как сайт запоминает меня</h1>
+      <p class="intro">Отметка «Запомнить меня» помогает вернуться в свой аккаунт без повторного ввода пароля. Для этого механизма браузер хранит специальный токен в cookie, а не ваш пароль. В «Переплёте» запоминание входа настроено на 30 дней.</p>
+      <figure>
+        <a href="/covers/remember-login-code.webp" target="_blank" rel="noopener" aria-label="Открыть снимок Java-кода запоминания входа в полном размере в новой вкладке">
+          <img src="/covers/remember-login-code.webp" width="2266" height="960" alt="Снимок IntelliJ IDEA: методы createSuccessfulAuthentication и setCookie класса RememberedLogin, обновление идентификатора сессии, регистрация сессии и параметры cookie." />
+        </a>
+        <figcaption>Настоящий фрагмент класса RememberedLogin, снятый автором проекта в IntelliJ IDEA. Нажмите на изображение, чтобы открыть его в полном размере.</figcaption>
+      </figure>
+      <section aria-labelledby="remember-steps-title">
+        <h2 id="remember-steps-title">Что показывает этот код</h2>
+        <ol>
+          <li><strong>Восстановление входа.</strong> Проверку токена выполняет механизм Spring Security. Метод createSuccessfulAuthentication завершает создание объекта аутентификации и меняет идентификатор сессии.</li>
+          <li><strong>Учёт сессий.</strong> Восстановленная сессия регистрируется, чтобы приложение могло завершить её при сбросе пароля.</li>
+          <li><strong>Cookie с настройками защиты.</strong> Метод setCookie задаёт HttpOnly, ограничивая доступ JavaScript к cookie, включает Secure при защищённом соединении или соответствующей настройке и устанавливает SameSite=Lax.</li>
+        </ol>
+        <p>Срок запоминания задаётся в другой части класса. На общем или чужом устройстве снимите отметку «Запомнить меня», а по окончании работы выйдите из аккаунта.</p>
+      </section>
+    </main>
+  </body>
+</html>
