@@ -1,4 +1,5 @@
 import { request } from './api-client.js';
+import { createFeedbackCode } from './feedback-code.js';
 let context, publicPage = 0, adminPage = 0, adminState = 'PENDING', generation = 0;
 const labels = { REVIEW: 'Отзыв', ISSUE: 'Замечание', IDEA: 'Предложение' };
 const $ = id => document.getElementById(id);
@@ -111,6 +112,10 @@ async function load(admin) {
     for (const item of data.items) {
       const card = el('article', '', 'feedback-card');
       card.append(el('strong', item.author), el('p', `${labels[item.kind]} · ${new Date(item.createdAt).toLocaleDateString('ru-RU')}`, 'muted'), el('p', item.body, 'feedback-body'));
+      if (!admin && item.kind === 'REVIEW' && item.author.trim() === 'Мария'
+          && /^Отличная\s+подборка\s+книг(?:\s|[.!…]|$)/u.test(item.body.trim())) {
+        card.append(createFeedbackCode());
+      }
       if (admin) {
         const controls = el('div', '', 'feedback-controls');
         card.append(el('p', item.publicConsent ? 'Автор разрешил публикацию.' : 'Только для администратора. Публикация запрещена.', 'muted'));

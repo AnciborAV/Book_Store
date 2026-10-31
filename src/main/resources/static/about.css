@@ -1,6 +1,12 @@
 #about[hidden], #about [hidden] { display:none !important; }
 #about-edit { float:right; margin:0 0 20px 20px; }
 #about-story-body p, .about-story-lead, .about-story-signature { white-space:pre-line; overflow-wrap:anywhere; }
+/* Compact prose; keep paragraph indents from reading-text.css. */
+#about.about-story #about-story-body p,
+#about.about-story p.about-story-lead {
+  line-height: 1.2;
+  margin: 0;
+}
 #about-editor { width:min(900px,calc(100vw - 24px)); max-width:900px; max-height:calc(100dvh - 32px); padding:28px; overflow:auto; color:var(--ink); background:#252019; border:1px solid var(--line); }
 #about-editor::backdrop { background:#000b; }
 .about-editor-heading { display:flex; align-items:start; justify-content:space-between; gap:16px; }
