@@ -92,6 +92,8 @@ public class WebSecurity {
                         "/reader.css",
                         "/pdf-reading-code.html",
                         "/remember-login-code.html",
+                        "/inside-pereplet.html",
+                        "/inside-pereplet.css",
                         "/pdf-download-code.html",
                         "/pdf-reading-code.css",
                         "/pdfjs/5.6.205/**",
