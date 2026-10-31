@@ -1,7 +1,25 @@
-/* Shared prose typography. Headings, controls and code keep their own alignment. */
+/* Main storefront reading typography. Component files own layout and type sizes. */
+:root {
+  --reading-indent: 1em;
+  --book-reading-indent: 1.5em;
+}
+
+/* Shared prose rules; the explicit component selectors retain existing priority. */
 body p,
 body .feedback-body,
-body .hero-note {
+body .hero-note,
+#description-body p,
+#owner-note-body,
+.editorial-note p,
+.reading-hero .hero-editorial-book p,
+.about-story p,
+.about-story p.about-story-signature,
+.book-author-biography p,
+.book-author-work p,
+.editorial-prose-preview p,
+.announcement-style-preview p,
+.editorial-comment-prose > p,
+.reading-hero .hero-editorial-book .editorial-comment-prose > p {
   text-align: justify;
   text-align-last: left;
   text-justify: inter-word;
@@ -11,39 +29,67 @@ body .hero-note {
   overflow-wrap: break-word;
 }
 
-/* These components have more specific rules in their own stylesheets. */
+/* The two existing reading roles intentionally keep their current indents. */
 #description-body p,
-#owner-note-body,
-.editorial-note p,
-.reading-hero .hero-editorial-book p,
-.about-story p,
-.about-story p.about-story-signature {
-  text-align: justify;
-  text-align-last: left;
-  -webkit-hyphens: none;
-  hyphens: none;
-  word-break: normal;
-  overflow-wrap: break-word;
+.book-author-biography p,
+.book-author-work p {
+  text-indent: var(--book-reading-indent);
 }
 
-/* Code is shown exactly as written, without stretched word spacing. */
+.about-story #about-story-body p,
+.about-story .about-story-lead,
+.editorial-prose-preview p,
+.announcement-style-preview p,
+.editorial-comment-prose > p,
+.reading-hero .hero-editorial-book .editorial-comment-prose > p {
+  text-indent: var(--reading-indent);
+}
+
+/* Native inputs and the live preview belong to the same reading system. */
+#editorial-form textarea[name="description"],
+#editorial-form textarea[name="comment"] {
+  text-align: justify;
+  text-align-last: left;
+  text-indent: var(--reading-indent);
+  line-height: 1.7;
+}
+.editorial-prose-preview {
+  padding: 18px 22px;
+  border: 1px solid #96774766;
+  border-radius: 5px;
+  background: #dcb87b08;
+}
+.editorial-prose-preview h3 {
+  margin: 0 0 14px;
+  color: #dfbc81;
+  font: 14px/1.5 Georgia, serif;
+}
+.editorial-prose-preview p {
+  margin: 12px 0;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.editorial-prose-preview [data-prose-kind="comment"] p {
+  white-space: pre-wrap;
+}
+.editorial-prose-preview [data-prose-kind="description"] p {
+  white-space: normal;
+}
+
+/* Comment paragraph spacing does not change stored text or single line breaks. */
+.editorial-comment-prose > p,
+.reading-hero .hero-editorial-book .editorial-comment-prose > p {
+  white-space: pre-wrap;
+  margin: 12px 0 0;
+}
+.editorial-comment-prose > p:first-child {
+  margin-top: 8px;
+}
+
+/* Code is exact text, not justified prose. Metadata exceptions stay in components. */
 pre, code {
   text-align: left;
   text-align-last: auto;
   -webkit-hyphens: none;
   hyphens: none;
 }
-
-/* Editor-only typography; published content retains its existing styles. */
-#editorial-form textarea[name="description"],
-#editorial-form textarea[name="comment"] {
-  text-align: justify;
-  text-align-last: left;
-  text-indent: 1em;
-  line-height: 1.7;
-}
-.editorial-prose-preview { padding:18px 22px; border:1px solid #96774766; border-radius:5px; background:#dcb87b08; }
-.editorial-prose-preview h3 { margin:0 0 14px; color:#dfbc81; font:14px/1.5 Georgia,serif; }
-.editorial-prose-preview p { text-align:justify; text-align-last:left; text-indent:1em; margin:12px 0; font-size:16px; line-height:1.7; hyphens:none; -webkit-hyphens:none; overflow-wrap:break-word; }
-.editorial-prose-preview [data-prose-kind="comment"] p { white-space:pre-wrap; }
-.editorial-prose-preview [data-prose-kind="description"] p { white-space:normal; }
