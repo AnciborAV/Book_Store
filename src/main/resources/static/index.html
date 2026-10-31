@@ -235,13 +235,13 @@ record Chapter(String title, int pages) { }</pre>
       <h2 id="editorial-edit-title"></h2>
       <form id="editorial-form">
         <label>Описание книги<textarea name="description" maxlength="3000" rows="9"></textarea></label>
-        <small>Короткая заметка до 3000 символов. Абзацы отделяйте пустой строкой. Текст публикуется как обычный текст, без HTML.</small>
+        <small>Короткая заметка до 3000 символов. Каждый перенос строки начинает новый абзац. Выравнивание по ширине и красная строка применяются автоматически; ниже виден предпросмотр. Текст сохраняется без HTML.</small>
         <label>Подборки редактора<textarea name="lists" maxlength="407" rows="3" placeholder="Выбор редакции&#10;Изучаем Java"></textarea></label>
         <small>По одному названию в строке: до 8 списков по 50 символов. Новое название создаёт подборку. Без списков книга не показывается в «Выборе редакции».</small>
         <div id="editorial-existing" class="editorial-card-actions" aria-label="Добавить в существующий список"></div>
         <button id="editorial-clear-lists" type="button" class="text-button">Убрать из всех подборок</button>
         <label>Закреплённый комментарий редактора<textarea name="comment" rows="10" placeholder="Почему вы рекомендуете эту книгу?"></textarea></label>
-        <small>Виден всем в карточке и описании книги, даже вне подборки. Чтобы убрать комментарий, очистите поле и сохраните.</small>
+        <small>Виден всем в карточке и описании книги, даже вне подборки. Каждый перенос строки начинает абзац с красной строки. Чтобы убрать комментарий, очистите поле и сохраните.</small>
         <p id="editorial-error" role="alert"></p><button id="editorial-save" type="submit" class="button dark">Сохранить и опубликовать</button>
       </form>
     </dialog>

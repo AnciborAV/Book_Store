@@ -52,6 +52,7 @@ class EditorialTest {
             count++;
         }
         assertThat(count).isGreaterThan(0);
+        mvc.perform(get("/editorial-prose.js")).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","DENY"));
         mvc.perform(get("/reading-text.css")).andExpect(status().isOk())
             .andExpect(content().string(org.hamcrest.Matchers.containsString(".editorial-note p")))
             .andExpect(content().string(org.hamcrest.Matchers.containsString("text-align: justify")));
