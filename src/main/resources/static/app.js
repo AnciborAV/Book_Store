@@ -1,6 +1,6 @@
 import {updateAtlasLink} from "./atlas-navigation.js";
 import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
-import {openAI, isAIHash, setupAINavigation} from "./ai-navigation.js";
+import {openAI, isAIHash, setupAINavigation, updateAISection} from "./ai-navigation.js";
 import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
 import { setupAbout, updateAbout } from "./about.js";
 import { setupEditorial, updateEditorial, addEditorialControls, showDescription } from "./editorial.js";
@@ -267,7 +267,7 @@ function renderCategories() {
   for (const section of [{id:'all',name:'Все разделы'}, ...visibleSections]) {
     const count = [...books, ...libraryBooks].filter(b => section.id === 'all' || b.sectionId === section.id).length;
     const button = action(section.name + (user?.role === 'ADMIN' ? ` · ${count}` : ''), () => {
-      $("#ai").hidden = true; if(location.hash === '#ai') history.replaceState(null,'','#catalog');
+      $("#ai").hidden = true; if(isAIHash(location.hash)) history.replaceState(null,'','#catalog');
       category = section.id; page = 1; render();
     }, 'category-chip' + (category === section.id ? ' active' : ''));
     button.setAttribute('aria-pressed',String(category === section.id)); target.append(button);
@@ -283,7 +283,9 @@ function render() {
   $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;
   for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) $(selector).hidden = false;
   renderCategories();
-  updateAtlasLink($("#catalog-atlas"), sections.find(section => section.id === category));
+  const currentSection = sections.find(section => section.id === category);
+  updateAtlasLink($("#catalog-atlas"), currentSection);
+  updateAISection(currentSection);
   const q = $("#search").value.trim().toLocaleLowerCase("ru");
   const visible = [...books, ...libraryBooks].filter(
     (b) =>
@@ -770,4 +772,4 @@ function openAIBooks() {
   $("#catalog").scrollIntoView({block: "start"});
 }
 document.querySelectorAll('[data-open-ai-books]').forEach(link => link.addEventListener('click', openAIBooks));
-setupAINavigation({openBooks:openAIBooks});
+setupAINavigation({openBooks:openAIBooks,ensureBooks:()=>{if(category !== 'ai') openAIBooks();}});
