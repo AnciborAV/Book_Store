@@ -27,4 +27,6 @@
     <include file="/db/migration/catalogue-management.xml"/>
     <include file="/db/migration/catalogue-book-order.xml"/>
     <include file="/db/migration/catalogue-editorial-20261031.xml"/>
+    <include file="/db/migration/digital-technologies-section.xml"/>
+    <include file="/db/migration/editorial-comment-text.xml"/>
 </databaseChangeLog>

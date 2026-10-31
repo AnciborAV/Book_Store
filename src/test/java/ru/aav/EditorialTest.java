@@ -30,6 +30,17 @@ class EditorialTest {
     String payload(long version,String lists,String comment) throws Exception {
         return json.writeValueAsString(java.util.Map.of("version",version,"description","Моё описание", "lists", lists.isBlank()?java.util.List.of():java.util.List.of(lists,"Изучаем Java"),"comment",comment));
     }
+    @Test void pinnedCommentCanExceedOnePrintedPageWithoutTruncation()throws Exception {
+        String comment="Подробный комментарий редактора о книге. ".repeat(350)+"\n\nЗаключительный абзац.";
+        for(String key:java.util.List.of("library/"+library,"catalog/"+catalog)) {
+            mvc.perform(put("/api/admin/editorial/books/"+key).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(-1,"Выбор редакции",comment)))
+                .andExpect(status().isOk());
+            mvc.perform(get("/api/editorial/books/"+key)).andExpect(status().isOk()).andExpect(jsonPath("$.comment").value(comment));
+            String edited=comment+" Дополнение.";
+            mvc.perform(put("/api/admin/editorial/books/"+key).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(0,"Выбор редакции",edited))).andExpect(status().isOk());
+            mvc.perform(get("/api/editorial/books/"+key)).andExpect(jsonPath("$.comment").value(edited));
+        }
+    }
     @Test void allHomeStylesheetsArePublic() throws Exception {
         String html = new String(new org.springframework.core.io.ClassPathResource("static/index.html")
             .getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);

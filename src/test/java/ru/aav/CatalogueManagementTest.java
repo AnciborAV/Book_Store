@@ -40,6 +40,16 @@ class CatalogueManagementTest {
         var request=multipart("/api/admin/catalogue/books/"+kind+"/"+id);request.param("title",record.get("title").asText()).param("author",record.get("author").asText())
             .param("sectionId",section).param("description",record.get("description").asText()).param("version",record.get("version").asText()).param("pdfVersion",record.get("pdfVersion").asText());return request;
     }
+    @Test void digitalSectionIsManagedAndAcceptsCoverThenPdf()throws Exception {
+        var section=db.queryForMap("SELECT * FROM store_sections WHERE id='digital-technologies'");
+        assertThat(section.get("name")).isEqualTo("Современные цифровые технологии");
+        assertThat(db.queryForObject("SELECT COUNT(*) FROM store_sections WHERE name='Современные цифровые технологии'",Integer.class)).isEqualTo(1);
+        String id=create(title(),"digital-technologies",cover());var initial=entry("catalog",id);
+        assertThat(initial.get("sectionId").asText()).isEqualTo("digital-technologies");
+        assertThat(initial.get("pdfId").isNull()).isTrue();
+        mvc.perform(edit("catalog",id,initial,"digital-technologies").file(pdf()).with(user("admin").roles("ADMIN")).with(csrf())).andExpect(status().isNoContent());
+        assertThat(entry("catalog",id).get("pdfId").isNull()).isFalse();
+    }
     @Test void coverFirstThenPdfKeepsCardCoverAndCollections()throws Exception {
         String id=create(title(),"java",cover());var initial=entry("catalog",id);assertThat(initial.get("pdfId").isNull()).isTrue();
         byte[] image=mvc.perform(get("/api/catalogue/covers/"+id)).andExpect(status().isOk()).andReturn().getResponse().getContentAsByteArray();

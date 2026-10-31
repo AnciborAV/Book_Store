@@ -13,7 +13,7 @@ public class EditorialController {
     private final AuthorProfiles authors;
     public record Edit(@Min(-1) long version, @NotNull @Size(max=3000) String description,
                        @NotNull @Size(max=8) List<@NotBlank @Size(max=50) String> lists,
-                       @NotNull @Size(max=1000) String comment) {}
+                       @NotNull String comment) {}
     @GetMapping("/api/editorial/books")
     public List<EditorialService.Book> books(@RequestParam(defaultValue="true") boolean recommended) {
         return service.list(recommended);

@@ -1,4 +1,4 @@
-import {updateAtlasLink} from "./atlas-navigation.js";
+import {updateAtlasLink,atlasForSection} from "./atlas-navigation.js";
 import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
 import {openAI, isAIHash, setupAINavigation, updateAISection} from "./ai-navigation.js";
 import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
@@ -718,6 +718,7 @@ async function init() {
   await loadBooks();
   if (isAIHash(location.hash)) openAI();
   else if (location.hash === "#ai-books") openAIBooks();
+  else if (location.hash === "#digital-books") openDigitalBooks();
 }
 setupCatalogueAdmin({getUser:()=>user,toast,getSections:()=>sections,getSection:()=>category,reload:async()=>{await loadBooks();await loadSelection();}});
 setupBookOrdering({getUser:()=>user,toast,getSection:()=>category,createCover:b=>coverImage(catalogueEntry(b,0)),onSaved:async section=>{
@@ -773,3 +774,12 @@ function openAIBooks() {
 }
 document.querySelectorAll('[data-open-ai-books]').forEach(link => link.addEventListener('click', openAIBooks));
 setupAINavigation({openBooks:openAIBooks,ensureBooks:()=>{if(category !== 'ai') openAIBooks();}});
+
+// Return from the digital atlas to the matching managed catalogue section.
+function openDigitalBooks() {
+  const section=sections.find(section=>atlasForSection(section)?.id === 'digital');
+  if (!section) { $('#catalog').scrollIntoView({block:'start'}); return; }
+  $('#ai').hidden=true;category=section.id;page=1;render();
+  $('#catalog').scrollIntoView({block:'start'});
+}
+window.addEventListener('hashchange',()=>{if(location.hash === '#digital-books')openDigitalBooks();});
