@@ -8,7 +8,7 @@ class Element {
  addEventListener(k,f){this.listeners[k]=f;}focus(){this.focused=true;}scrollIntoView(){this.scrolled=true;}
  getBoundingClientRect(){return {top:120};}
 }
-const elements=Object.fromEntries(['ai','ai-frame','ai-panel','ai-fullscreen'].map(id=>['#'+id,new Element(id)]));
+const elements=Object.fromEntries(['ai','ai-frame','ai-panel','ai-fullscreen','catalog-ai-links'].map(id=>['#'+id,new Element(id)]));
 const tabs=['atlas','architects','history','models','russia'].map(view=>new Element('ai-tab-'+view,{aiView:view}));
 const frame=elements['#ai-frame'];frame.contentWindow={};
 const listeners={},location={hash:'#ai-history',origin:'https://bookstore.example'},scrolls=[];
@@ -16,8 +16,8 @@ let books=0;
 const ctx={document:{querySelector:s=>elements[s],querySelectorAll:s=>s==='[data-ai-view]'?tabs:[]},location,window:{addEventListener:(n,f)=>listeners[n]=f,scrollY:200,scrollTo:x=>scrolls.push(x)},console};
 vm.createContext(ctx);
 const source=(await readFile(new URL('../src/main/resources/static/ai-navigation.js',import.meta.url),'utf8')).replaceAll('export ','');vm.runInContext(source,ctx);
-ctx.books=()=>books++;vm.runInContext('setupAINavigation({openBooks:books});openAI()',ctx);
-assert.equal(frame.src,'/ai-history.html');assert.equal(tabs[2].attrs['aria-selected'],'true');assert.equal(elements['#ai-panel'].attrs['aria-labelledby'],'ai-tab-history');assert.match(frame.title,/История/);
+let ensured=0;ctx.ensure=()=>ensured++;ctx.books=()=>books++;vm.runInContext("setupAINavigation({openBooks:books,ensureBooks:ensure});updateAISection({id:'ai'});openAI()",ctx);
+assert.equal(ensured>0,true);assert.equal(elements['#catalog-ai-links'].hidden,false);assert.equal(frame.src,'/ai-history.html');assert.equal(tabs[2].attrs['aria-selected'],'true');assert.equal(elements['#ai-panel'].attrs['aria-labelledby'],'ai-tab-history');assert.match(frame.title,/История/);
 assert.equal(elements['#ai-fullscreen'].href,'/ai-history.html');
 tabs[1].listeners.click();assert.equal(frame.src,'/ai-architects.html');assert.equal(tabs[1].tabIndex,0);assert.equal(tabs[2].tabIndex,-1);
 let prevented=false;tabs[1].listeners.keydown({key:'ArrowRight',preventDefault(){prevented=true;}});assert.equal(prevented,true);assert.equal(tabs[2].focused,true);assert.equal(location.hash,'#ai-history');
@@ -53,3 +53,9 @@ catalog.listeners.click({preventDefault(){}});assert.equal(messages.at(-1).data.
 cross.listeners.click({preventDefault(){}});assert.equal(messages.at(-1).data.view,'architects');
 assert.ok(messages.every(m=>m.origin===child.location.origin));
 console.log('PASS AI embedded document: height coalescing, chapter focus/scroll, catalogue and cross-tab messages');
+
+vm.runInContext("updateAISection({id:'java',name:'Java'})",ctx);assert.equal(elements['#catalog-ai-links'].hidden,true);assert.equal(elements['#ai'].hidden,true);
+vm.runInContext("updateAISection({id:'ai',name:'AI'})",ctx);assert.equal(elements['#catalog-ai-links'].hidden,false);
+const html=await readFile(new URL('../src/main/resources/static/index.html',import.meta.url),'utf8');
+assert.ok(!html.includes('data-open-ai>'));assert.ok(html.indexOf('id="catalog-ai-links"')>html.indexOf('id="catalog"'));assert.ok(html.indexOf('id="ai"')>html.indexOf('id="catalog-ai-links"'));
+console.log('PASS: AI materials live inside catalogue and follow the selected section');

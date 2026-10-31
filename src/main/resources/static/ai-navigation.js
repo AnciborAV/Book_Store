@@ -8,7 +8,14 @@ const views = {
 };
 export const isAIHash = hash => Object.values(views).some(view => view.hash === hash);
 const fromHash = hash => Object.keys(views).find(key => views[key].hash === hash) || 'atlas';
+let ensureBooks = () => {};
+export function updateAISection(section) {
+  const active = section?.id === 'ai' || String(section?.name || '').trim().toUpperCase() === 'AI';
+  $('#catalog-ai-links').hidden = !active;
+  if (!active) $('#ai').hidden = true;
+}
 export function openAI(key = fromHash(location.hash)) {
+  ensureBooks();
   const view = views[key] || views.atlas;
   const section = $('#ai'), frame = $('#ai-frame');
   section.hidden = false;
@@ -28,7 +35,8 @@ export function openAI(key = fromHash(location.hash)) {
   full.textContent = view.full;
   section.scrollIntoView({block:'start'});
 }
-export function setupAINavigation({openBooks}) {
+export function setupAINavigation({openBooks,ensureBooks:ensure = () => {}}) {
+  ensureBooks = ensure;
   const tabs = [...document.querySelectorAll('[data-ai-view]')];
   for (const tab of tabs) {
     tab.addEventListener('click', () => openAI(tab.dataset.aiView));
@@ -45,7 +53,6 @@ export function setupAINavigation({openBooks}) {
       openAI(tabs[index].dataset.aiView);
     });
   }
-  document.querySelectorAll('[data-open-ai]').forEach(link => link.addEventListener('click', () => openAI('atlas')));
   document.querySelectorAll('a[href="#catalog"]').forEach(link => link.addEventListener('click', () => { $('#ai').hidden = true; }));
   window.addEventListener('hashchange', () => {
     if (isAIHash(location.hash)) openAI();

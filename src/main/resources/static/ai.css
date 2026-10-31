@@ -19,3 +19,10 @@
 .ai-tabs a[aria-selected="true"]{background:#292016;color:#f2d59d;border-color:#c9a568}
 .ai-tabs a:focus-visible,#ai-panel:focus-visible{outline:3px solid #c9a568;outline-offset:4px}
 @media(max-width:600px){.ai-tabs{gap:8px}.ai-tabs a{flex:1 1 auto;text-align:center;padding:12px;font-size:14px}}
+
+/* AI reading materials belong to the AI catalogue section. */
+#catalog-ai-links[hidden]{display:none!important}
+.catalog-tools #catalog-ai-links{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0;flex:1 1 580px}
+.catalog-tools #catalog-ai-links a{display:inline-flex;align-items:center;min-height:44px;padding:10px 14px;border-radius:4px;color:#e2c58e;font:14px/1.4 Georgia,serif}
+#catalog .ai-atlas{margin:20px 0 32px}
+@media(max-width:600px){.catalog-tools #catalog-ai-links{flex-basis:100%}.catalog-tools #catalog-ai-links a{flex:1 1 140px;justify-content:center}}
