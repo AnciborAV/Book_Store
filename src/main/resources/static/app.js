@@ -291,10 +291,7 @@ function render() {
       (filter !== "favorites" || (b.kind === "library" ? libraryFavorites : favorites).has(String(b.id))) &&
       (category === "all" || b.sectionId === category),
   );
-  const sort = $("#sort").value;
-  if (sort !== "default")
-    visible.sort((a, b) => a[sort].localeCompare(b[sort], "ru"));
-  else visible.sort((a,b)=>a.catalogOrder-b.catalogOrder);
+  visible.sort((a,b)=>a.catalogOrder-b.catalogOrder);
   const pages = Math.max(1, Math.ceil(visible.length / pageSize));
   page = Math.min(page, pages);
   $("#books").replaceChildren();
@@ -523,10 +520,6 @@ $("#search").oninput = () => {
   page = 1;
   render();
 };
-$("#sort").onchange = () => {
-  page = 1;
-  render();
-};
 document.querySelectorAll("[data-filter]").forEach(
   (b) =>
     (b.onclick = () => {
@@ -726,7 +719,7 @@ async function init() {
 }
 setupCatalogueAdmin({getUser:()=>user,toast,getSections:()=>sections,getSection:()=>category,reload:async()=>{await loadBooks();await loadSelection();}});
 setupBookOrdering({getUser:()=>user,toast,getSection:()=>category,createCover:b=>coverImage(catalogueEntry(b,0)),onSaved:async section=>{
-  category=section;page=1;filter='all';$('#search').value='';$('#sort').value='default';
+  category=section;page=1;filter='all';$('#search').value='';
   document.querySelectorAll('[data-filter]').forEach(button=>button.classList.toggle('active',button.dataset.filter==='all'));
   await loadBooks();await loadSelection();$('#catalog').scrollIntoView({block:'start'});
 }});

@@ -10,5 +10,6 @@ for (const [key,a] of Object.entries(atlases)) {
 for(const [name,id]of [['Российские авторы','russian'],['Русская литература','russian'],['Русские авторы','russian'],['Зарубежные авторы','foreign'],['Зарубежная литература','foreign'],['Философия','philosophy']])assert.equal(atlasForSection({id:'generated-42',name}).id,id);
 for(const name of ['Java','История','Гражданское право','AI','Все разделы',''])assert.equal(atlasForSection({name}),null);
 const link={removeAttribute(k){delete this[k]}};updateAtlasLink(link,{name:'Философия'});assert.equal(link.href,'/reading-atlas.html?atlas=philosophy');assert.equal(link.hidden,false);updateAtlasLink(link,{name:'Java'});assert.equal(link.hidden,true);assert.equal(link.href,undefined);
-const html=await readFile(new URL('../src/main/resources/static/index.html',import.meta.url),'utf8');assert.ok(html.indexOf('Моя полка')<html.indexOf('id="catalog-atlas"')&&html.indexOf('id="catalog-atlas"')<html.indexOf('class="sort-label"'));
+const html=await readFile(new URL('../src/main/resources/static/index.html',import.meta.url),'utf8');assert.ok(html.indexOf('Моя полка')<html.indexOf('id="catalog-atlas"')&&html.indexOf('id="catalog-atlas"')<html.indexOf('id="catalog-count"'));
+assert.ok(!html.includes('id="sort"'));
 console.log('PASS: atlas data integrity, links, dynamic section names, switching and toolbar placement');
