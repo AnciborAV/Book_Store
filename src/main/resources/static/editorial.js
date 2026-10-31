@@ -1,4 +1,5 @@
 import { request } from './api-client.js';
+import {setupProsePreviews} from './editorial-prose.js';
 const $ = s => document.querySelector(s);
 const element = (tag, text, cls) => {
   const n = document.createElement(tag);
@@ -12,6 +13,7 @@ function button(text, run, cls = 'button light') {
 let getUser = () => null, notify = () => {}, records = [], pending, editing, saving = false;
 let cacheGeneration = 0, coverMap;
 let manage = false, listName = '', query = '', loadNumber = 0, detailNumber = 0;
+let refreshProsePreviews=()=>{};
 const admin = () => getUser()?.role === 'ADMIN';
 const key = b => b.kind + ':' + b.id;
 async function all(refresh = false) {
@@ -203,7 +205,7 @@ async function editBook(kind,id) {
     if(!admin())return;
     editing=b; const f=$('#editorial-form'); f.reset();
     $('#editorial-edit-title').textContent=b.title;
-    f.elements.description.value=b.description; f.elements.lists.value=b.lists.join('\n'); f.elements.comment.value=b.comment;
+    f.elements.description.value=b.description; f.elements.lists.value=b.lists.join('\n'); f.elements.comment.value=b.comment;refreshProsePreviews();
     $('#editorial-error').textContent='';
     $('#editorial-existing').replaceChildren();
     $('#editorial-existing').append(button('Показывать на главной',()=>{
@@ -229,6 +231,7 @@ export function updateEditorial() {
 }
 export function setupEditorial(options) {
   getUser=options.getUser;notify=options.toast;
+  refreshProsePreviews=setupProsePreviews($('#editorial-form'));
   document.addEventListener('announcement-changed',renderHeroBook);
   document.addEventListener('catalogue-books-changed',()=>{all(true).then(()=>{paintNotes();if($('#editorial-dialog').open)renderCollection();}).catch(()=>{});});
   all().then(renderHeroBook).catch(renderHeroBook);
