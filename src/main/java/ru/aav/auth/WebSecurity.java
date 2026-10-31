@@ -126,6 +126,7 @@ public class WebSecurity {
                         "/ai-atlas.js",
                         "/api/editorial/books",
                         "/api/editorial/books/*/*",
+                        "/api/editorial/books/*/*/authors",
                         "/announcement.css",
                         "/api/announcement",
                         "/feedback.css",

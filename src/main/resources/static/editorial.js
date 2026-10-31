@@ -42,7 +42,8 @@ function paintNotes() {
 // Both paper-book and PDF cards use exactly the same description/editor interface.
 export function addEditorialControls(card, kind, book) {
   const actions = element('div', undefined, 'editorial-card-actions');
-  actions.append(button('Описание', () => showDescription(kind, String(book.id)), 'button light description-button'));
+  actions.append(button('Описание', () => showDescription(kind, String(book.id)), 'button light description-button'),
+    button('Автор', () => showDescription(kind, String(book.id), 'author'), 'button light author-button'));
   if (admin()) actions.append(button('Выбор редакции / комментарий', () => editBook(kind, String(book.id)), 'text-button'));
   const note = element('aside', undefined, 'editorial-note');
   note.dataset.editorialKey = kind + ':' + book.id; note.hidden = true;
@@ -125,12 +126,62 @@ async function reloadCollection() {
   try { await all(true); if(ticket===loadNumber) {renderCollection();paintNotes();} }
   catch(e) { if(ticket===loadNumber) $('#editorial-status').textContent=e.message; }
 }
-export async function showDescription(kind,id) {
+function paragraphs(holder,text) {
+  for(const p of text.split(/\n\s*\n/).filter(p=>p.trim())) holder.append(element('p',p));
+}
+function authorView(detail) {
+  const root=$('#book-authors'); root.replaceChildren();
+  if(!detail.authors.length) { root.append(element('p','Биография этого автора пока не добавлена.')); return; }
+  for(const a of detail.authors) {
+    const article=element('article',undefined,'book-author-profile');
+    const head=element('div',undefined,'book-author-head');
+    if(a.portrait) {
+      const figure=element('figure',undefined,'book-author-portrait');
+      const img=element('img'); img.src=a.portrait.path; img.alt=a.portrait.caption+': '+a.name;
+      img.width=a.portrait.width; img.height=a.portrait.height; img.loading='lazy'; img.decoding='async';
+      img.onerror=()=>{ img.hidden=true; figure.prepend(element('p','Изображение временно недоступно.')); };
+      const credit=element('details',undefined,'book-author-credit'); credit.append(element('summary','Об изображении'));
+      const line=element('p',a.portrait.caption+'. '+a.portrait.credit+'. ');
+      for(const [label,url] of [['Источник',a.portrait.source],[a.portrait.license,a.portrait.licenseUrl]]) {
+        if(!url) {if(label!=='Источник')line.append(document.createTextNode(label+'. '));continue;}
+        const link=element('a',label);link.href=url;link.target='_blank';link.rel='noopener noreferrer';line.append(link,document.createTextNode('. '));
+      }
+      line.append(document.createTextNode('Уменьшение и сжатие; без ретуши.'));credit.append(line);figure.append(img,credit);head.append(figure);
+    }
+    const intro=element('div');intro.append(element('h3',a.name),element('p',a.dates,'book-author-dates'));head.append(intro);
+    article.append(head);const bio=element('div',undefined,'book-author-biography');paragraphs(bio,a.biography);article.append(bio);root.append(article);
+  }
+  if(detail.bookNote) {const note=element('aside',undefined,'book-author-work');note.append(element('h3','Книга в творческом пути'));paragraphs(note,detail.bookNote);root.append(note);}
+}
+export async function showDescription(kind,id,initialTab='description') {
   const ticket=++detailNumber;
   $('#description-title').textContent='Описание книги'; $('#description-author').textContent='';
   $('#description-body').textContent='Загружаем описание…'; $('#description-source').replaceChildren();
   $('#description-comment').replaceChildren(); $('#description-edit').hidden=true;
+  let authorLoading=false, authorLoaded=false;
+  async function selectTab(tab) {
+    const author=tab==='author';
+    for(const [name,selected] of [['description',!author],['author',author]]) {
+      const control=$('#book-'+name+'-tab');control.setAttribute('aria-selected',String(selected));control.tabIndex=selected?0:-1;
+      $('#book-'+name+'-panel').hidden=!selected;
+    }
+    if(!author || authorLoading || authorLoaded)return;
+    authorLoading=true;$('#book-authors').textContent='Загружаем биографию…';
+    try {
+      const detail=await request(`/api/editorial/books/${kind}/${id}/authors`);
+      if(ticket!==detailNumber || !$('#description-dialog').open)return;
+      authorView(detail);authorLoaded=true;
+    } catch(e) {if(ticket===detailNumber)$('#book-authors').textContent=e.message;}
+    finally {authorLoading=false;}
+  }
+  for(const name of ['description','author']) {
+    const tab=$('#book-'+name+'-tab');tab.onclick=()=>selectTab(name);
+    tab.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const next=e.key==='Home'?'description':e.key==='End'?'author':name==='author'?'description':'author';selectTab(next);$('#book-'+next+'-tab').focus();};
+  }
+  $('#book-authors').replaceChildren();
   $('#description-dialog').showModal();
+  $('#description-dialog').scrollTop=0;
+  selectTab(initialTab);
   try {
     const b=await request(`/api/editorial/books/${kind}/${id}`);
     if(ticket!==detailNumber || !$('#description-dialog').open)return;
