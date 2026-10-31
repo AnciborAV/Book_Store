@@ -14,13 +14,15 @@ class PdfCodePageTest {
     @Autowired MockMvc mvc;
 
     @Test void sourceExplanationsAreAvailableWithoutLogin() throws Exception {
-        for (String path : new String[]{"/pdf-reading-code.html", "/pdf-download-code.html", "/pdf-reading-code.css", "/feedback-code.js"}) {
+        for (String path : new String[]{"/pdf-reading-code.html", "/pdf-download-code.html", "/remember-login-code.html", "/pdf-reading-code.css", "/feedback-code.js"}) {
             mvc.perform(get(path)).andExpect(status().isOk())
                 .andExpect(header().string("X-Frame-Options", "DENY"));
         }
         mvc.perform(get("/covers/pdf-reading-code.webp")).andExpect(status().isOk())
             .andExpect(content().contentType("image/webp"));
         mvc.perform(get("/covers/pdf-download-code.webp")).andExpect(status().isOk())
+            .andExpect(content().contentType("image/webp"));
+        mvc.perform(get("/covers/remember-login-code.webp")).andExpect(status().isOk())
             .andExpect(content().contentType("image/webp"));
     }
 
