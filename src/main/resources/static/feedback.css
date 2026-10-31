@@ -92,3 +92,29 @@
 .feedback-code .feedback-artwork-caption p {font-size:18px;line-height:1.7;text-align:justify;text-align-last:left;hyphens:none;word-break:normal;}
 .feedback-code .text-button {display:inline-block;margin-top:18px;}
 @media(max-width:900px){.feedback-gallery{grid-template-columns:minmax(0,1fr);gap:24px;}}
+
+/* Optional source disclosure stays within the review, even on narrow phones. */
+.feedback-source { margin-top: 20px; min-width: 0; }
+.feedback-source summary {
+  padding: 12px 0; border-top: 1px solid var(--line);
+  color: #dfbd81; font-size: 15px; line-height: 1.5; cursor: pointer;
+  min-height: 44px; overflow-wrap: anywhere;
+}
+.feedback-source summary:focus-visible { outline: 2px solid #dfbd81; outline-offset: 4px; }
+.feedback-source .feedback-source-explanation {
+  margin: 12px 0; font-size: 15px; line-height: 1.5;
+  text-align: justify; text-align-last: left; text-indent: 1em;
+}
+.feedback-source-editor { background: #252525; border: 1px solid #5e513d; border-radius: 8px; overflow: hidden; }
+.feedback-source-file { background: #303030; color: #dfcfb5; padding: 12px; font: 13px/1.5 monospace; overflow-wrap: anywhere; }
+.feedback-source pre {
+  margin: 0; padding: 16px; color: #b4c2cf;
+  font: 13px/1.7 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap; overflow-wrap: anywhere; word-break: normal;
+}
+.feedback-source code { font: inherit; color: inherit; white-space: inherit; overflow-wrap: inherit; }
+.feedback-source-keyword { color: #e1a05d; }
+.feedback-source-string { color: #a5bc90; }
+.feedback-source-comment { color: #a7a7a7; }
+.feedback-source-annotation { color: #d4cd69; }
+@media(max-width: 480px) { .feedback-source pre { padding: 12px; } }
