@@ -1,6 +1,7 @@
 import { request } from './api-client.js';
 import { createFeedbackCode } from './feedback-code.js';
 let context, publicPage = 0, adminPage = 0, adminState = 'PENDING', generation = 0;
+let refreshFeedbackLayout = () => {};
 const labels = { REVIEW: 'Отзыв', ISSUE: 'Замечание', IDEA: 'Предложение' };
 const $ = id => document.getElementById(id);
 const el = (tag, text, cls) => {
@@ -10,6 +11,32 @@ const el = (tag, text, cls) => {
 };
 function button(text, handler) {
   const b = el('button', text, 'button light'); b.type = 'button'; b.onclick = handler; return b;
+}
+function setupCompactFeedback(section) {
+  const column = section.querySelector('.feedback-reader-column');
+  const grid = el('div', '', 'feedback-masonry');
+  const pages = el('div'); pages.id = 'feedback-public-pages';
+  column.append(grid, pages);
+  grid.append($('feedback-public'), section.querySelector('.feedback-gallery'));
+  let frame;
+  const arrange = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      // Preserve DOM reading order; dense grid packing only removes vertical holes.
+      for (const item of grid.querySelectorAll('#feedback-public > *, .feedback-gallery > *')) {
+        const span = Math.ceil((item.getBoundingClientRect().height + 20) / 4);
+        item.style.gridRowEnd = `span ${Math.max(1, span)}`;
+      }
+    });
+  };
+  const observer = new ResizeObserver(arrange);
+  refreshFeedbackLayout = () => {
+    observer.disconnect();
+    observer.observe(grid);
+    grid.querySelectorAll('#feedback-public > *, .feedback-gallery > *').forEach(item => observer.observe(item));
+    arrange();
+  };
+  refreshFeedbackLayout();
 }
 export function setupFeedback(ctx) {
   context = ctx;
@@ -68,6 +95,7 @@ export function setupFeedback(ctx) {
       <p id="feedback-admin-result" role="status"></p><div id="feedback-inbox"></div>
     </div>`;
   document.querySelector('main').append(section);
+  setupCompactFeedback(section);
   let requestId = crypto.randomUUID();
   $('feedback-form').onsubmit = async e => {
     e.preventDefault();
@@ -103,7 +131,9 @@ async function load(admin) {
   const target = $(admin ? 'feedback-inbox' : 'feedback-public');
   const stamp = generation, page = admin ? adminPage : publicPage;
   const marker = {}; target._request = marker;
+  if (!admin) $('feedback-public-pages').replaceChildren();
   target.replaceChildren(el('p','Загрузка…'));
+  if (!admin) refreshFeedbackLayout();
   try {
     const data = await request(admin ? `/api/admin/site-feedback?page=${page}&state=${adminState}` : `/api/site-feedback?page=${page}`);
     if (target._request !== marker || (admin && stamp !== generation)) return;
@@ -141,9 +171,11 @@ async function load(admin) {
     if (page>0) nav.append(button('← Назад',()=>go(page-1)));
     nav.append(el('span', `Сообщений: ${data.total} · Страница ${page+1}`));
     if ((page+1)*20 < data.total) nav.append(button('Далее →',()=>go(page+1)));
-    target.append(nav);
+    (admin ? target : $('feedback-public-pages')).append(nav);
   } catch(error) {
     if (target._request !== marker || (admin && stamp !== generation)) return;
     target.replaceChildren(el('p',error.message),button('Повторить',()=>load(admin)));
+  } finally {
+    if (!admin) refreshFeedbackLayout();
   }
 }

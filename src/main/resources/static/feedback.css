@@ -4,10 +4,13 @@
 .feedback-layout > div:first-child { max-width: 760px; }
 #feedback-login { margin: 0; }
 .feedback-reader-column h3 { margin: 0 0 20px; }
-#feedback-public { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+.feedback-masonry { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 4px; grid-auto-flow: row dense; column-gap: 20px; align-items: start; }
+.feedback-masonry > #feedback-public,
+.feedback-masonry > .feedback-gallery { display: contents; }
 #feedback-public > .feedback-card { min-width: 0; margin: 0; }
-#feedback-public > :not(.feedback-card),
-#feedback-public > .feedback-card:has(details[open]) { grid-column: 1 / -1; }
+#feedback-public > :not(.feedback-card) { grid-column: 1 / -1; }
+.feedback-masonry > .feedback-gallery > .feedback-artwork { margin: 0; min-width: 0; }
+#feedback-public-pages { margin-top: 4px; }
 .site-feedback label { display: block; margin: 16px 0; }
 .site-feedback textarea, .site-feedback select { display: block; width: 100%; padding: 12px; margin-top: 8px; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 4px; }
 .site-feedback textarea { resize: vertical; }
@@ -20,7 +23,12 @@
 .site-feedback [hidden] { display: none !important; }
 .site-feedback button:disabled { opacity: .6; cursor: wait; }
 .site-footer { flex-wrap: wrap; gap: 16px; }
-@media(max-width: 760px) { #feedback-public { grid-template-columns: minmax(0, 1fr); gap: 16px; } .site-feedback { padding: 36px 20px; } }
+@media(max-width: 760px) {
+  .feedback-masonry { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 16px; }
+  .feedback-masonry > #feedback-public > *,
+  .feedback-masonry > .feedback-gallery > * { grid-row-end: auto !important; }
+  .site-feedback { padding: 36px 20px; }
+}
 
 .java-card .button.java-downloaded { background: #315b49; color: #f3f7ef; border: 1px solid #8fbda2; }
 .java-download-note { display: block; margin: 10px 0; color: var(--muted); line-height: 1.5; }
