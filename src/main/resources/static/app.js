@@ -278,6 +278,9 @@ function appendPDFControls(target, book) {
   const read = node('a','Читать','button light'); read.href = `/reader.html?id=${encodeURIComponent(book.pdfId)}`;
   const download = node('a','Скачать PDF ↓','button dark'); download.href = `/api/java-library/${book.pdfId}/download`; download.setAttribute('download','');
   target.append(read,download);
+  const source = node('a', 'Как работает чтение PDF · Java', 'pdf-source-link');
+  source.href = '/pdf-reading-code.html'; source.target = '_blank'; source.rel = 'noopener';
+  target.append(source);
 }
 function render() {
   $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;

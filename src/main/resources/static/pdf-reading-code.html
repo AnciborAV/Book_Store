@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Как работает чтение PDF · Переплёт</title>
+    <link rel="stylesheet" href="/pdf-reading-code.css" />
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/index.html#catalog">← К книгам «Переплёта»</a>
+      <p class="eyebrow">ПО ТУ СТОРОНУ БИБЛИОТЕКИ · JAVA 21</p>
+      <h1>Как работает чтение PDF</h1>
+      <p class="intro">За кнопкой «Читать» работает метод <code>read</code> класса <code>JavaLibraryService</code>. Он проверяет версию книги и передаёт браузеру запрошенный фрагмент PDF. Сервер читает данные блоками, сохраняя память для других читателей.</p>
+      <figure>
+        <a href="/covers/pdf-reading-code.webp" target="_blank" rel="noopener" aria-label="Открыть снимок Java-кода в полном размере в новой вкладке">
+          <img src="/covers/pdf-reading-code.webp" width="2474" height="1412" alt="Снимок IntelliJ IDEA: фрагмент JavaLibraryService.read с проверкой версии книги, обработкой HTTP Range и настройкой ответа PDF." />
+        </a>
+        <figcaption>Настоящий фрагмент кода «Переплёта», снятый автором проекта в IntelliJ IDEA. Нажмите на изображение, чтобы открыть его в полном размере.</figcaption>
+      </figure>
+      <section aria-labelledby="steps-title">
+        <h2 id="steps-title">Что происходит после нажатия «Читать»</h2>
+        <ol>
+          <li><strong>Проверка версии.</strong> Если файл заменили, читатель получает предложение открыть книгу заново. Так части разных версий не смешиваются.</li>
+          <li><strong>Выбор фрагмента.</strong> Браузер может запросить диапазон байтов через заголовок Range. Метод проверяет его границы и сообщает, какую часть файла отправляет.</li>
+          <li><strong>Передача книги.</strong> Далее метод извлекает необходимые блоки из базы и записывает их в поток ответа, не собирая весь PDF в памяти приложения.</li>
+        </ol>
+        <p>На снимке показана верхняя часть метода. Передача блоков следует за строкой <code>response.getOutputStream()</code>.</p>
+      </section>
+    </main>
+  </body>
+</html>

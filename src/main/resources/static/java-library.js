@@ -41,6 +41,9 @@ function downloadControls(book, info) {
   const read = el('a', 'Читать', 'button light');
   read.href = `/reader.html?id=${encodeURIComponent(book.id)}`;
   info.append(read, link, note, reset); paint();
+  const source = el('a', 'Как работает чтение PDF · Java', 'pdf-source-link');
+  source.href = '/pdf-reading-code.html'; source.target = '_blank'; source.rel = 'noopener';
+  info.append(source);
 }
 const admin = () => getUser?.()?.role === 'ADMIN';
 const mb = bytes => (bytes / 1024 / 1024).toLocaleString('ru', { maximumFractionDigits: 1 }) + ' МБ';
