@@ -1,0 +1,6 @@
+.catalog-tools { flex-wrap: wrap; gap: 12px 20px; }
+.catalog-atlas { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 14px; color: #e2c58e; border: 1px solid #b28f555c; border-radius: 4px; font: 14px/1.4 Georgia, serif; text-decoration: none; }
+.catalog-atlas[hidden] { display: none; }
+.catalog-atlas:hover { background: #d6b57615; border-color: #d6b576; }
+.catalog-atlas:focus-visible { outline: 2px solid #efd29e; outline-offset: 4px; }
+@media (max-width: 600px) { .catalog-atlas { flex-basis: 100%; justify-content: center; } }

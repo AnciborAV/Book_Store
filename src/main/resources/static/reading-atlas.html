@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Атласы · Переплёт</title>
+  <link rel="stylesheet" href="/reading-atlas.css">
+  <script type="module" src="/reading-atlas.js"></script>
+</head>
+<body>
+  <header class="atlas-header">
+    <a class="wordmark" href="/index.html#catalog">Переплёт<span>КНИГИ · МЫСЛЬ · ВРЕМЯ</span></a>
+    <nav aria-label="Атласы"><a href="?atlas=foreign">Зарубежная литература</a><a href="?atlas=russian">Русская литература</a><a href="?atlas=philosophy">Философия</a></nav>
+    <a class="back" href="/index.html#catalog">К каталогу ↗</a>
+  </header>
+  <main>
+    <div class="atlas-intro"><div><p id="atlas-kicker" class="eyebrow"></p><h1 id="atlas-title">Атласы чтения</h1><p id="atlas-intro"></p></div><div class="atlas-number" aria-hidden="true">I</div></div>
+    <section class="atlas-controls" aria-label="Управление картой">
+      <label class="atlas-search">Найти на карте<input id="atlas-search" type="search" placeholder="Автор, направление, произведение" autocomplete="off"></label>
+      <label>Эпоха<select id="atlas-era"><option value="all">Все эпохи</option></select></label>
+      <label>Область<select id="atlas-lane"><option value="all">Все области</option></select></label>
+      <div class="zoom-controls"><button id="zoom-out" type="button" aria-label="Уменьшить карту">−</button><output id="zoom-value" aria-live="polite">100%</output><button id="zoom-in" type="button" aria-label="Увеличить карту">+</button></div>
+      <button id="fit-width" type="button">По ширине</button><button id="fit-map" type="button">Вся карта</button><button id="atlas-fullscreen" type="button">На весь экран ↗</button>
+    </section>
+    <div class="atlas-caption"><span>Время ↓ &nbsp; · &nbsp; Традиции и контексты →</span><span id="atlas-status" role="status" aria-live="polite"></span></div>
+    <div class="atlas-viewport" id="atlas-viewport" tabindex="0" role="region" aria-label="Обзорная карта: прокручивайте для перемещения, нажмите карточку для подробностей" aria-describedby="atlas-help">
+      <div id="atlas-space"><div id="atlas-map"><svg id="atlas-connections" aria-hidden="true"></svg><div id="atlas-grid"></div></div></div>
+    </div>
+    <p id="atlas-help" class="atlas-help">Нажмите карточку, чтобы увидеть пояснение, произведения и связанные направления. Масштаб меняется кнопками; карту можно прокручивать по обеим осям. Tab — переход к карточкам, Enter — открыть, Esc — закрыть подробности.</p>
+    <p class="atlas-caveat">Карта даёт обзор основных линий, а не исчерпывающий перечень. Границы эпох условны, направления пересекаются и продолжаются за пределами своей строки. Положение рядом не означает влияние. Связи в карточках обозначают избранное преемство или содержательный диалог.</p>
+    <details class="atlas-sources"><summary>Источники и принципы карты</summary><p id="atlas-method"></p><ul id="atlas-sources"></ul><p>Формулировки и группировка — редакционный обзор. Названия в переводах могут различаться. Произведения для знакомства не означают наличие этих книг в каталоге.</p></details>
+  </main>
+  <dialog id="atlas-detail" aria-labelledby="detail-title"><button class="detail-close" type="button" aria-label="Закрыть подробности">×</button><div class="eyebrow" id="detail-period"></div><h2 id="detail-title"></h2><p id="detail-authors" class="detail-authors"></p><p id="detail-text"></p><h3>С чего начать чтение</h3><ul id="detail-works"></ul><div id="detail-links"></div><button id="detail-locate" type="button">Показать на карте</button></dialog>
+  <footer>ПЕРЕПЛЁТ · АТЛАСЫ ЧТЕНИЯ<span>© 2026 Анцибор А.В.</span></footer>
+  <noscript><p>Для интерактивных карт включите JavaScript в браузере.</p></noscript>
+</body></html>

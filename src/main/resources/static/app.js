@@ -1,3 +1,4 @@
+import {updateAtlasLink} from "./atlas-navigation.js";
 import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
 import {openAI, isAIHash, setupAINavigation} from "./ai-navigation.js";
 import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
@@ -281,6 +282,7 @@ function render() {
   $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;
   for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) $(selector).hidden = false;
   renderCategories();
+  updateAtlasLink($("#catalog-atlas"), sections.find(section => section.id === category));
   const q = $("#search").value.trim().toLocaleLowerCase("ru");
   const visible = [...books, ...libraryBooks].filter(
     (b) =>
