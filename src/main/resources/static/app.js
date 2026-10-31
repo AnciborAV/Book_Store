@@ -262,8 +262,9 @@ function renderCart() {
 }
 function renderCategories() {
   const target = $("#categories"); target.replaceChildren();
-  if (category !== 'all' && !sections.some(section => section.id === category)) category = 'all';
-  for (const section of [{id:'all',name:'Все разделы'}, ...sections]) {
+  const visibleSections = sections.filter(section => section.name.trim().toLocaleLowerCase('ru') !== 'каталог');
+  if (category !== 'all' && !visibleSections.some(section => section.id === category)) category = 'all';
+  for (const section of [{id:'all',name:'Все разделы'}, ...visibleSections]) {
     const count = [...books, ...libraryBooks].filter(b => section.id === 'all' || b.sectionId === section.id).length;
     const button = action(section.name + (user?.role === 'ADMIN' ? ` · ${count}` : ''), () => {
       $("#ai").hidden = true; if(location.hash === '#ai') history.replaceState(null,'','#catalog');
