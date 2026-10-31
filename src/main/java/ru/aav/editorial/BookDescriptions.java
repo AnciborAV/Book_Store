@@ -13,6 +13,18 @@ final class BookDescriptions {
     }
     private record Entry(String title, String author, String text, String source) {}
     private static final Map<String, Summary> SUPPLEMENTAL = load();
+    private record Alias(String old_title, String old_author, String new_title, String new_author) {}
+    private static final Map<String, String> ALIASES = loadAliases();
+    private static Map<String, String> loadAliases() {
+        try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-metadata-aliases.json")) {
+            if (stream == null) throw new IllegalStateException("Missing Java metadata aliases");
+            var result = new HashMap<String, String>();
+            for (var alias : new ObjectMapper().readValue(stream, Alias[].class))
+                if (result.putIfAbsent(key(alias.new_title(), alias.new_author()), key(alias.old_title(), alias.old_author())) != null)
+                    throw new IllegalStateException("Duplicate metadata alias");
+            return Map.copyOf(result);
+        } catch (IOException ex) { throw new IllegalStateException("Cannot read metadata aliases", ex); }
+    }
 
     private static Map<String, Summary> load() {
         try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-descriptions.json")) {
@@ -75,7 +87,8 @@ final class BookDescriptions {
                 Заметка подготовлена по странице двенадцатого издания «Диалектика-Вильямс», ориентированного на Java SE 17: в нём рассматриваются записи, запечатанные классы и выражения switch. Содержание более ранних редакций отличается. Изучая новые версии Java, дополняйте книгу актуальной документацией к используемой версии JDK.
                 """.strip(), "https://www.williamspublishing.com/Books/978-5-907458-86-4.html");
         }
-        return SUPPLEMENTAL.getOrDefault(key(title, author), new Summary("", ""));
+        String lookup = key(title, author);
+        return SUPPLEMENTAL.getOrDefault(ALIASES.getOrDefault(lookup, lookup), new Summary("", ""));
     }
     private BookDescriptions() {}
 }

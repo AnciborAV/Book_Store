@@ -25,7 +25,7 @@
 .description-content { position: relative; padding: 32px 40px; background: linear-gradient(100deg,#17120eef,#17120ed4); }
 .description-code { position: absolute; inset: 0; pointer-events: none; user-select: none; margin: 0; padding: 24px; font: 18px/2.5 monospace; color: #d6b877; overflow: hidden; opacity: .38; white-space: pre; }
 .description-author { color: #dcb87b; font-size: 17px; }
-#description-body p { font-size: 16px; line-height: 1.7; text-align: justify; hyphens: auto; overflow-wrap: anywhere; margin: 14px 0; }
+#description-body p { font-size: 16px; line-height: 1.7; text-align: justify; hyphens: none; overflow-wrap: break-word; text-indent: 1.5em; margin: 14px 0; }
 #description-source { font-size: 12px; line-height: 1.5; }
 #description-source a { color: #c9bca6; text-decoration: underline; }
 .description-button { min-height: 44px; }
