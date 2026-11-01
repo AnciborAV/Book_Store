@@ -3,8 +3,10 @@ package ru.aav.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.aav.catalogue.SectionService;
 import ru.aav.exception.EntityNotFoundException;
 import ru.aav.model.Book;
 import ru.aav.repository.BookRepository;
@@ -16,12 +18,13 @@ import ru.aav.repository.BookRepository;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final ru.aav.catalogue.SectionService sections;
+    private final SectionService sections;
 
     public List<Book> findAll() {
-        return bookRepository.findAll(
-            org.springframework.data.domain.Sort.by("id")
-        ).stream().filter(b -> !b.isArchived()).toList();
+        return bookRepository.findAll(Sort.by("id"))
+            .stream()
+            .filter(b -> !b.isArchived())
+            .toList();
     }
 
     public Book findById(Long id) {
@@ -37,9 +40,9 @@ public class BookService {
         log.debug("Book to create {}", book);
         book.setName(book.getName().strip());
         book.setAuthor(book.getAuthor().strip());
-        if (book.getCategory() != null) book.setCategory(
-            book.getCategory().strip()
-        );
+        if (book.getCategory() != null) {
+            book.setCategory(book.getCategory().strip());
+        }
         book.setCategory(sections.ensureCatalog(book.getCategory()));
         return bookRepository.saveAndFlush(book);
     }

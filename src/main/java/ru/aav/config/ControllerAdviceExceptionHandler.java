@@ -1,5 +1,6 @@
 package ru.aav.config;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -9,13 +10,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.aav.exception.EntityNotFoundException;
 
 @RestControllerAdvice
-public class ControllerAdviceExceptionHandler
-    extends ResponseEntityExceptionHandler
-{
+public class ControllerAdviceExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    @ExceptionHandler(ConstraintViolationException.class)
     public ProblemDetail handleInvalidParameters(
-        jakarta.validation.ConstraintViolationException exception
+        ConstraintViolationException exception
     ) {
         return ProblemDetail.forStatusAndDetail(
             HttpStatus.BAD_REQUEST,

@@ -1,6 +1,15 @@
 package ru.aav.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.Version;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -28,11 +37,15 @@ public abstract class Entity implements Serializable {
 
     @Override
     public final boolean equals(Object other) {
-        if (this == other) return true;
+        if (this == other) {
+            return true;
+        }
         if (
             other == null ||
             Hibernate.getClass(this) != Hibernate.getClass(other)
-        ) return false;
+        ) {
+            return false;
+        }
         Entity entity = (Entity) other;
         return getId() != null && getId().equals(entity.getId());
     }

@@ -1,6 +1,7 @@
 package ru.aav.config.liquibase;
 
 import java.sql.SQLException;
+import liquibase.CatalogAndSchema.CatalogAndSchemaCase;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.core.H2Database;
 import liquibase.database.jvm.JdbcConnection;
@@ -19,8 +20,8 @@ public class LowercaseH2Database extends H2Database {
     }
 
     @Override
-    public liquibase.CatalogAndSchema.CatalogAndSchemaCase getSchemaAndCatalogCase() {
-        return liquibase.CatalogAndSchema.CatalogAndSchemaCase.LOWER_CASE;
+    public CatalogAndSchemaCase getSchemaAndCatalogCase() {
+        return CatalogAndSchemaCase.LOWER_CASE;
     }
 
     @Override
