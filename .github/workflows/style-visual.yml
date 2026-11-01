@@ -26,7 +26,7 @@ jobs:
       - name: Compare static pages and CSSOM
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/style-visual/node_modules/playwright
-          VISUAL_BASE_SHA: 81388540915dcb72114e038ebea8039de07255a9
+          VISUAL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: node scripts/style-visual-check.cjs
       - uses: actions/upload-artifact@v4
         if: always()
