@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Catalogue model and data loading
+        run: node scripts/test-catalogue.mjs
       - name: Install browser test dependencies
         run: |
           npm install --prefix "$RUNNER_TEMP/browser-test" playwright@1.58.2

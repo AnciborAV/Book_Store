@@ -12,6 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class AiPagesTest {
     @Autowired MockMvc mvc;
+    @Test void catalogueModulesArePublicWithoutLogin() throws Exception {
+        for (String path : new String[]{"/catalogue-data.js", "/catalogue-model.js", "/catalogue-view.js"}) {
+            mvc.perform(get(path)).andExpect(status().isOk())
+                .andExpect(header().string("X-Frame-Options", "DENY"));
+        }
+    }
     @Test void allAiDocumentsArePublicAndCanOnlyBeEmbeddedByThisSite()throws Exception {
         for(String path:new String[]{"/ai-atlas.html","/ai-architects.html","/ai-history.html","/ai-models.html","/ai-russia.html"})
             mvc.perform(get(path)).andExpect(status().isOk()).andExpect(header().string("X-Frame-Options","SAMEORIGIN"));

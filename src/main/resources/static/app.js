@@ -1,3 +1,6 @@
+import { loadCatalogue } from "./catalogue-data.js";
+import { catalogueEntry, selectCatalogue } from "./catalogue-model.js";
+import { appendPDFControls, renderCatalogueCategories, renderCatalogueCards, renderCataloguePager } from "./catalogue-view.js";
 import {updateAtlasLink,atlasForSection} from "./atlas-navigation.js";
 import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
 import {openAI, isAIHash, setupAINavigation, updateAISection} from "./ai-navigation.js";
@@ -260,142 +263,38 @@ function renderCart() {
   $("#clear-cart").disabled = !total;
   updateCartCount();
 }
-function renderCategories() {
-  const target = $("#categories"); target.replaceChildren();
-  const visibleSections = sections.filter(section => section.name.trim().toLocaleLowerCase('ru') !== 'каталог');
-  if (category !== 'all' && !visibleSections.some(section => section.id === category)) category = 'all';
-  for (const section of [{id:'all',name:'Все разделы'}, ...visibleSections]) {
-    const count = [...books, ...libraryBooks].filter(b => section.id === 'all' || b.sectionId === section.id).length;
-    const button = action(section.name + (user?.role === 'ADMIN' ? ` · ${count}` : ''), () => {
-      $("#ai").hidden = true; if(isAIHash(location.hash)) history.replaceState(null,'','#catalog');
-      category = section.id; page = 1; render();
-    }, 'category-chip' + (category === section.id ? ' active' : ''));
-    button.setAttribute('aria-pressed',String(category === section.id)); target.append(button);
-  }
-}
-function appendPDFControls(target, book) {
-  if (!book.pdfId) return;
-  const read = node('a','Читать','button light'); read.href = `/reader.html?id=${encodeURIComponent(book.pdfId)}`;
-  const download = node('a','Скачать PDF ↓','button dark'); download.href = `/api/java-library/${book.pdfId}/download`; download.setAttribute('download','');
-  target.append(read,download);
-  const source = node('a', 'Как работает чтение PDF · Java', 'pdf-source-link');
-  source.href = '/pdf-reading-code.html'; source.target = '_blank'; source.rel = 'noopener';
-  target.append(source);
-  const downloadSource = node('a', 'Как работает скачивание · Java', 'pdf-source-link');
-  downloadSource.href = '/pdf-download-code.html'; downloadSource.target = '_blank'; downloadSource.rel = 'noopener';
-  target.append(downloadSource);
-}
 function render() {
   $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;
   for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) $(selector).hidden = false;
-  renderCategories();
+  const model = selectCatalogue({ books, libraryBooks, sections, category, filter,
+    query: $("#search").value, page, pageSize, favorites, libraryFavorites });
+  category = model.category;
+  page = model.page;
   const currentSection = sections.find(section => section.id === category);
   updateAtlasLink($("#catalog-atlas"), currentSection);
   updateAISection(currentSection);
-  const q = $("#search").value.trim().toLocaleLowerCase("ru");
-  const visible = [...books, ...libraryBooks].filter(
-    (b) =>
-      (b.name + " " + b.author).toLocaleLowerCase("ru").includes(q) &&
-      (filter !== "favorites" || (b.kind === "library" ? libraryFavorites : favorites).has(String(b.id))) &&
-      (category === "all" || b.sectionId === category),
-  );
-  visible.sort((a,b)=>a.catalogOrder-b.catalogOrder);
-  const pages = Math.max(1, Math.ceil(visible.length / pageSize));
-  page = Math.min(page, pages);
-  $("#books").replaceChildren();
-  $("#catalog-count").textContent = `Найдено: ${visible.length}`;
-  $("#favorite-count").textContent = [...books,...libraryBooks].filter(b => (b.kind === 'library' ? libraryFavorites : favorites).has(String(b.id))).length;
-  renderCategories();
-  if (!visible.length)
-    $("#books").append(
-      node(
-        "p",
-        filter === "favorites"
-          ? "На этой полке пока нет книг. Добавляйте их сердечком в каталоге."
-          : "Книги не найдены. Измените запрос или раздел.",
-      ),
-    );
-  visible.slice((page - 1) * pageSize, page * pageSize).forEach((b) => {
-    const card = node("article", undefined, "book-card");
-    const image = node("div", undefined, "book-image");
-    const show = () => b.kind === "library" ? showDescription("library",String(b.id)) : openBook(b);
-    const open = action("", show, "cover-button");
-    open.setAttribute("aria-label", "Подробнее: " + b.name);
-    open.append(coverImage(b));
-    image.append(open);
-    const saved = (b.kind === "library" ? libraryFavorites : favorites).has(String(b.id));
-    const button = action(
-      saved ? "♥" : "♡",
-      () => b.kind === "library" ? toggleLibraryFavorite(b) : toggleFavorite(b),
-      "favorite" + (saved ? " selected" : ""),
-    );
-    button.setAttribute(
-      "aria-label",
-      (saved ? "Убрать с полки: " : "Добавить на полку: ") + b.name,
-    );
-    button.setAttribute("aria-pressed", saved);
-    image.append(button);
-    const title = node("h3");
-    title.append(action(b.name, show, "book-title"));
-    card.append(
-      image,
-      node("span", b.category || "Каталог", "category-label"),
-      title,
-      node("p", b.author),
-    );
-    const actions = node('div',undefined,'book-actions');
-    if (b.pdfId) appendPDFControls(actions,b);
-    else card.append(node('p','PDF пока не добавлен','stock-caption'));
-    if (b.kind === 'catalog') {
-      if (b.price !== null) {
-        card.append(node('strong',new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB'}).format(b.price),'book-price'),node('p','Доступно: '+b.availableStock,'stock-caption'));
-        actions.append(action('В корзину +',()=>addToCart(b),'button dark small-button'));
-      }
-      actions.append(action('Отзывы ↗',()=>openBook(b),'text-button'));
-    }
-    card.append(actions); addEditorialControls(card,b.kind,b); addManagementControls(card,b);
-    $("#books").append(card);
+  $("#catalog-count").textContent = `Найдено: ${model.total}`;
+  $("#favorite-count").textContent = model.favoriteCount;
+  renderCatalogueCategories($("#categories"), model, user?.role === 'ADMIN', id => {
+    $("#ai").hidden = true;
+    if (isAIHash(location.hash)) history.replaceState(null, '', '#catalog');
+    category = id; page = 1; render();
   });
-  const pager = $("#pagination");
-  pager.replaceChildren();
-  if (pages > 1) {
-    const prev = action(
-      "← Назад",
-      () => {
-        page--;
-        render();
-        $("#catalog").scrollIntoView();
-      },
-      "page-button",
-    );
-    prev.disabled = page === 1;
-    const next = action(
-      "Далее →",
-      () => {
-        page++;
-        render();
-        $("#catalog").scrollIntoView();
-      },
-      "page-button",
-    );
-    next.disabled = page === pages;
-    pager.append(prev, node("span", `${page} / ${pages}`), next);
-  }
+  renderCatalogueCards($("#books"), model, { coverImage, openBook, showDescription,
+    favorites, libraryFavorites, toggleFavorite, toggleLibraryFavorite, addToCart,
+    addEditorialControls, addManagementControls });
+  renderCataloguePager($("#pagination"), model, nextPage => {
+    page = nextPage; render(); $("#catalog").scrollIntoView();
+  });
   updateCartCount();
-}
-function catalogueEntry(b,index) {
-  return {...b,name:b.title,category:b.sectionName,catalogOrder:index,
-    coverUrl:b.kind==='catalog'?(b.cover?`/api/catalogue/covers/${b.id}?v=${b.version}-${b.pdfVersion}`:null):`/api/java-library/${b.id}/cover?v=${b.version}`};
 }
 async function loadBooks() {
   try {
-    const data = await request("/api/catalogue");
+    const data = await loadCatalogue();
     sections = data.sections;
-    const entries = data.books.map(catalogueEntry);
-    books = entries.filter(b => b.kind === 'catalog'); libraryBooks = entries.filter(b => b.kind === 'library');
-    $("#catalog-message").textContent = data.books.length
-      ? "Найдите свою книгу по названию, автору или разделу."
-      : "Каталог пока пуст. Добавьте первую книгу.";
+    books = data.books;
+    libraryBooks = data.libraryBooks;
+    $("#catalog-message").textContent = data.message;
     render();
   } catch (e) {
     $("#catalog-message").textContent =
