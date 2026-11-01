@@ -331,6 +331,64 @@ class CommerceTest {
         assertThat(selection.get(buyer).cart()).hasSize(2);
     }
 
+    private long anotherStockedBook() {
+        var second = new Book();
+        second.setName("Second " + UUID.randomUUID());
+        second.setAuthor("Author");
+        long id = books.saveAndFlush(second).getId();
+        inventory.update(admin, id, second.getName(), "Author", "История", new BigDecimal("3.10"));
+        inventory.receive(admin, id, 4, UUID.randomUUID(), "Накладная 2");
+        return id;
+    }
+
+    @Test
+    void multiBookCheckoutKeepsTotalsAndAscendingReservationOrder() {
+        long second = anotherStockedBook();
+        selection.quantity(buyer, second, 3);
+        selection.quantity(buyer, book, 2);
+        var result = orders.checkout(buyer, UUID.randomUUID());
+        assertThat(result.order().total()).isEqualByComparingTo("29.80");
+        assertThat(result.items()).extracting(CommerceDto.Item::bookId).containsExactly(book, second);
+        assertThat(result.items()).extracting(CommerceDto.Item::quantity).containsExactly(2, 3);
+        assertThat(jdbc.queryForList("SELECT book_id FROM stock_movements WHERE order_id=? AND kind='RESERVE' ORDER BY id", Long.class, result.order().id()))
+            .containsExactly(book, second);
+        assertThat(books.findById(book).orElseThrow().getReserved()).isEqualTo(2);
+        assertThat(books.findById(second).orElseThrow().getReserved()).isEqualTo(3);
+        assertThat(selection.get(buyer).cart()).isEmpty();
+    }
+
+    @Test
+    void archivedBooksAreOmittedFromCheckoutSnapshot() {
+        long second = anotherStockedBook();
+        selection.quantity(buyer, book, 1);
+        selection.quantity(buyer, second, 1);
+        jdbc.update("UPDATE books SET archived=TRUE WHERE id=?", second);
+        var result = orders.checkout(buyer, UUID.randomUUID());
+        assertThat(result.items()).extracting(CommerceDto.Item::bookId).containsExactly(book);
+        assertThat(result.order().total()).isEqualByComparingTo("10.25");
+        assertThat(books.findById(book).orElseThrow().getReserved()).isEqualTo(1);
+        assertThat(books.findById(second).orElseThrow().getReserved()).isZero();
+        assertThat(selection.get(buyer).cart()).isEmpty();
+    }
+
+    @Test
+    void brokenSecondReserveRollsBackEarlierReleaseAndOrderStatus() {
+        long second = anotherStockedBook();
+        selection.quantity(buyer, book, 2);
+        selection.quantity(buyer, second, 1);
+        String id = orders.checkout(buyer, UUID.randomUUID()).order().id();
+        jdbc.update("UPDATE books SET reserved=0 WHERE id=?", second);
+        assertThatThrownBy(() -> orders.transition(buyer, id, OrderStatus.CANCELLED, false))
+            .isInstanceOfSatisfying(ResponseStatusException.class, e -> {
+                assertThat(e.getStatusCode().value()).isEqualTo(409);
+                assertThat(e.getReason()).isEqualTo("Нарушен складской резерв");
+            });
+        assertThat(books.findById(book).orElseThrow().getReserved()).isEqualTo(2);
+        assertThat(orders.detail(buyer, id).order().status()).isEqualTo(OrderStatus.CREATED);
+        assertThat(orders.detail(buyer, id).events()).hasSize(1);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM stock_movements WHERE order_id=? AND kind='RELEASE'", Integer.class, id)).isZero();
+    }
+
     @Test
     void receiptsAreAuditedIdempotentAndCartDatesAreRecorded() {
         var key = UUID.randomUUID();
