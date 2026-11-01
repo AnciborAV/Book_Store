@@ -49,8 +49,13 @@ public class ReviewRepository {
         return false;
     }
 
-    public long id(long book,long user) {
-        return jdbc.queryForObject("SELECT id FROM book_reviews WHERE book_id=? AND user_id=?",Long.class,book,user);
+    public long id(long book, long user) {
+        return jdbc.queryForObject(
+            "SELECT id FROM book_reviews WHERE book_id=? AND user_id=?",
+            Long.class,
+            book,
+            user
+        );
     }
 
     public boolean delete(long book, long review, long user) {
