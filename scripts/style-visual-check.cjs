@@ -59,12 +59,23 @@ async function createPage(browser, before, width) {
       try {
         for (const name of pages) {
           const shots=[];
+          const rules=[];
           for (const [label,item] of [['before',before],['after',after]]) {
             await item.page.goto(`https://style.test/${name}`,{waitUntil:'networkidle'});
-            await item.page.evaluate(() => document.fonts.ready);
+            await item.page.evaluate(async () => {
+              await document.fonts.ready;
+              await Promise.all(Array.from(document.images, image => {
+                image.loading='eager';
+                return image.decode().catch(()=>{});
+              }));
+            });
+            rules.push(await item.page.evaluate(() => Array.from(document.styleSheets, sheet =>
+              Array.from(sheet.cssRules, rule=>rule.cssText))));
             shots.push(await item.page.screenshot({path:path.join(output,`${name}-${width}-${label}.png`),
               fullPage:true, animations:'disabled'}));
           }
+          await fs.writeFile(path.join(output,`${name}-${width}-rules.json`),JSON.stringify(rules,null,2));
+          assert.deepEqual(rules[1],rules[0],`Page CSSOM difference: ${name} at ${width}`);
           assert.ok(shots[0].equals(shots[1]),`Visual difference: ${name} at ${width}`);
         }
         // CSSOM comparison also covers styles used only in script-created dialogs and cards.
