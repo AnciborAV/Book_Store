@@ -1,7 +1,9 @@
 package ru.aav.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,8 +19,8 @@ public class Book extends BasicEntity {
     private String author;
     private String category;
 
-    @jakarta.persistence.Column(precision = 10, scale = 2)
-    private java.math.BigDecimal price;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
 
     private String retiredTitle;
     private boolean archived;
