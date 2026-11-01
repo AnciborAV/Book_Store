@@ -19,16 +19,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Catalogue model and data loading
-        run: node scripts/test-catalogue.mjs
-      - name: Cart data, state and view
-        run: node scripts/test-cart.mjs
-      - name: Account data, forms and profile
-        run: node scripts/test-account.mjs
-      - name: Book detail and reviews
-        run: node scripts/test-book-detail.mjs
-      - name: Application startup and navigation
-        run: node scripts/test-app-startup.mjs
+      - name: All client contract checks
+        run: |
+          for script in scripts/test-*.mjs; do
+            node "$script"
+          done
+      - name: Content source and asset checks
+        run: |
+          python3 scripts/check-ai-content.py
+          python3 scripts/check-ai-models.py
+          python3 scripts/check-ai-russia.py
       - name: Install browser test dependencies
         id: browser-deps
         run: |
@@ -52,3 +52,10 @@ jobs:
             target/browser-server.log
             target/java-library-server.log
             target/browser-screenshots
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build production image on Java 21
+        run: docker build --tag bookstore:ci .
