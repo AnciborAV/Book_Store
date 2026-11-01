@@ -1,54 +1,29 @@
 package ru.aav.editorial;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
-import java.io.IOException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Editorial summaries, not publisher quotations. Never infer an uploaded PDF's edition. */
 final class BookDescriptions {
-    record Summary(String text, String source, boolean supplemental) {
-        Summary(String text, String source) { this(text, source, false); }
-    }
-    private record Entry(String title, String author, String text, String source) {}
     private static final Map<String, Summary> SUPPLEMENTAL = load();
-    private record Alias(String old_title, String old_author, String new_title, String new_author) {}
     private static final Map<String, String> ALIASES = loadAliases();
-    private static Map<String, String> loadAliases() {
-        try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-metadata-aliases.json")) {
-            if (stream == null) throw new IllegalStateException("Missing Java metadata aliases");
-            var result = new HashMap<String, String>();
-            for (var alias : new ObjectMapper().readValue(stream, Alias[].class))
-                if (result.putIfAbsent(key(alias.new_title(), alias.new_author()), key(alias.old_title(), alias.old_author())) != null)
-                    throw new IllegalStateException("Duplicate metadata alias");
-            return Map.copyOf(result);
-        } catch (IOException ex) { throw new IllegalStateException("Cannot read metadata aliases", ex); }
-    }
 
-    private static Map<String, Summary> load() {
-        try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-descriptions.json")) {
-            if (stream == null) throw new IllegalStateException("Missing Java descriptions");
-            var entries = new ObjectMapper().readValue(stream, Entry[].class);
-            var result = new HashMap<String, Summary>();
-            for (var entry : entries) {
-                if (entry.title() == null || entry.author() == null || entry.text() == null
-                        || entry.text().isBlank() || entry.source() == null || !entry.source().startsWith("https://"))
-                    throw new IllegalStateException("Invalid Java description");
-                if (result.putIfAbsent(key(entry.title(), entry.author()),
-                        new Summary(entry.text(), entry.source(), true)) != null)
-                    throw new IllegalStateException("Duplicate Java description: " + entry.title());
-            }
-            return Map.copyOf(result);
-        } catch (IOException ex) {
-            throw new IllegalStateException("Cannot read Java descriptions", ex);
+    record Summary(String text, String source, boolean supplemental) {
+        Summary(String text, String source) {
+            this(text, source, false);
         }
     }
-    private static String key(String title, String author) {
-        return title.strip().toLowerCase(Locale.ROOT) + "\n" + author.strip().toLowerCase(Locale.ROOT);
-    }
+
+    private record Entry(String title, String author, String text, String source) {}
+
+    private record Alias(String old_title, String old_author, String new_title, String new_author) {}
+
     static Summary find(String title, String author) {
-        String name = title.toLowerCase(Locale.ROOT), person = author.toLowerCase(Locale.ROOT);
+        String name = title.toLowerCase(Locale.ROOT);
+        String person = author.toLowerCase(Locale.ROOT);
         if ((name.contains("философия java") || name.contains("thinking in java"))
                 && (person.contains("эккел") || person.contains("eckel") || name.contains("эккел"))) {
             return new Summary("""
@@ -90,5 +65,50 @@ final class BookDescriptions {
         String lookup = key(title, author);
         return SUPPLEMENTAL.getOrDefault(ALIASES.getOrDefault(lookup, lookup), new Summary("", ""));
     }
+
+    private static Map<String, String> loadAliases() {
+        try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-metadata-aliases.json")) {
+            if (stream == null) {
+                throw new IllegalStateException("Missing Java metadata aliases");
+            }
+            var result = new HashMap<String, String>();
+            for (var alias : new ObjectMapper().readValue(stream, Alias[].class)) {
+                if (result.putIfAbsent(key(alias.new_title(), alias.new_author()), key(alias.old_title(), alias.old_author())) != null) {
+                    throw new IllegalStateException("Duplicate metadata alias");
+                }
+            }
+            return Map.copyOf(result);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot read metadata aliases", ex);
+        }
+    }
+
+    private static Map<String, Summary> load() {
+        try (var stream = BookDescriptions.class.getResourceAsStream("/editorial/java-descriptions.json")) {
+            if (stream == null) {
+                throw new IllegalStateException("Missing Java descriptions");
+            }
+            var entries = new ObjectMapper().readValue(stream, Entry[].class);
+            var result = new HashMap<String, Summary>();
+            for (var entry : entries) {
+                if (entry.title() == null || entry.author() == null || entry.text() == null
+                        || entry.text().isBlank() || entry.source() == null || !entry.source().startsWith("https://")) {
+                    throw new IllegalStateException("Invalid Java description");
+                }
+                if (result.putIfAbsent(key(entry.title(), entry.author()),
+                        new Summary(entry.text(), entry.source(), true)) != null) {
+                    throw new IllegalStateException("Duplicate Java description: " + entry.title());
+                }
+            }
+            return Map.copyOf(result);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot read Java descriptions", ex);
+        }
+    }
+
+    private static String key(String title, String author) {
+        return title.strip().toLowerCase(Locale.ROOT) + "\n" + author.strip().toLowerCase(Locale.ROOT);
+    }
+
     private BookDescriptions() {}
 }
