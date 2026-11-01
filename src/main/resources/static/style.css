@@ -51,11 +51,11 @@ button {
     color: inherit;
 }
 
-button: hover, a.button:hover {
+button:hover, a.button:hover {
     filter: brightness(0.92);
 }
 
-button: focus-visible, a:focus-visible, input:focus-visible {
+button:focus-visible, a:focus-visible, input:focus-visible {
     outline: 3px solid #d6a564;
     outline-offset: 4px;
 }
@@ -100,7 +100,7 @@ header {
 
 .logo strong span {
     display: block;
-    font: 1rem "Golos Text",     sans-serif;
+    font:     1rem "Golos Text",     sans-serif;
     letter-spacing: 3px;
     margin-top: 4px;
 }
@@ -280,7 +280,7 @@ p {
 
 .standing-book {
     position: absolute;
-    box-shadow: 10px 18px 20px #233a3033,     inset 6px 0 5px #0003;
+    box-shadow:     10px 18px 20px #233a3033,     inset 6px 0 5px #0003;
     border-radius: 2px 5px 5px 2px;
     width: 175px;
     height: 270px;
@@ -294,7 +294,7 @@ p {
 }
 
 .standing-book b {
-    font: 25px/1.2 "Literata",     Georgia,     serif;
+    font:     25px/1.2 "Literata",     Georgia,     serif;
     display: block;
     margin: 20px 0;
 }
@@ -525,7 +525,7 @@ h2 {
     background: var(--cover);
     color: var(--text);
     padding: 18px 13px;
-    box-shadow: 6px 8px 10px #25362728,     inset 4px 0 3px #0003;
+    box-shadow:     6px 8px 10px #25362728,     inset 4px 0 3px #0003;
     transform: rotate(-4deg);
     display: flex;
     flex-direction: column;
@@ -546,7 +546,7 @@ h2 {
 }
 
 .cover strong {
-    font: 20px/1.25 "Literata",     Georgia,     serif;
+    font:     20px/1.25 "Literata",     Georgia,     serif;
     overflow-wrap: anywhere;
 }
 
@@ -579,7 +579,7 @@ h2 {
 }
 
 .book-card h3 {
-    font: 16px/1.4 "Literata",     Georgia,     serif;
+    font:     16px/1.4 "Literata",     Georgia,     serif;
     margin: 15px 0 4px;
 }
 
@@ -669,7 +669,7 @@ dialog {
     overflow: auto;
 }
 
-dialog: :backdrop {
+dialog::backdrop {
     background: #193c3277;
     backdrop-filter: blur(5px);
 }
@@ -1013,7 +1013,7 @@ textarea {
     resize: vertical;
 }
 
-button: disabled {
+button:disabled {
     cursor: default;
     opacity: 0.45;
 }
@@ -1178,7 +1178,7 @@ form[hidden], [hidden] {
 }
 
 .cart-row h3 {
-    font: 18px/1.4 "Literata",     Georgia,     serif;
+    font:     18px/1.4 "Literata",     Georgia,     serif;
     margin: 0;
 }
 
@@ -1797,7 +1797,7 @@ nav a, .account {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(       90deg,       #17120e 0%,       #17120e80 10%,       #17120e18 27%,       transparent 50%     ),     linear-gradient(0deg, #17120e 0%, #17120e99 12%, #17120e22 32%, transparent 52%);
+    background:     linear-gradient(       90deg,       #17120e 0%,       #17120e80 10%,       #17120e18 27%,       transparent 50%     ),     linear-gradient(0deg, #17120e 0%, #17120e99 12%, #17120e22 32%, transparent 52%);
 }
 
 .hero-signature {
@@ -1825,7 +1825,7 @@ nav a, .account {
   }
 
     .reading-room::after {
-        background: linear-gradient(90deg, #17120e 0%, #17120ed9 38%, #17120e66 100%),       linear-gradient(0deg, #17120e, transparent 50%);
+        background:       linear-gradient(90deg, #17120e 0%, #17120ed9 38%, #17120e66 100%),       linear-gradient(0deg, #17120e, transparent 50%);
   }
 }
 
@@ -1855,7 +1855,7 @@ nav a, .account {
   }
 
     .reading-room::after {
-        background: linear-gradient(0deg, #17120e 0%, transparent 38%),       linear-gradient(90deg, #17120edb, #17120e80);
+        background:       linear-gradient(0deg, #17120e 0%, transparent 38%),       linear-gradient(90deg, #17120edb, #17120e80);
   }
 
     .hero-signature {
@@ -1930,7 +1930,7 @@ form input, input, select, textarea {
     border-color: #8e7855;
 }
 
-input: :placeholder, textarea::placeholder {
+input::placeholder, textarea::placeholder {
     color: #c1b49c;
     opacity: 1;
 }
@@ -1998,11 +1998,11 @@ input: :placeholder, textarea::placeholder {
     border-color: var(--line);
 }
 
-dialog: :backdrop {
+dialog::backdrop {
     background: #080c09cc;
 }
 
-button: focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
     outline-color: #f4d59c;
 }
 
@@ -2038,214 +2038,214 @@ button: focus-visible, a:focus-visible, input:focus-visible, select:focus-visibl
 }
 
 .java-heading {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   gap: 24px;
-   padding: 30px 0;
-   border-bottom: 1px solid #826d46;
+   display:flex;
+   justify-content:space-between;
+   align-items:center;
+   gap:24px;
+   padding:30px 0;
+   border-bottom:1px solid #826d46;
 }
 /* Library section titles use the shared h2 scale, matching the catalog title. */
 .java-heading h2 {
-   margin: 12px 0;
+   margin:12px 0;
 }
 
 .java-heading p {
-   font-size: 19px;
-   line-height: 1.7;
+   font-size:19px;
+   line-height:1.7;
 }
 
 .java-dot {
-   color: #c5a059;
+   color:#c5a059;
 }
 
 .java-search {
-   margin: 24px 0;
-   max-width: 650px;
+   margin:24px 0;
+   max-width:650px;
 }
 
 .java-search label {
-   display: block;
-   font-size: 18px;
-   margin-bottom: 10px;
+   display:block;
+   font-size:18px;
+   margin-bottom:10px;
 }
 
 .java-search>div {
-   display: flex;
-   gap: 12px;
+   display:flex;
+   gap:12px;
 }
 
 .java-search input {
-   flex: 1;
-   min-width: 0;
+   flex:1;
+   min-width:0;
 }
 
 .java-grid {
-   display: grid;
-   grid-template-columns: repeat(3,minmax(0,1fr));
-   gap: 30px;
-   margin: 28px 0;
+   display:grid;
+   grid-template-columns:repeat(3,minmax(0,1fr));
+   gap:30px;
+   margin:28px 0;
 }
 
 .java-card {
-   background: #242c25;
-   border: 1px solid #5d5843;
-   padding: 22px;
-   display: flex;
-   flex-direction: column;
+   background:#242c25;
+   border:1px solid #5d5843;
+   padding:22px;
+   display:flex;
+   flex-direction:column;
 }
 
 .java-cover {
-   height: 310px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   background: #171d18;
-   padding: 14px;
+   height:310px;
+   display:flex;
+   justify-content:center;
+   align-items:center;
+   background:#171d18;
+   padding:14px;
 }
 
 .java-cover img {
-   max-height: 100%;
-   max-width: 100%;
-   width: auto;
-   height: auto;
-   object-fit: contain;
-   box-shadow: 8px 10px 18px #0008;
+   max-height:100%;
+   max-width:100%;
+   width:auto;
+   height:auto;
+   object-fit:contain;
+   box-shadow:8px 10px 18px #0008;
 }
 
 .java-info {
-   padding-top: 22px;
-   display: flex;
-   flex-direction: column;
-   flex: 1;
-   gap: 12px;
-   color: #f1eadb;
+   padding-top:22px;
+   display:flex;
+   flex-direction:column;
+   flex:1;
+   gap:12px;
+   color:#f1eadb;
 }
 
 .java-info h3 {
-   font-size: 25px;
-   line-height: 1.3;
-   margin: 0;
-   overflow-wrap: anywhere;
+   font-size:25px;
+   line-height:1.3;
+   margin:0;
+   overflow-wrap:anywhere;
 }
 
 .java-info p {
-   margin: 0;
-   font-size: 17px;
-   line-height: 1.6;
+   margin:0;
+   font-size:17px;
+   line-height:1.6;
 }
 
 .java-author,.java-meta {
-   color: #d1c7b1;
+   color:#d1c7b1;
 }
 
 .java-description {
-   white-space: pre-wrap;
-   overflow-wrap: anywhere;
+   white-space:pre-wrap;
+   overflow-wrap:anywhere;
 }
 
 .java-info>a {
-   margin-top: 0;
-   text-align: center;
+   margin-top:0;
+   text-align:center;
 }
 
 .java-actions {
-   display: flex;
-   flex-wrap: wrap;
-   gap: 8px;
+   display:flex;
+   flex-wrap:wrap;
+   gap:8px;
 }
 
 .java-actions .button {
-   padding: 10px 14px;
-   font-size: 16px;
+   padding:10px 14px;
+   font-size:16px;
 }
 
 .java-editor-heading {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   gap: 16px;
+   display:flex;
+   align-items:center;
+   justify-content:space-between;
+   gap:16px;
 }
 
 .java-form {
-   display: grid;
-   gap: 16px;
+   display:grid;
+   gap:16px;
 }
 
 .java-form label {
-   display: grid;
-   gap: 8px;
-   font-size: 18px;
+   display:grid;
+   gap:8px;
+   font-size:18px;
 }
 
 .java-form input,.java-form textarea,.java-search input {
-   padding: 12px;
-   border: 1px solid #9a896c;
-   border-radius: 4px;
-   font: inherit;
-   background: #f4efe3;
-   color: #202b24;
-   width: 100%;
+   padding:12px;
+   border:1px solid #9a896c;
+   border-radius:4px;
+   font:inherit;
+   background:#f4efe3;
+   color:#202b24;
+   width:100%;
 }
 
 .java-form input[type=file] {
-   font-size: 16px;
+   font-size:16px;
 }
 
 .java-hint {
-   font-size: 16px;
-   line-height: 1.6;
-   margin: 0;
+   font-size:16px;
+   line-height:1.6;
+   margin:0;
 }
 
 #java-current-cover {
-   max-width: 160px;
-   max-height: 220px;
-   object-fit: contain;
+   max-width:160px;
+   max-height:220px;
+   object-fit:contain;
 }
 
 #java-error {
-   color: #ffb5a9;
+   color:#ffb5a9;
 }
 
 #java-status {
-   font-size: 18px;
-   line-height: 1.6;
+   font-size:18px;
+   line-height:1.6;
 }
 
 @media(max-width:1000px) {
    .java-grid {
-     grid-template-columns: repeat(2,minmax(0,1fr));
+     grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
 @media(max-width:600px) {
    .java-grid {
-     grid-template-columns: 1fr;
+     grid-template-columns:1fr;
   }
 
    .java-heading {
-     align-items: flex-start;
-     flex-direction: column;
+     align-items:flex-start;
+     flex-direction:column;
   }
 
    .java-editor-heading {
-     align-items: flex-start;
+     align-items:flex-start;
   }
 
    .java-editor-heading h2 {
-     font-size: 26px;
+     font-size:26px;
   }
 }
 
 .java-search button {
-   width: auto;
-   flex: 0 0 auto;
+   width:auto;
+   flex:0 0 auto;
 }
 
 .java-search input {
-   width: 0;
-   flex: 1 1 0;
+   width:0;
+   flex:1 1 0;
 }
 /* One photographic backdrop from the catalogue to the footer.
    A sticky viewport-sized layer avoids stretching the portrait over long lists
@@ -2266,7 +2266,7 @@ button: focus-visible, a:focus-visible, input:focus-visible, select:focus-visibl
     margin-bottom: -100vh;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(180deg, #17120e 0%, #17120e38 18%, #17120e66 100%),     linear-gradient(90deg, #100d0bc9, #100d0b70 50%, #100d0bb3),     url("/covers/scene/catalog-library.jpg") center 55% / cover no-repeat;
+    background:     linear-gradient(180deg, #17120e 0%, #17120e38 18%, #17120e66 100%),     linear-gradient(90deg, #100d0bc9, #100d0b70 50%, #100d0bb3),     url("/covers/scene/catalog-library.jpg") center 55% / cover no-repeat;
 }
 
 @supports (height: 100svh) {
@@ -2433,7 +2433,7 @@ button: focus-visible, a:focus-visible, input:focus-visible, select:focus-visibl
 }
 
 .home-masthead > .reading-room::after {
-    background: linear-gradient(180deg, #17120e38 0%, transparent 65%, #17120e 100%),     linear-gradient(90deg, #100b08d9 0%, #100b08b8 40%, #100b0859 72%, #100b0873 100%);
+    background:     linear-gradient(180deg, #17120e38 0%, transparent 65%, #17120e 100%),     linear-gradient(90deg, #100b08d9 0%, #100b08b8 40%, #100b0859 72%, #100b0873 100%);
 }
 
 .home-masthead .announcement {
@@ -2459,7 +2459,7 @@ button: focus-visible, a:focus-visible, input:focus-visible, select:focus-visibl
   }
 
     .home-masthead > .reading-room::after {
-        background: linear-gradient(180deg, #17120e40, #17120e20 70%, #17120e 100%),       linear-gradient(90deg, #100b08d9, #100b088a);
+        background:       linear-gradient(180deg, #17120e40, #17120e20 70%, #17120e 100%),       linear-gradient(90deg, #100b08d9, #100b088a);
   }
 }
 /* Compact phone layout: retain comfortable touch targets without a full-screen header. */
@@ -2758,113 +2758,113 @@ button: focus-visible, a:focus-visible, input:focus-visible, select:focus-visibl
 }
 /* An author's portrait in the opening of the personal preface. */
 .about-story-content {
-  display: flow-root;
+  display:flow-root;
 }
 
 .about-author {
-  float: left;
-  width: 240px;
-  margin: 4px 36px 24px 0;
-  padding: 8px;
-  background: #211912;
-  border: 1px solid #b693586e;
-  border-radius: 8px;
-  box-shadow: 0 16px 38px #0005;
+  float:left;
+  width:240px;
+  margin:4px 36px 24px 0;
+  padding:8px;
+  background:#211912;
+  border:1px solid #b693586e;
+  border-radius:8px;
+  box-shadow:0 16px 38px #0005;
 }
 
 .about-author img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 3px;
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:3px;
 }
 
 .about-story p.about-story-signature {
-  clear: both;
+  clear:both;
 }
 
 @media(max-width:1000px) {
     .about-author {
-    float: none;
-    width: min(260px,100%);
-    margin: 0 auto 30px;
+    float:none;
+    width:min(260px,100%);
+    margin:0 auto 30px;
   }
 }
 
 .about-author-zoom {
-  display: block;
-  cursor: zoom-in;
-  border-radius: 3px;
+  display:block;
+  cursor:zoom-in;
+  border-radius:3px;
 }
 
 .about-author-zoom:focus-visible {
-  outline: 2px solid #e9c783;
-  outline-offset: 5px;
+  outline:2px solid #e9c783;
+  outline-offset:5px;
 }
 
 dialog.author-photo-dialog {
-  width: fit-content;
-  max-width: calc(100vw - 24px);
-  max-height: calc(100dvh - 24px);
-  padding: 48px 12px 12px;
-  border: 1px solid #b69358;
-  border-radius: 8px;
-  background: #211912;
-  box-sizing: border-box;
+  width:fit-content;
+  max-width:calc(100vw - 24px);
+  max-height:calc(100dvh - 24px);
+  padding:48px 12px 12px;
+  border:1px solid #b69358;
+  border-radius:8px;
+  background:#211912;
+  box-sizing:border-box;
 }
 
 .author-photo-dialog img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: calc(100vw - 50px);
-  max-height: calc(100dvh - 86px);
-  object-fit: contain;
+  display:block;
+  width:auto;
+  height:auto;
+  max-width:calc(100vw - 50px);
+  max-height:calc(100dvh - 86px);
+  object-fit:contain;
 }
 
 .author-photo-dialog .author-photo-close {
-  top: 2px;
-  right: 4px;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  color: #f4e7ce;
-  cursor: pointer;
+  top:2px;
+  right:4px;
+  width:44px;
+  height:44px;
+  padding:0;
+  color:#f4e7ce;
+  cursor:pointer;
 }
 
 .author-photo-dialog::backdrop {
-  background: rgba(10,7,5,.88);
-  backdrop-filter: blur(6px);
+  background:rgba(10,7,5,.88);
+  backdrop-filter:blur(6px);
 }
 
-html: has(#author-photo-dialog[open]) {
-  overflow: hidden;
+html:has(#author-photo-dialog[open]) {
+  overflow:hidden;
 }
 
 #auth-form .remember-choice {
-   display: flex;
-   align-items: center;
-   gap: 12px;
-   cursor: pointer;
-   font-size: 16px;
-   line-height: 1.5;
+   display:flex;
+   align-items:center;
+   gap:12px;
+   cursor:pointer;
+   font-size:16px;
+   line-height:1.5;
 }
 
 #auth-form .remember-choice input {
-   flex: 0 0 20px;
-   width: 20px;
-   height: 20px;
-   min-height: 20px;
-   margin: 0;
-   padding: 0;
-   accent-color: var(--green);
+   flex:0 0 20px;
+   width:20px;
+   height:20px;
+   min-height:20px;
+   margin:0;
+   padding:0;
+   accent-color:var(--green);
 }
 
 #auth-form .remember-hint {
-   margin: 6px 0 16px;
-   font-size: 14px;
-   line-height: 1.5;
-   color: var(--muted);
+   margin:6px 0 16px;
+   font-size:14px;
+   line-height:1.5;
+   color:var(--muted);
 }
 
 #auth-form .remember-code-link {

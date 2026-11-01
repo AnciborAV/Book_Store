@@ -175,29 +175,29 @@
 }
 
 #open-review-inbox {
-  margin: 12px 0;
+  margin:12px 0;
 }
 
 #admin-reviews-dialog {
-  width: min(850px,calc(100% - 32px));
-  max-height: 90dvh;
-  overflow: auto;
+  width:min(850px,calc(100% - 32px));
+  max-height:90dvh;
+  overflow:auto;
 }
 
 #admin-reviews-dialog .feedback-card {
-  overflow-wrap: anywhere;
+  overflow-wrap:anywhere;
 }
 
 .review-mail-status {
-  margin: 24px 0;
-  padding: 20px;
-  background: rgba(211,178,115,.08);
-  border: 1px solid rgba(211,178,115,.3);
-  border-radius: 12px;
+  margin:24px 0;
+  padding:20px;
+  background:rgba(211,178,115,.08);
+  border:1px solid rgba(211,178,115,.3);
+  border-radius:12px;
 }
 
 #review-inbox-error {
-  color: #e8a49d;
+  color:#e8a49d;
 }
 /* Keep the illustration outside the live reviews region so pagination never removes it. */
 .feedback-layout > div {
@@ -273,60 +273,60 @@
 }
 /* A paired composition below the feedback columns keeps both images readable. */
 .feedback-gallery {
-  display: grid;
-  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  gap: 32px;
-  margin-top: 32px;
-  align-items: start;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:32px;
+  margin-top:32px;
+  align-items:start;
 }
 
 .feedback-gallery .feedback-artwork {
-  margin: 0;
-  min-width: 0;
+  margin:0;
+  min-width:0;
 }
 
 .feedback-code-link {
-  display: block;
-  background: #292929;
+  display:block;
+  background:#292929;
 }
 
 .feedback-code-link:focus-visible {
-  outline: 3px solid #d3b273;
-  outline-offset: 4px;
+  outline:3px solid #d3b273;
+  outline-offset:4px;
 }
 
 .feedback-code img {
-  aspect-ratio: auto;
-  height: auto;
+  aspect-ratio:auto;
+  height:auto;
 }
 
 .feedback-code h3 {
-  font-family: Georgia,"Times New Roman",serif;
-  font-size: clamp(24px,2.2vw,30px);
-  font-weight: 400;
-  line-height: 1.3;
-  color: #d3b273;
-  margin: 0 0 16px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(24px,2.2vw,30px);
+  font-weight:400;
+  line-height:1.3;
+  color:#d3b273;
+  margin:0 0 16px;
 }
 
 .feedback-code .feedback-artwork-caption p {
-  font-size: 18px;
-  line-height: 1.7;
-  text-align: justify;
-  text-align-last: left;
-  hyphens: none;
-  word-break: normal;
+  font-size:18px;
+  line-height:1.7;
+  text-align:justify;
+  text-align-last:left;
+  hyphens:none;
+  word-break:normal;
 }
 
 .feedback-code .text-button {
-  display: inline-block;
-  margin-top: 18px;
+  display:inline-block;
+  margin-top:18px;
 }
 
 @media(max-width:900px) {
   .feedback-gallery {
-    grid-template-columns: minmax(0,1fr);
-    gap: 24px;
+    grid-template-columns:minmax(0,1fr);
+    gap:24px;
   }
 }
 /* Optional source disclosure stays within the review, even on narrow phones. */
