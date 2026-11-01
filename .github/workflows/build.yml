@@ -27,6 +27,8 @@ jobs:
         run: node scripts/test-account.mjs
       - name: Book detail and reviews
         run: node scripts/test-book-detail.mjs
+      - name: Application startup and navigation
+        run: node scripts/test-app-startup.mjs
       - name: Install browser test dependencies
         run: |
           npm install --prefix "$RUNNER_TEMP/browser-test" playwright@1.58.2

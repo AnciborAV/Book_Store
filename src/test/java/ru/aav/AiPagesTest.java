@@ -12,6 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class AiPagesTest {
     @Autowired MockMvc mvc;
+    @Test void applicationModulesArePublicWithoutLogin() throws Exception {
+        for (String path : new String[]{"/app-startup.js", "/app-navigation.js"}) {
+            mvc.perform(get(path)).andExpect(status().isOk())
+                .andExpect(header().string("X-Frame-Options", "DENY"));
+        }
+    }
     @Test void bookDetailModulesArePublicWithoutLogin() throws Exception {
         for (String path : new String[]{"/book-detail-data.js", "/book-detail-controller.js", "/book-detail-view.js"}) {
             mvc.perform(get(path)).andExpect(status().isOk())
