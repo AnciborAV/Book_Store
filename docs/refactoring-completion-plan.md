@@ -12,7 +12,7 @@
 
 JavaLibraryService уже унифицирован в PR №86. SelectionRepository унифицирован в принятом PR №87; отзывы и выбор продолжены в PR №88–89. Группа J1 завершена принятым PR №90: закрыты все 8 файлов: 7 приведены к общим правилам, модель Review проверена без правки. Результаты и проверки указаны в реестре и в разделе «Завершение группы J1» документа refactoring.md. Архитектурные выделения из PR №67, №68 и №77–85 сохраняются; уже обработанные компоненты отмечены в реестре, их не нужно повторно разделять.
 
-Группа J2 завершена и принята в PR №92: 5 из 5 файлов. В текущем PR унифицированы AboutController и AboutService, группа J3 готова на 2 из 4 файлов. Следующий небольшой блок J3: AboutImages и AnnouncementController. Остальные этапы остаются в очереди.
+Группа J2 завершена и принята в PR №92: 5 из 5 файлов. Группа J3 завершается в текущем PR: AboutController и AboutService приняты в PR №93, AboutImages и AnnouncementController унифицированы и проверены, 4 из 4 файлов. Следующий этап: J4, единый стиль клиентского каталога на сервере. Остальные этапы остаются в очереди.
 
 ## Общие правила
 
@@ -30,7 +30,7 @@ JavaLibraryService уже унифицирован в PR №86. SelectionReposit
 | Порядок и группа | Участки | Что завершить | Проверки по области |
 | --- | --- | --- | --- |
 | 1. J1, завершена (PR №90) | SelectionRepository, SelectionService, SelectionController, Selection, Review/ReviewController/ReviewRepository/ReviewService | Оформление операций корзины, обеих полок и отзывов; маленькие DTO проверить без обязательной правки | SelectionTest, CatalogTest; CI PostgresSelectionTest/PostgresCatalogTest |
-| 2. J2 (завершена, PR №92), J3 (2 из 4) | FeedbackController/FeedbackService; notifications; AboutController/AboutService/AboutImages; AnnouncementController | Раскрыть плотные ветвления и JDBC-вызовы, упорядочить импорты. Письма и опубликованные тексты сохранять | FeedbackTest, ReviewNotificationsTest, ReviewMailSenderTest, AboutSectionTest, AnnouncementTest |
+| 2. J2 (завершена, PR №92), J3 (завершение, 4 из 4) | FeedbackController/FeedbackService; notifications; AboutController/AboutService/AboutImages; AnnouncementController | Раскрыть плотные ветвления и JDBC-вызовы, упорядочить импорты. Письма и опубликованные тексты сохранять | FeedbackTest, ReviewNotificationsTest, ReviewMailSenderTest, AboutSectionTest, AnnouncementTest |
 | 3. J4–J5 | CatalogueController, CatalogueOrderService, CatalogueService, SectionService; JavaLibraryController, LibraryFiles, PdfDeliveryService, PdfReaderAssets | Единый стиль каталога, файлов и HTTP-обёрток. JavaLibraryService повторно не переписывать; уже выделенную выдачу PDF сохранить | CatalogueManagementTest, CatalogueOrderTest, SectionServiceTest, JavaLibraryTest, LibraryCoverCodecTest и PostgreSQL-варианты |
 | 4. J6 | EditorialService/EditorialController/EditorialBookMapper, AuthorProfiles, BookDescriptions, TextStyles | Упорядочить оставшееся оформление. Сохранить приоритеты описаний, UTF-16-диапазоны, намеренно пустые значения и структуру DTO | EditorialTest, EditorialDtoTest, AuthorProfilesTest, BookDescriptionsTest, TextStylesTest, миграционные проверки |
 | 5. J7 | commerce: контроллер, DTO, repository, inventory, order services/status, очереди/отправитель/шаблон писем | Проверить стиль всех 10 файлов, точечно оформить плотные места; сохранить BigDecimal, повторный ключ и порядок складских блокировок | CommerceTest, OrderMailTest, PostgresCommerceTest; браузерный заказ и перезапуск |
