@@ -1,3 +1,6 @@
+import { createSelectionState } from "./selection-state.js";
+import { cartRows } from "./cart-model.js";
+import { renderCartRows, renderSelectionHints } from "./cart-view.js";
 import { loadCatalogue } from "./catalogue-data.js";
 import { catalogueEntry, selectCatalogue } from "./catalogue-model.js";
 import { appendPDFControls, renderCatalogueCategories, renderCatalogueCards, renderCataloguePager } from "./catalogue-view.js";
@@ -21,39 +24,17 @@ let books = [], libraryBooks = [], sections = [],
   category = "all",
   page = 1,
   selectedBook = null,
-  covers = {},
-  favorites = new Set(), libraryFavorites = new Set();
+  covers = {};
 const pageSize = 12;
-let cart = {},
-  selectionBusy = false,
-  selectionReady = false;
-function loadGuestSelection() {
-  cart = {};
-  favorites = new Set();
-  libraryFavorites = new Set();
-  try {
-    const stored = JSON.parse(localStorage.getItem("bookstore-library-favorites") || "[]");
-    if (Array.isArray(stored)) libraryFavorites = new Set(stored.filter(id => typeof id === "string"));
-  } catch (_) {}
-  try {
-    const stored = JSON.parse(localStorage.getItem("bookstore-cart") || "{}");
-    for (const [id, quantity] of Object.entries(stored))
-      if (
-        /^\d+$/.test(id) &&
-        Number.isInteger(quantity) &&
-        quantity > 0 &&
-        quantity <= 99
-      )
-        cart[id] = quantity;
-  } catch (_) {}
-  try {
-    const stored = JSON.parse(
-      localStorage.getItem("bookstore-favorites") || "[]",
-    );
-    if (Array.isArray(stored)) favorites = new Set(stored.map(String));
-  } catch (_) {}
-}
-loadGuestSelection();
+const selection = createSelectionState({
+  getUser: () => user,
+  notify: toast,
+  onReset: render,
+  onChange: () => {
+    render();
+    if ($('#cart-dialog').open) renderCart();
+  },
+});
 const node = (tag, text, cls) => {
   const n = document.createElement(tag);
   if (text !== undefined) n.textContent = text;
@@ -85,110 +66,13 @@ function action(text, handler, cls = "button dark") {
   button.onclick = handler;
   return button;
 }
-async function changeSelection(operation) {
-  if (selectionBusy) {
-    toast("Дождитесь сохранения выбора");
-    return;
-  }
-  if (!selectionReady) {
-    toast("Выбор ещё не загружен. Обновите страницу и повторите действие.");
-    return;
-  }
-  selectionBusy = true;
-  try {
-    await operation();
-    render();
-    if ($("#cart-dialog").open) renderCart();
-  } catch (e) {
-    toast(e.message);
-  } finally {
-    selectionBusy = false;
-  }
-}
-async function setCartQuantity(id, quantity) {
-  id = String(id);
-  await changeSelection(async () => {
-    if (user)
-      await request(
-        "/api/selection/cart/" + id,
-        quantity
-          ? {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ quantity }),
-            }
-          : { method: "DELETE" },
-      );
-    if (quantity) cart[id] = quantity;
-    else delete cart[id];
-    if (!user) saveGuestSelection();
-  });
-}
-async function addToCart(book) {
-  const id = String(book.id);
-  await changeSelection(async () => {
-    const quantity = Math.min(99, (cart[id] || 0) + 1);
-    if (user)
-      await request("/api/selection/cart/" + id, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity }),
-      });
-    cart[id] = quantity;
-    if (!user) saveGuestSelection();
-    toast("«" + book.name + "» добавлена в корзину");
-  });
-}
-async function toggleFavorite(book) {
-  const id = String(book.id);
-  await changeSelection(async () => {
-    const saved = favorites.has(id);
-    if (user)
-      await request("/api/selection/favorites/" + id, {
-        method: saved ? "DELETE" : "PUT",
-      });
-    saved ? favorites.delete(id) : favorites.add(id);
-    if (!user) saveGuestSelection();
-  });
-}
-async function toggleLibraryFavorite(book) {
-  await changeSelection(async () => {
-    const id = String(book.id), saved = libraryFavorites.has(id);
-    if (user) await request('/api/selection/library-favorites/' + id, {method: saved ? 'DELETE' : 'PUT'});
-    saved ? libraryFavorites.delete(id) : libraryFavorites.add(id);
-    if (!user) saveGuestSelection();
-  });
-}
-function saveGuestSelection() {
-  try {
-    localStorage.setItem("bookstore-library-favorites", JSON.stringify([...libraryFavorites]));
-    localStorage.setItem("bookstore-cart", JSON.stringify(cart));
-    localStorage.setItem("bookstore-favorites", JSON.stringify([...favorites]));
-  } catch (_) {
-    toast("Браузер не разрешает сохранение гостевого выбора");
-  }
-}
+const setCartQuantity = (id, quantity) => selection.setQuantity(id, quantity);
+const addToCart = book => selection.add(book);
+const toggleFavorite = book => selection.toggleFavorite(book);
+const toggleLibraryFavorite = book => selection.toggleFavorite(book, true);
 async function loadSelection() {
-  selectionReady = false;
-  if (user) {
-    cart = {};
-    favorites = new Set();
-    libraryFavorites = new Set();
-    render();
-    const data = await request("/api/selection");
-    cart = data.cart;
-    favorites = new Set(data.favorites.map(String));
-    libraryFavorites = new Set(data.libraryFavorites || []);
-  } else loadGuestSelection();
-  selectionReady = true;
-  render();
-  if ($("#cart-dialog").open) renderCart();
-  $("#selection-note").textContent = user
-    ? "Ваш выбор сохраняется в аккаунте и доступен после повторного входа."
-    : "Гостевой выбор хранится в этом браузере. Войдите, чтобы вести личную полку и корзину в аккаунте.";
-  $(".cart-hint").textContent = user
-    ? "Корзина сохранена. Цена и доступный остаток проверяются при оформлении заказа."
-    : "Гостевая корзина хранится отдельно от аккаунтов. Войдите для оформления заказа.";
+  await selection.load();
+  renderSelectionHints({ selectionNote: $('#selection-note'), cartHint: $('.cart-hint') }, user);
 }
 function updateCartCount() {
   updateEditorial();
@@ -196,78 +80,20 @@ function updateCartCount() {
   updateJavaLibrary();
   updateCatalogueAdmin();
   updateBookOrderingAdmin();
-  $("#cart-count").textContent = Object.values(cart).reduce(
-    (sum, n) => sum + n,
-    0,
-  );
+  $('#cart-count').textContent = selection.count;
 }
 function renderCart() {
-  const list = $("#cart-items");
-  list.replaceChildren();
-  let total = 0;
-  for (const [id, quantity] of Object.entries(cart)) {
-    const book = books.find((b) => String(b.id) === id);
-    if (!book) {
-      delete cart[id];
-      continue;
-    }
-    total += quantity;
-    const row = node("article", undefined, "cart-row");
-    row.append(coverImage(book));
-    const info = node("div");
-    info.append(
-      node("h3", book.name),
-      node("p", book.author),
-      node(
-        "p",
-        book.price === null
-          ? "Цена не указана"
-          : new Intl.NumberFormat("ru-RU", {
-              style: "currency",
-              currency: "RUB",
-            }).format(book.price),
-      ),
-    );
-    const controls = node("div", undefined, "quantity-controls");
-    const minus = action(
-      "−",
-      () => setCartQuantity(id, quantity - 1),
-      "quantity-button",
-    );
-    minus.setAttribute("aria-label", "Уменьшить количество: " + book.name);
-    const plus = action(
-      "+",
-      () => setCartQuantity(id, Math.min(99, quantity + 1)),
-      "quantity-button",
-    );
-    plus.disabled = quantity >= 99;
-    plus.setAttribute("aria-label", "Увеличить количество: " + book.name);
-    controls.append(
-      minus,
-      node("span", String(quantity)),
-      plus,
-      action("Удалить", () => setCartQuantity(id, 0), "text-button"),
-    );
-    info.append(controls);
-    row.append(info);
-    list.append(row);
-  }
-  if (!total)
-    list.append(
-      node(
-        "p",
-        "Ваша корзина пока пуста. Найдите книгу в каталоге и нажмите «В корзину».",
-      ),
-    );
-  $("#cart-total").textContent = "Экземпляров: " + total;
-  $("#clear-cart").disabled = !total;
+  const model = cartRows(selection.cart, books);
+  selection.removeMissing(model.missing);
+  renderCartRows({ list: $('#cart-items'), total: $('#cart-total'), clear: $('#clear-cart') },
+    model, { coverImage, setQuantity: setCartQuantity });
   updateCartCount();
 }
 function render() {
   $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;
   for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) $(selector).hidden = false;
   const model = selectCatalogue({ books, libraryBooks, sections, category, filter,
-    query: $("#search").value, page, pageSize, favorites, libraryFavorites });
+    query: $("#search").value, page, pageSize, favorites: selection.favorites, libraryFavorites: selection.libraryFavorites });
   category = model.category;
   page = model.page;
   const currentSection = sections.find(section => section.id === category);
@@ -281,7 +107,7 @@ function render() {
     category = id; page = 1; render();
   });
   renderCatalogueCards($("#books"), model, { coverImage, openBook, showDescription,
-    favorites, libraryFavorites, toggleFavorite, toggleLibraryFavorite, addToCart,
+    favorites: selection.favorites, libraryFavorites: selection.libraryFavorites, toggleFavorite, toggleLibraryFavorite, addToCart,
     addEditorialControls, addManagementControls });
   renderCataloguePager($("#pagination"), model, nextPage => {
     page = nextPage; render(); $("#catalog").scrollIntoView();
@@ -421,7 +247,7 @@ async function loadProfile() {
   updateAdminReviews();
   updateAnnouncement();
   updateAbout();
-  if (previous !== user?.email || !selectionReady) await loadSelection();
+  if (previous !== user?.email || !selection.ready) await loadSelection();
 }
 $("#search").oninput = () => {
   page = 1;
@@ -537,7 +363,7 @@ $("#avatar-form").onsubmit = async (e) => {
   }
 };
 $("#logout").onclick = async () => {
-  if (selectionBusy) {
+  if (selection.busy) {
     toast("Дождитесь сохранения выбора");
     return;
   }
@@ -576,12 +402,7 @@ $("#open-cart").onclick = () => {
   renderCart();
   $("#cart-dialog").showModal();
 };
-$("#clear-cart").onclick = () =>
-  changeSelection(async () => {
-    if (user) await request("/api/selection/cart", { method: "DELETE" });
-    cart = {};
-    if (!user) saveGuestSelection();
-  });
+$("#clear-cart").onclick = () => selection.clear();
 $("#continue-shopping").onclick = () => {
   $("#cart-dialog").close();
   $("#catalog").scrollIntoView();
@@ -635,11 +456,11 @@ setupAbout({ getUser: () => user, toast });
 setupAnnouncement({ getUser: () => user });
 setupAdminReviews({ getUser: () => user });
 setupFeedback({ getUser: () => user });
-setupJavaLibrary({ getUser: () => user, toast, getFavorites: () => libraryFavorites, toggleFavorite: toggleLibraryFavorite, isSelectionReady: () => selectionReady && !selectionBusy });
+setupJavaLibrary({ getUser: () => user, toast, getFavorites: () => selection.libraryFavorites, toggleFavorite: toggleLibraryFavorite, isSelectionReady: () => selection.ready && !selection.busy });
 setupCommerce({
   getUser: () => user,
   getBooks: () => books,
-  getCart: () => cart,
+  getCart: () => selection.cart,
   toast,
   reload: async () => {
     await loadBooks();
