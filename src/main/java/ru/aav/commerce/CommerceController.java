@@ -1,16 +1,34 @@
 package ru.aav.commerce;
 
-import static ru.aav.commerce.CommerceDto.*;
+import static ru.aav.commerce.CommerceDto.Detail;
+import static ru.aav.commerce.CommerceDto.Movement;
+import static ru.aav.commerce.CommerceDto.Order;
+import static ru.aav.commerce.CommerceDto.Stock;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Validated
@@ -51,7 +69,7 @@ public class CommerceController {
     }
 
     @PostMapping("/orders")
-    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
     public Detail checkout(Principal user, @Valid @RequestBody Checkout body) {
         return orders.checkout(user.getName(), body.requestKey());
     }
@@ -108,7 +126,7 @@ public class CommerceController {
     }
 
     @PutMapping("/admin/books/{id}")
-    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void edit(
         Principal user,
         @PathVariable long id,
@@ -125,7 +143,7 @@ public class CommerceController {
     }
 
     @PostMapping("/admin/books/{id}/receipts")
-    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void receive(
         Principal user,
         @PathVariable long id,
