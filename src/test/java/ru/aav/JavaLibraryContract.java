@@ -18,6 +18,7 @@ abstract class JavaLibraryContract {
     @Autowired MockMvc mvc;
     @Autowired JdbcTemplate jdbc;
     @Autowired ObjectMapper json;
+    @Autowired ru.aav.library.JavaLibraryService library;
     byte[] original;
     @BeforeEach void reset() throws Exception {
         jdbc.update("DELETE FROM java_library");
@@ -78,6 +79,75 @@ abstract class JavaLibraryContract {
             mvc.perform(get(path)).andExpect(status().isOk());
         mvc.perform(get("/pdfjs/5.6.205/build/missing.mjs")).andExpect(status().isNotFound());
     }
+    @Test void readerPreservesHeadersAndInvalidRangesHaveNoPdfBody() throws Exception {
+        String id=create("Headers");
+        String url="/api/java-library/"+id+"/content";
+        mvc.perform(get(url).param("version","0")).andExpect(status().isOk())
+            .andExpect(header().string("Content-Length",String.valueOf(original.length)))
+            .andExpect(header().string("Cache-Control","no-store"))
+            .andExpect(header().string("X-Content-Type-Options","nosniff"))
+            .andExpect(header().doesNotExist("Content-Range"))
+            .andExpect(content().contentType("application/pdf"));
+        for(String range:new String[]{"invalid","bytes=0-1,4-5","bytes=99999999-"}) {
+            mvc.perform(get(url).param("version","0").header("Range",range))
+                .andExpect(status().isRequestedRangeNotSatisfiable())
+                .andExpect(header().string("Content-Range","bytes */"+original.length))
+                .andExpect(header().string("Accept-Ranges","bytes"))
+                .andExpect(header().doesNotExist("Content-Disposition"))
+                .andExpect(content().bytes(new byte[0]));
+        }
+        // A stale edition takes precedence over parsing even a malformed range.
+        mvc.perform(get(url).param("version","1").header("Range","invalid"))
+            .andExpect(status().isConflict()).andExpect(header().doesNotExist("Accept-Ranges"));
+    }
+
+    @Test void downloadSanitizesFilenameAndKeepsUtf8AndSecurityHeaders() throws Exception {
+        String id=create("Filename");
+        jdbc.update("UPDATE java_library SET title=? WHERE id=?","Исаак/Сирин\\слова\r\n",id);
+        var response=mvc.perform(get("/api/java-library/"+id+"/download"))
+            .andExpect(status().isOk()).andExpect(content().bytes(original))
+            .andExpect(header().string("Content-Length",String.valueOf(original.length)))
+            .andExpect(header().string("Cache-Control","no-store"))
+            .andExpect(header().string("X-Content-Type-Options","nosniff"))
+            .andReturn().getResponse();
+        var disposition=org.springframework.http.ContentDisposition.parse(response.getHeader("Content-Disposition"));
+        assertThat(disposition.getType()).isEqualTo("attachment");
+        assertThat(disposition.getFilename()).isEqualTo("Исаак_Сирин_слова__.pdf");
+        assertThat(disposition.getCharset()).isEqualTo(java.nio.charset.StandardCharsets.UTF_8);
+    }
+
+    @Test void rangeBoundariesAndClampedEndsKeepExactBytesAcrossChunks() throws Exception {
+        String id=create("Boundary");
+        byte[] bytes=new byte[2*1024*1024+13];
+        new java.util.Random(27).nextBytes(bytes);
+        jdbc.update("DELETE FROM java_library_pdf_chunks WHERE book_id=?",id);
+        for(int offset=0,part=0;offset<bytes.length;offset+=1024*1024,part++) {
+            jdbc.update("INSERT INTO java_library_pdf_chunks(book_id,part,data) VALUES(?,?,?)",id,part,
+                java.util.Arrays.copyOfRange(bytes,offset,Math.min(offset+1024*1024,bytes.length)));
+        }
+        jdbc.update("UPDATE java_library SET file_size=? WHERE id=?",bytes.length,id);
+        String[] ranges={"bytes=1048575-1048576","bytes=1048576-1048580","bytes=2097152-","bytes=-13","bytes=2097150-9999999"};
+        int[][] bounds={{1048575,1048577},{1048576,1048581},{2097152,bytes.length},{bytes.length-13,bytes.length},{2097150,bytes.length}};
+        for(int i=0;i<ranges.length;i++) {
+            int start=bounds[i][0],end=bounds[i][1];
+            mvc.perform(get("/api/java-library/"+id+"/content").param("version","0").header("Range",ranges[i]))
+                .andExpect(status().isPartialContent())
+                .andExpect(header().string("Content-Range","bytes "+start+"-"+(end-1)+"/"+bytes.length))
+                .andExpect(header().string("Content-Length",String.valueOf(end-start)))
+                .andExpect(content().bytes(java.util.Arrays.copyOfRange(bytes,start,end)));
+        }
+        mvc.perform(get("/api/java-library/"+id+"/download")).andExpect(content().bytes(bytes));
+    }
+
+    @Test void emptyStoredBlockIsRejectedByDownloadAndReader() throws Exception {
+        String id=create("Empty block");
+        jdbc.update("UPDATE java_library_pdf_chunks SET data=? WHERE book_id=? AND part=0",new byte[0],id);
+        org.assertj.core.api.Assertions.assertThatThrownBy(()->library.download(id,new org.springframework.mock.web.MockHttpServletResponse()))
+            .isInstanceOf(IOException.class).hasMessage("Incomplete PDF storage");
+        org.assertj.core.api.Assertions.assertThatThrownBy(()->library.read(id,0,null,new org.springframework.mock.web.MockHttpServletResponse()))
+            .isInstanceOf(IOException.class).hasMessage("Incomplete PDF storage");
+    }
+
     @Test void atlasAssetsArePublic() throws Exception {
         mvc.perform(get("/ai-atlas.html")).andExpect(header().string("X-Frame-Options", "SAMEORIGIN"));
         mvc.perform(get("/")).andExpect(header().string("X-Frame-Options", "DENY"));

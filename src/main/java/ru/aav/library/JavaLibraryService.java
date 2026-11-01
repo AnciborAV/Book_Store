@@ -1,13 +1,14 @@
 package ru.aav.library;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 import java.time.Instant;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ContentDisposition;
-import java.nio.charset.StandardCharsets;
 import org.springframework.transaction.annotation.Isolation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class JavaLibraryService {
     private final JdbcTemplate jdbc;
+    private final PdfDeliveryService delivery;
     private final ru.aav.catalogue.CatalogueOrderService ordering;
     public record Book(String id, String title, String author, String description, long fileSize,
                        int pageCount, long version, Instant updatedAt, String section) {}
@@ -96,52 +98,14 @@ public class JavaLibraryService {
     // One chunk per SELECT bounds JDBC memory, unlike collecting every BLOB in a list.
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public void download(String id,HttpServletResponse response) throws IOException {
-        Book book=get(id);
-        String name=book.title().replaceAll("[\\p{Cntrl}/\\\\]","_")+".pdf";
-        response.setContentType("application/pdf"); response.setContentLengthLong(book.fileSize());
-        response.setHeader("Content-Disposition",ContentDisposition.attachment().filename(name,StandardCharsets.UTF_8).build().toString());
-        response.setHeader("Cache-Control","no-store");response.setHeader("X-Content-Type-Options","nosniff");
-        var out=response.getOutputStream();
-        long remaining=book.fileSize();
-        for(int part=0;remaining>0;part++) {
-            byte[] block=jdbc.queryForObject("SELECT data FROM java_library_pdf_chunks WHERE book_id=? AND part=?",byte[].class,id,part);
-            if(block==null || block.length==0 || block.length>remaining) throw new IOException("Incomplete PDF storage");
-            out.write(block);remaining-=block.length;
-        }
-        out.flush();
+        delivery.download(get(id), response);
     }
     // Version matching protects separate range requests from mixing editions.
     @Transactional(readOnly=true,isolation=Isolation.REPEATABLE_READ)
     public void read(String id,long version,String range,HttpServletResponse response) throws IOException {
         Book book=get(id);
         if (book.version()!=version) throw new ResponseStatusException(HttpStatus.CONFLICT,"Книга обновлена. Откройте её заново.");
-        long size=book.fileSize(), start=0, end=size-1;
-        response.setHeader("Accept-Ranges","bytes");
-        response.setHeader("Cache-Control","no-store");
-        if (range!=null) {
-            try {
-                var ranges=org.springframework.http.HttpRange.parseRanges(range);
-                if(ranges.size()!=1) throw new IllegalArgumentException();
-                start=ranges.getFirst().getRangeStart(size); end=ranges.getFirst().getRangeEnd(size);
-                if(start<0 || start>=size || end<start) throw new IllegalArgumentException();
-            } catch(IllegalArgumentException ex) {
-                response.setStatus(416);response.setHeader("Content-Range","bytes */"+size);return;
-            }
-            response.setStatus(206);response.setHeader("Content-Range","bytes "+start+"-"+end+"/"+size);
-        }
-        response.setContentType("application/pdf");response.setContentLengthLong(end-start+1);
-        response.setHeader("X-Content-Type-Options","nosniff");
-        response.setHeader("Content-Disposition",ContentDisposition.inline().filename("book.pdf").build().toString());
-        final int chunkSize=1024*1024;
-        var out=response.getOutputStream();
-        for(long offset=start;offset<=end;) {
-            int part=(int)(offset/chunkSize), local=(int)(offset%chunkSize);
-            byte[] block=jdbc.queryForObject("SELECT data FROM java_library_pdf_chunks WHERE book_id=? AND part=?",byte[].class,id,part);
-            if(block==null || local>=block.length) throw new IOException("Incomplete PDF storage");
-            int count=(int)Math.min(block.length-local,end-offset+1);
-            out.write(block,local,count); offset+=count;
-        }
-        out.flush();
+        delivery.read(book, range, response);
     }
     private ResponseStatusException missing() { return new ResponseStatusException(HttpStatus.NOT_FOUND,"Книга не найдена"); }
 }
