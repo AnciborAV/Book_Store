@@ -1,9 +1,10 @@
 package ru.aav.commerce;
 
-import static ru.aav.commerce.CommerceDto.*;
+import static ru.aav.commerce.CommerceDto.Detail;
+import static ru.aav.commerce.CommerceDto.Order;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.aav.auth.CurrentAccount;
 import ru.aav.catalog.SelectionRepository;
-import ru.aav.model.Book;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ public class OrderService {
     private final SelectionRepository selection;
     private final InventoryService inventory;
     private final OrderMailQueue mail;
+    private final OrderInventoryService orderInventory;
 
     public List<Order> list(String email, int page) {
         return repository.list(accounts.require(email).getId(), page);
@@ -58,44 +59,10 @@ public class OrderService {
         var user = accounts.lock(email);
         var replay = repository.replay(user.getId(), key.toString());
         if (replay.isPresent()) return detail(replay.get());
-        var cart = selection.find(user.getId()).cart();
-        if (cart.isEmpty()) throw conflict("Корзина пуста");
-        var locked = new LinkedHashMap<Book, Integer>();
-        BigDecimal total = BigDecimal.ZERO;
-        // Always lock books in ascending ID order across checkout, shipment and cancellation.
-        for (long id : new TreeSet<>(cart.keySet())) {
-            var book = inventory.lock(id);
-            if (book.isArchived()) throw conflict("Книга удалена из каталога: " + book.getName());
-            int quantity = cart.get(id);
-            if (book.getPrice() == null) throw conflict(
-                "Не указана цена: " + book.getName()
-            );
-            if (book.getStock() - book.getReserved() < quantity) throw conflict(
-                "Недостаточно книг на складе: " + book.getName()
-            );
-            locked.put(book, quantity);
-            total = total.add(
-                book.getPrice().multiply(BigDecimal.valueOf(quantity))
-            );
-        }
+        var cart = orderInventory.prepare(selection.find(user.getId()).cart());
         String id = UUID.randomUUID().toString();
-        repository.create(id, user, key.toString(), total);
-        for (var entry : locked.entrySet()) {
-            var book = entry.getKey();
-            int quantity = entry.getValue();
-            repository.item(id, book, quantity);
-            book.setReserved(book.getReserved() + quantity);
-            repository.movement(
-                book,
-                user.getId(),
-                "RESERVE",
-                0,
-                quantity,
-                id,
-                null,
-                "Резерв заказа"
-            );
-        }
+        repository.create(id, user, key.toString(), cart.total());
+        orderInventory.reserve(id, user.getId(), cart);
         repository.status(id, OrderStatus.CREATED, user.getId());
         selection.clear(user.getId());
         mail.enqueue(id);
@@ -123,29 +90,7 @@ public class OrderService {
         if (!order.status().canMoveTo(next)) throw conflict(
             "Недопустимый переход статуса заказа"
         );
-        if (next == OrderStatus.SHIPPED || next == OrderStatus.CANCELLED) {
-            for (var item : repository.items(id)) {
-                var book = inventory.lock(item.bookId());
-                if (book.getReserved() < item.quantity()) throw conflict(
-                    "Нарушен складской резерв"
-                );
-                book.setReserved(book.getReserved() - item.quantity());
-                int delta = next == OrderStatus.SHIPPED ? -item.quantity() : 0;
-                book.setStock(book.getStock() + delta);
-                repository.movement(
-                    book,
-                    actor.getId(),
-                    next == OrderStatus.SHIPPED ? "SHIP" : "RELEASE",
-                    delta,
-                    -item.quantity(),
-                    id,
-                    null,
-                    next == OrderStatus.SHIPPED
-                        ? "Отправка заказа"
-                        : "Отмена заказа"
-                );
-            }
-        }
+        orderInventory.applyTransition(id, actor.getId(), next);
         repository.status(id, next, actor.getId());
         return detail(repository.find(id, false).orElseThrow());
     }
