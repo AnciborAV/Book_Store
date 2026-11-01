@@ -1,10 +1,11 @@
+import { setupBookDetail } from "./book-detail-controller.js";
 import { setupAccount } from "./account-controller.js";
 import { createSelectionState } from "./selection-state.js";
 import { cartRows } from "./cart-model.js";
 import { renderCartRows, renderSelectionHints } from "./cart-view.js";
 import { loadCatalogue } from "./catalogue-data.js";
 import { catalogueEntry, selectCatalogue } from "./catalogue-model.js";
-import { appendPDFControls, renderCatalogueCategories, renderCatalogueCards, renderCataloguePager } from "./catalogue-view.js";
+import { renderCatalogueCategories, renderCatalogueCards, renderCataloguePager } from "./catalogue-view.js";
 import {updateAtlasLink,atlasForSection} from "./atlas-navigation.js";
 import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
 import {openAI, isAIHash, setupAINavigation, updateAISection} from "./ai-navigation.js";
@@ -23,7 +24,6 @@ let books = [], libraryBooks = [], sections = [],
   filter = "all",
   category = "all",
   page = 1,
-  selectedBook = null,
   covers = {};
 const pageSize = 12;
 const selection = createSelectionState({
@@ -59,12 +59,6 @@ function coverImage(book) {
   image.width = 240;
   image.height = 350;
   return image;
-}
-function action(text, handler, cls = "button dark") {
-  const button = node("button", text, cls);
-  button.type = "button";
-  button.onclick = handler;
-  return button;
 }
 const setCartQuantity = (id, quantity) => selection.setQuantity(id, quantity);
 const addToCart = book => selection.add(book);
@@ -127,93 +121,8 @@ async function loadBooks() {
       "Каталог недоступен. Проверьте подключение к серверу.";
   }
 }
-async function openBook(book) {
-  selectedBook = book;
-  const target = $("#book-detail");
-  target.replaceChildren();
-  const cover = coverImage(book),
-    info = node("div");
-  info.append(
-    node("div", book.category || "Каталог", "eyebrow"),
-    node("h2", book.name),
-    node("p", book.author),
-    ...(book.price !== null ? [action("Добавить в корзину +", () => addToCart(book))] : []),
-  );
-  appendPDFControls(info,book);
-  target.append(cover, info);
-  $("#review-form").reset();
-  $("#review-error").textContent = "";
-  $("#review-list").textContent = "Загрузка отзывов…";
-  $("#review-summary").textContent = "";
-  if (!$("#detail-dialog").open) $("#detail-dialog").showModal();
-  await loadReviews(book);
-}
-async function loadReviews(book) {
-  $("#review-form").hidden = !user;
-  $("#review-login").hidden = !!user;
-  try {
-    const reviews = await request("/api/books/" + book.id + "/reviews");
-    if (selectedBook?.id !== book.id) return;
-    const list = $("#review-list");
-    list.replaceChildren();
-    $("#review-summary").textContent = reviews.length
-      ? " · " +
-        (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(
-          1,
-        ) +
-        " / 5 · " +
-        reviews.length
-      : "";
-    if (!reviews.length)
-      list.append(
-        node("p", "Отзывов пока нет. Поделитесь первым впечатлением."),
-      );
-    for (const review of reviews) {
-      const item = node("article", undefined, "review");
-      const top = node("div", undefined, "review-top");
-      top.append(
-        node("strong", review.author),
-        node(
-          "span",
-          "★".repeat(review.rating) + "☆".repeat(5 - review.rating),
-          "review-stars",
-        ),
-      );
-      item.append(
-        top,
-        node("small", new Date(review.created).toLocaleDateString("ru-RU")),
-        node("p", review.body),
-      );
-      if (review.own) {
-        $("#review-form [name=rating]").value = review.rating;
-        $("#review-form [name=body]").value = review.body;
-        item.append(
-          action(
-            "Удалить мой отзыв",
-            async () => {
-              try {
-                await request(
-                  "/api/books/" + book.id + "/reviews/" + review.id,
-                  { method: "DELETE" },
-                );
-                $("#review-form").reset();
-                await loadReviews(book);
-              } catch (e) {
-                toast(e.message);
-              }
-            },
-            "text-button",
-          ),
-        );
-      }
-      list.append(item);
-    }
-  } catch (e) {
-    if (selectedBook?.id === book.id)
-      $("#review-list").textContent =
-        "Не удалось загрузить отзывы. Откройте книгу ещё раз.";
-  }
-}
+const bookDetail = setupBookDetail({ getUser: () => user, coverImage, addToCart, toast });
+const openBook = book => bookDetail.open(book);
 const account = setupAccount({
   getUser: () => user,
   setUser: value => { user = value; },
@@ -292,34 +201,6 @@ $("#clear-cart").onclick = () => selection.clear();
 $("#continue-shopping").onclick = () => {
   $("#cart-dialog").close();
   $("#catalog").scrollIntoView();
-};
-$("#review-signin").onclick = () => {
-  $("#detail-dialog").close();
-  $("#auth-dialog").showModal();
-};
-$("#review-form").onsubmit = async (e) => {
-  e.preventDefault();
-  const book = selectedBook;
-  if (!book) return;
-  const button = e.target.querySelector("button");
-  button.disabled = true;
-  $("#review-error").textContent = "";
-  try {
-    await request("/api/books/" + book.id + "/reviews", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        rating: Number(e.target.elements.rating.value),
-        body: e.target.elements.body.value,
-      }),
-    });
-    await loadReviews(book);
-    toast("Отзыв сохранён");
-  } catch (err) {
-    $("#review-error").textContent = err.message;
-  } finally {
-    button.disabled = false;
-  }
 };
 async function init() {
   try {

@@ -82,6 +82,7 @@ public class WebSecurity {
                         "/",
                         "/index.html",
                         "/app.js",
+                        "/book-detail-data.js", "/book-detail-controller.js", "/book-detail-view.js",
                         "/account-data.js", "/account-controller.js", "/account-view.js",
                         "/selection-data.js", "/selection-state.js", "/cart-model.js", "/cart-view.js",
                         "/catalogue-data.js",
