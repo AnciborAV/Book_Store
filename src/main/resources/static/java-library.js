@@ -7,28 +7,54 @@ let getFavorites, toggleFavorite, isSelectionReady, favoritesOnly = false;
 const sectionTitle = () => ({java: 'Java', 'civil-law': 'Гражданское право', ai: 'AI'})[section];
 const el = (tag, text, cls) => {
   const n = document.createElement(tag);
-  if (text !== undefined) n.textContent = text;
-  if (cls) n.className = cls;
+  if (text !== undefined) {
+    n.textContent = text;
+  }
+  if (cls) {
+    n.className = cls;
+  }
   return n;
 };
 // Local history records an initiated download, never proof of a saved file.
 const downloadMemory = new Map();
-function historyKey() { return 'bookstore-java-downloads-v1:' + (getUser?.()?.email || 'guest'); }
+
+function historyKey() {
+  return 'bookstore-java-downloads-v1:' + (getUser?.()?.email || 'guest');
+}
+
 function history() {
   const key = historyKey();
   if (!downloadMemory.has(key)) {
     let ids = [];
-    try { const data = JSON.parse(localStorage.getItem(key) || '[]'); if (Array.isArray(data)) ids = data.filter(x => typeof x === 'string'); } catch (_) {}
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '[]');
+      if (Array.isArray(data)) {
+        ids = data.filter(x => typeof x === 'string');
+      }
+    } catch (_) {
+    }
     downloadMemory.set(key, new Set(ids));
   }
   return downloadMemory.get(key);
 }
-function saveHistory() { try { localStorage.setItem(historyKey(), JSON.stringify([...history()])); } catch (_) {} }
+
+function saveHistory() {
+  try {
+    localStorage.setItem(historyKey(), JSON.stringify([...history()]));
+  } catch (_) {
+  }
+}
+
 function downloadControls(book, info) {
   const link = el('a', '', 'button dark');
-  link.href = `/api/java-library/${book.id}/download`; link.setAttribute('download', '');
+  link.href = `/api/java-library/${book.id}/download`;
+  link.setAttribute('download', '');
   const note = el('small', '', 'java-download-note');
-  const reset = button('Сбросить отметку', () => { history().delete(book.id); saveHistory(); paint(); }, 'java-download-reset');
+  const reset = button('Сбросить отметку', () => {
+    history().delete(book.id);
+    saveHistory();
+    paint();
+  }, 'java-download-reset');
   const paint = () => {
     const seen = history().has(book.id);
     link.textContent = seen ? 'Скачать ещё раз ↓' : 'Скачать PDF ↓';
@@ -37,46 +63,72 @@ function downloadControls(book, info) {
     note.textContent = 'Вы уже запускали скачивание в этом браузере. Если файл не сохранился, скачайте ещё раз.';
     link.title = seen ? 'Повторное скачивание. Отметка не подтверждает сохранение файла.' : 'Скачать оригинальный PDF';
   };
-  link.addEventListener('click', () => { history().add(book.id); saveHistory(); paint(); });
+  link.addEventListener('click', () => {
+    history().add(book.id);
+    saveHistory();
+    paint();
+  });
   const read = el('a', 'Читать', 'button light');
   read.href = `/reader.html?id=${encodeURIComponent(book.id)}`;
-  info.append(read, link, note, reset); paint();
+  info.append(read, link, note, reset);
+  paint();
   const source = el('a', 'Как работает чтение PDF · Java', 'pdf-source-link');
-  source.href = '/pdf-reading-code.html'; source.target = '_blank'; source.rel = 'noopener';
+  source.href = '/pdf-reading-code.html';
+  source.target = '_blank';
+  source.rel = 'noopener';
   info.append(source);
   const downloadSource = el('a', 'Как работает скачивание · Java', 'pdf-source-link');
-  downloadSource.href = '/pdf-download-code.html'; downloadSource.target = '_blank'; downloadSource.rel = 'noopener';
+  downloadSource.href = '/pdf-download-code.html';
+  downloadSource.target = '_blank';
+  downloadSource.rel = 'noopener';
   info.append(downloadSource);
 }
 const admin = () => getUser?.()?.role === 'ADMIN';
 const mb = bytes => (bytes / 1024 / 1024).toLocaleString('ru', { maximumFractionDigits: 1 }) + ' МБ';
+
 function button(text, handler, cls = 'button light') {
-  const b = el('button', text, cls); b.type = 'button'; b.onclick = handler; return b;
+  const b = el('button', text, cls);
+  b.type = 'button';
+  b.onclick = handler;
+  return b;
 }
+
 export function updateJavaLibrary() {
   $('#java-add').hidden = !admin();
-  if (!admin() && $('#java-editor').open) $('#java-editor').close();
-  if (!$('#java-library').hidden) load();
+  if (!admin() && $('#java-editor').open) {
+    $('#java-editor').close();
+  }
+  if (!$('#java-library').hidden) {
+    load();
+  }
 }
+
 export function openJavaLibrary(nextSection = 'java') {
-  if (section !== nextSection) { section = nextSection; page = 0; query = ''; $('#java-search').value = ''; }
+  if (section !== nextSection) {
+    section = nextSection;
+    page = 0;
+    query = '';
+    $('#java-search').value = '';
+  }
   $('#java-title').textContent = section === 'ai' ? 'Книги об AI' : sectionTitle();
   $('#library-intro').textContent = section === 'ai'
-    ? 'Искусственный интеллект в книгах. Читайте описания, сохраняйте в избранное, читайте на сайте и скачивайте PDF.'
-    : section === 'civil-law'
-    ? 'Книги по гражданскому праву. Скачивайте PDF и изучайте в удобное время.'
-    : 'От первой строки кода — к большим идеям. Книги в PDF, которые можно забрать с собой.';
+  ? 'Искусственный интеллект в книгах. Читайте описания, сохраняйте в избранное, читайте на сайте и скачивайте PDF.'
+  : section === 'civil-law'
+  ? 'Книги по гражданскому праву. Скачивайте PDF и изучайте в удобное время.'
+  : 'От первой строки кода — к большим идеям. Книги в PDF, которые можно забрать с собой.';
   $('#java-search-form label').textContent = 'Найти книгу — ' + sectionTitle();
   $('#java-pages').setAttribute('aria-label', 'Страницы библиотеки: ' + sectionTitle());
   load();
 }
+
 async function load() {
   const ticket = ++generation;
   $('#java-favorites').setAttribute('aria-pressed', String(favoritesOnly));
   $('#java-favorites').textContent = favoritesOnly ? '♥ Избранное PDF - показать все' : '♡ Избранное PDF';
   $('#java-favorites-note').textContent = getUser?.() ? 'Избранные PDF сохраняются в вашем аккаунте.' : 'Гостевое избранное хранится в этом браузере отдельно от аккаунта.';
   $('#java-status').textContent = 'Загружаем электронную полку…';
-  $('#java-list').replaceChildren(); $('#java-pages').replaceChildren();
+  $('#java-list').replaceChildren();
+  $('#java-pages').replaceChildren();
   try {
     let data;
     if (favoritesOnly) {
@@ -86,30 +138,52 @@ async function load() {
       const slice = selected.slice(page * 12, (page + 1) * 12);
       const metadata = slice.length ? await request('/api/java-library/metadata?' + new URLSearchParams({ids: slice.map(b => b.id).join(',')})) : [];
       data = {items: slice.map(b => metadata.find(m => m.id === b.id)).filter(Boolean), total: selected.length, pageSize: 12};
-    } else data = await request('/api/java-library?' + new URLSearchParams({ page, q: query, section }));
-    if (ticket !== generation) return;
-    if (page && !data.items.length) { page = Math.max(0, Math.ceil(data.total / 12) - 1); return load(); }
+    } else {
+      data = await request('/api/java-library?' + new URLSearchParams({ page, q: query, section }));
+    }
+    if (ticket !== generation) {
+      return;
+    }
+    if (page && !data.items.length) {
+      page = Math.max(0, Math.ceil(data.total / 12) - 1);
+      return load();
+    }
     $('#java-status').textContent = data.total ? `Книг: ${data.total}. Чтение и скачивание доступны без регистрации.` : `Полка «${sectionTitle()}» пока пуста. Здесь появятся книги для свободного скачивания.`;
-    if (!data.total && favoritesOnly) $('#java-status').textContent = query ? 'В избранном нет книг по этому запросу.' : 'В этом разделе пока нет избранных PDF. Нажмите сердечко на обложке книги.';
+    if (!data.total && favoritesOnly) {
+      $('#java-status').textContent = query ? 'В избранном нет книг по этому запросу.' : 'В этом разделе пока нет избранных PDF. Нажмите сердечко на обложке книги.';
+    }
     for (const book of data.items) {
       const card = el('article', undefined, 'java-card');
-      const img = el('img'); img.src = `/api/java-library/${book.id}/cover?v=${book.version}`;
-      img.alt = 'Обложка книги «' + book.title + '»'; img.loading = 'lazy'; img.decoding = 'async';
-      const frame = el('div', undefined, 'java-cover'); frame.append(img);
+      const img = el('img');
+      img.src = `/api/java-library/${book.id}/cover?v=${book.version}`;
+      img.alt = 'Обложка книги «' + book.title + '»';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      const frame = el('div', undefined, 'java-cover');
+      frame.append(img);
       const saved = getFavorites().has(String(book.id));
       const heart = button(saved ? '♥' : '♡', async () => {
-        heart.disabled = true;
-        try { await toggleFavorite(book); } finally { if (heart.isConnected) heart.disabled = !isSelectionReady(); }
-      }, 'favorite' + (saved ? ' selected' : ''));
+          heart.disabled = true;
+          try {
+            await toggleFavorite(book);
+          } finally {
+            if (heart.isConnected) {
+              heart.disabled = !isSelectionReady();
+            }
+          }
+        }, 'favorite' + (saved ? ' selected' : ''));
       heart.disabled = !isSelectionReady();
       heart.setAttribute('aria-pressed', String(saved));
       heart.setAttribute('aria-label', (saved ? 'Убрать из избранного: ' : 'Добавить в избранное: ') + book.title);
       frame.append(heart);
       const info = el('div', undefined, 'java-info');
       info.append(el('span', sectionTitle(), 'eyebrow'), el('h3', book.title));
-      if (book.author) info.append(el('p', book.author, 'java-author'));
-      if (book.pageCount != null) info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
-
+      if (book.author) {
+        info.append(el('p', book.author, 'java-author'));
+      }
+      if (book.pageCount != null) {
+        info.append(el('p', `${book.pageCount} стр. · ${mb(book.fileSize)}`, 'java-meta'));
+      }
       downloadControls(book, info);
       addEditorialControls(info, "library", book);
       if (admin()) {
@@ -117,73 +191,143 @@ async function load() {
         actions.append(button('Редактировать', () => editor(book)), button('Удалить', () => remove(book)));
         info.append(actions);
       }
-      card.append(frame, info); $('#java-list').append(card);
+      card.append(frame, info);
+      $('#java-list').append(card);
     }
     const pages = Math.ceil(data.total / data.pageSize);
     if (pages > 1) {
-      const previous = button('← Назад', () => { page--; load(); }); previous.disabled = !page;
-      const next = button('Далее →', () => { page++; load(); }); next.disabled = page >= pages - 1;
+      const previous = button('← Назад', () => {
+        page--;
+        load();
+      });
+      previous.disabled = !page;
+      const next = button('Далее →', () => {
+        page++;
+        load();
+      });
+      next.disabled = page >= pages - 1;
       $('#java-pages').append(previous, el('span', `Страница ${page + 1} из ${pages}`), next);
     }
   } catch (e) {
-    if (ticket !== generation) return;
+    if (ticket !== generation) {
+      return;
+    }
     $('#java-status').textContent = e.message;
     $('#java-pages').append(button('Повторить загрузку', load));
   }
 }
+
 function editor(book = null) {
-  editing = book; editorSection = book?.section || section;
-  const form = $('#java-form'); form.reset(); $('#java-error').textContent = '';
+  editing = book;
+  editorSection = book?.section || section;
+  const form = $('#java-form');
+  form.reset();
+  $('#java-error').textContent = '';
   $('#java-editor-title').textContent = book ? 'Редактировать книгу' : 'Новая книга — ' + sectionTitle();
   form.elements.title.value = book?.title || '';
   form.elements.author.value = book?.author || '';
   form.elements.description.value = book?.description || '';
-  form.elements.description.closest('label').hidden = !!book; // Existing descriptions are edited in the shared editorial dialog.
+  form.elements.description.closest('label').hidden = !!book;
+  // Existing descriptions are edited in the shared editorial dialog.
   form.elements.pdf.required = !book;
   $('#java-file-note').textContent = book ? 'Оставьте файлы пустыми, чтобы сохранить текущий PDF и обложку. Новый PDF обновит обложку по первой странице, если не выбрана отдельная.' : 'Обложка появится автоматически с первой страницы PDF. При желании выберите отдельное изображение.';
   $('#java-current-cover').hidden = !book;
-  if (book) $('#java-current-cover').src = `/api/java-library/${book.id}/cover?v=${book.version}`;
+  if (book) {
+    $('#java-current-cover').src = `/api/java-library/${book.id}/cover?v=${book.version}`;
+  }
   $('#java-editor').showModal();
 }
+
 async function remove(book) {
-  if (busy || !confirm(`Удалить «${book.title}» и PDF с сайта? Уже скачанные пользователями копии останутся у них.`)) return;
+  if (busy || !confirm(`Удалить «${book.title}» и PDF с сайта? Уже скачанные пользователями копии останутся у них.`)) {
+    return;
+  }
   busy = true;
   try {
     await request(`/api/admin/java-library/${book.id}?version=${book.version}`, { method: 'DELETE' });
     document.dispatchEvent(new Event('library-books-changed'));
-    toast('Книга удалена'); await load();
-  } catch (e) { toast(e.message); } finally { busy = false; }
+    toast('Книга удалена');
+    await load();
+  } catch (e) {
+    toast(e.message);
+  } finally {
+    busy = false;
+  }
 }
+
 export function setupJavaLibrary(options) {
-  getUser = options.getUser; toast = options.toast;
-  getFavorites = options.getFavorites; toggleFavorite = options.toggleFavorite; isSelectionReady = options.isSelectionReady;
-  $('#java-favorites').onclick = () => { favoritesOnly = !favoritesOnly; page = 0; load(); };
+  getUser = options.getUser;
+  toast = options.toast;
+  getFavorites = options.getFavorites;
+  toggleFavorite = options.toggleFavorite;
+  isSelectionReady = options.isSelectionReady;
+  $('#java-favorites').onclick = () => {
+    favoritesOnly = !favoritesOnly;
+    page = 0;
+    load();
+  };
   $('#java-add').onclick = () => editor();
-  $('#java-close').onclick = () => { if (!busy) $('#java-editor').close(); };
-  $('#java-editor').addEventListener('cancel', e => { if (busy) e.preventDefault(); });
+  $('#java-close').onclick = () => {
+    if (!busy) {
+      $('#java-editor').close();
+    }
+  };
+  $('#java-editor').addEventListener('cancel', e => {
+    if (busy) {
+      e.preventDefault();
+    }
+  });
   $('#java-search-form').onsubmit = e => {
-    e.preventDefault(); query = $('#java-search').value.trim(); page = 0; load();
+    e.preventDefault();
+    query = $('#java-search').value.trim();
+    page = 0;
+    load();
   };
   $('#java-form').onsubmit = async e => {
-    e.preventDefault(); if (busy) return;
+    e.preventDefault();
+    if (busy) {
+      return;
+    }
     const form = e.target, pdf = form.elements.pdf.files[0], cover = form.elements.cover.files[0];
     $('#java-error').textContent = '';
-    if (pdf && pdf.size > 500 * 1024 * 1024) { $('#java-error').textContent = 'PDF должен быть не больше 500 МБ'; return; }
-    if (cover && cover.size > 2 * 1024 * 1024) { $('#java-error').textContent = 'Обложка должна быть не больше 2 МБ'; return; }
+    if (pdf && pdf.size > 500 * 1024 * 1024) {
+      $('#java-error').textContent = 'PDF должен быть не больше 500 МБ';
+      return;
+    }
+    if (cover && cover.size > 2 * 1024 * 1024) {
+      $('#java-error').textContent = 'Обложка должна быть не больше 2 МБ';
+      return;
+    }
     const data = new FormData(form);
     data.set('section', editorSection);
-    if (!pdf) data.delete('pdf'); if (!cover) data.delete('cover');
-    if (editing) data.set('version', editing.version);
-    busy = true; $('#java-save').disabled = true; $('#java-close').disabled = true;
+    if (!pdf) {
+      data.delete('pdf');
+    }
+    if (!cover) {
+      data.delete('cover');
+    }
+    if (editing) {
+      data.set('version', editing.version);
+    }
+    busy = true;
+    $('#java-save').disabled = true;
+    $('#java-close').disabled = true;
     $('#java-save').textContent = 'Загрузка и сохранение…';
     try {
       await request('/api/admin/java-library' + (editing ? '/' + editing.id : ''), { method: 'POST', body: data });
       document.dispatchEvent(new Event('library-books-changed'));
-      $('#java-editor').close(); toast('Книга опубликована и доступна для скачивания');
-      page = 0; query = ''; $('#java-search').value = ''; await load();
-    } catch (err) { $('#java-error').textContent = err.message; }
-    finally {
-      busy = false; $('#java-save').disabled = false; $('#java-close').disabled = false;
+      $('#java-editor').close();
+      toast('Книга опубликована и доступна для скачивания');
+      page = 0;
+      query = '';
+      $('#java-search').value = '';
+      await load();
+    } catch (err) {
+      $('#java-error').textContent = err.message;
+    } finally {
+      busy = false;
+      $('#java-save').disabled = false;
+      $('#java-close').disabled = false;
       $('#java-save').textContent = 'Сохранить и опубликовать';
     }
   };
