@@ -1,4 +1,5 @@
 // Catalogue calculations are independent of the DOM, network and account storage.
+
 export function catalogueEntry(book, index) {
   return {
     ...book,
@@ -6,8 +7,8 @@ export function catalogueEntry(book, index) {
     category: book.sectionName,
     catalogOrder: index,
     coverUrl: book.kind === 'catalog'
-      ? (book.cover ? `/api/catalogue/covers/${book.id}?v=${book.version}-${book.pdfVersion}` : null)
-      : `/api/java-library/${book.id}/cover?v=${book.version}`,
+    ? (book.cover ? `/api/catalogue/covers/${book.id}?v=${book.version}-${book.pdfVersion}` : null)
+    : `/api/java-library/${book.id}/cover?v=${book.version}`,
   };
 }
 
@@ -18,8 +19,8 @@ export function catalogueSnapshot(data) {
     books: entries.filter(book => book.kind === 'catalog'),
     libraryBooks: entries.filter(book => book.kind === 'library'),
     message: data.books.length
-      ? 'Найдите свою книгу по названию, автору или разделу.'
-      : 'Каталог пока пуст. Добавьте первую книгу.',
+    ? 'Найдите свою книгу по названию, автору или разделу.'
+    : 'Каталог пока пуст. Добавьте первую книгу.',
   };
 }
 
@@ -32,9 +33,11 @@ export function selectCatalogue({ books, libraryBooks, sections, category, filte
   const entries = [...books, ...libraryBooks];
   const availableSections = sections.filter(section => section.name.trim().toLocaleLowerCase('ru') !== 'каталог');
   const activeCategory = category !== 'all' && !availableSections.some(section => section.id === category)
-    ? 'all' : category;
+  ? 'all' : category;
   const counts = new Map();
-  for (const book of entries) counts.set(book.sectionId, (counts.get(book.sectionId) || 0) + 1);
+  for (const book of entries) {
+    counts.set(book.sectionId, (counts.get(book.sectionId) || 0) + 1);
+  }
   const q = query.trim().toLocaleLowerCase('ru');
   const visible = entries.filter(book =>
     (book.name + ' ' + book.author).toLocaleLowerCase('ru').includes(q)
@@ -53,7 +56,7 @@ export function selectCatalogue({ books, libraryBooks, sections, category, filte
     page: currentPage,
     pages,
     emptyMessage: filter === 'favorites'
-      ? 'На этой полке пока нет книг. Добавляйте их сердечком в каталоге.'
-      : 'Книги не найдены. Измените запрос или раздел.',
+    ? 'На этой полке пока нет книг. Добавляйте их сердечком в каталоге.'
+    : 'Книги не найдены. Измените запрос или раздел.',
   };
 }

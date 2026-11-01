@@ -10,18 +10,29 @@ export function createSelectionData({ send = request, getStorage = () => localSt
       const selection = emptySelection();
       try {
         const stored = JSON.parse(getStorage().getItem('bookstore-library-favorites') || '[]');
-        if (Array.isArray(stored)) selection.libraryFavorites = new Set(stored.filter(id => typeof id === 'string'));
-      } catch (_) {}
+        if (Array.isArray(stored)) {
+          selection.libraryFavorites = new Set(stored.filter(id => typeof id === 'string'));
+        }
+      } catch (_) {
+      }
       try {
         const stored = JSON.parse(getStorage().getItem('bookstore-cart') || '{}');
         for (const [id, quantity] of Object.entries(stored))
+        {
           if (/^\d+$/.test(id) && Number.isInteger(quantity) && quantity > 0 && quantity <= 99)
+          {
             selection.cart[id] = quantity;
-      } catch (_) {}
+          }
+        }
+      } catch (_) {
+      }
       try {
         const stored = JSON.parse(getStorage().getItem('bookstore-favorites') || '[]');
-        if (Array.isArray(stored)) selection.favorites = new Set(stored.map(String));
-      } catch (_) {}
+        if (Array.isArray(stored)) {
+          selection.favorites = new Set(stored.map(String));
+        }
+      } catch (_) {
+      }
       return selection;
     },
     saveGuest(selection) {
@@ -39,10 +50,12 @@ export function createSelectionData({ send = request, getStorage = () => localSt
         method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ quantity }),
       } : { method: 'DELETE' });
     },
-    clearCart() { return send('/api/selection/cart', { method: 'DELETE' }); },
+    clearCart() {
+      return send('/api/selection/cart', { method: 'DELETE' });
+    },
     setFavorite(id, saved, library) {
       return send('/api/selection/' + (library ? 'library-favorites/' : 'favorites/') + id,
-        { method: saved ? 'DELETE' : 'PUT' });
+      { method: saved ? 'DELETE' : 'PUT' });
     },
   };
 }

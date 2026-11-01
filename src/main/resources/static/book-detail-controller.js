@@ -9,10 +9,14 @@ export function setupBookDetail({ getUser, coverImage, addToCart, toast,
     try {
       const reviews = await data.loadReviews(book);
       // Keep the original strict ID check when switching between book dialogs.
-      if (selectedBook?.id !== book.id) return;
+      if (selectedBook?.id !== book.id) {
+        return;
+      }
       view.renderReviews(reviews, review => deleteReview(book, review));
     } catch (error) {
-      if (selectedBook?.id === book.id) view.showLoadError();
+      if (selectedBook?.id === book.id) {
+        view.showLoadError();
+      }
     }
   }
   async function deleteReview(book, review) {
@@ -20,14 +24,18 @@ export function setupBookDetail({ getUser, coverImage, addToCart, toast,
       await data.deleteReview(book, review);
       view.resetReview();
       await loadReviews(book);
-    } catch (error) { toast(error.message); }
+    } catch (error) {
+      toast(error.message);
+    }
   }
   view.bind({
     signin: () => view.signin(),
     async submit(event) {
       event.preventDefault();
       const book = selectedBook;
-      if (!book) return;
+      if (!book) {
+        return;
+      }
       const button = event.target.querySelector('button');
       button.disabled = true;
       view.setReviewError('');
@@ -36,8 +44,11 @@ export function setupBookDetail({ getUser, coverImage, addToCart, toast,
           body: event.target.elements.body.value });
         await loadReviews(book);
         toast('Отзыв сохранён');
-      } catch (error) { view.setReviewError(error.message); }
-      finally { button.disabled = false; }
+      } catch (error) {
+        view.setReviewError(error.message);
+      } finally {
+        button.disabled = false;
+      }
     },
   });
   return {
