@@ -1,3 +1,5 @@
+import { startApplication } from "./app-startup.js";
+import { setupApplicationNavigation } from "./app-navigation.js";
 import { setupBookDetail } from "./book-detail-controller.js";
 import { setupAccount } from "./account-controller.js";
 import { createSelectionState } from "./selection-state.js";
@@ -6,16 +8,16 @@ import { renderCartRows, renderSelectionHints } from "./cart-view.js";
 import { loadCatalogue } from "./catalogue-data.js";
 import { catalogueEntry, selectCatalogue } from "./catalogue-model.js";
 import { renderCatalogueCategories, renderCatalogueCards, renderCataloguePager } from "./catalogue-view.js";
-import {updateAtlasLink,atlasForSection} from "./atlas-navigation.js";
+import {updateAtlasLink} from "./atlas-navigation.js";
 import {setupBookOrdering, updateBookOrderingAdmin} from "./book-ordering.js";
-import {openAI, isAIHash, setupAINavigation, updateAISection} from "./ai-navigation.js";
+import {updateAISection} from "./ai-navigation.js";
 import { setupCatalogueAdmin, updateCatalogueAdmin, addManagementControls, openBookManager } from "./catalogue-admin.js";
 import { setupAbout, updateAbout } from "./about.js";
 import { setupEditorial, updateEditorial, addEditorialControls, showDescription } from "./editorial.js";
 import { setupAdminReviews, updateAdminReviews } from "./admin-reviews.js";
 import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
 import { setupFeedback, updateFeedback } from "./feedback.js";
-import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-library.js";
+import { setupJavaLibrary, updateJavaLibrary } from "./java-library.js";
 import { setupCommerce, updateCommerce } from "./commerce.js";
 import { request } from "./api-client.js";
 const $ = (s) => document.querySelector(s);
@@ -95,11 +97,7 @@ function render() {
   updateAISection(currentSection);
   $("#catalog-count").textContent = `Найдено: ${model.total}`;
   $("#favorite-count").textContent = model.favoriteCount;
-  renderCatalogueCategories($("#categories"), model, user?.role === 'ADMIN', id => {
-    $("#ai").hidden = true;
-    if (isAIHash(location.hash)) history.replaceState(null, '', '#catalog');
-    category = id; page = 1; render();
-  });
+  renderCatalogueCategories($("#categories"), model, user?.role === 'ADMIN', navigation.selectCategory);
   renderCatalogueCards($("#books"), model, { coverImage, openBook, showDescription,
     favorites: selection.favorites, libraryFavorites: selection.libraryFavorites, toggleFavorite, toggleLibraryFavorite, addToCart,
     addEditorialControls, addManagementControls });
@@ -121,158 +119,146 @@ async function loadBooks() {
       "Каталог недоступен. Проверьте подключение к серверу.";
   }
 }
-const bookDetail = setupBookDetail({ getUser: () => user, coverImage, addToCart, toast });
+function setupCoreComponents() {
+  const bookDetail = setupBookDetail({ getUser: () => user, coverImage, addToCart, toast });
+  const account = setupAccount({
+    getUser: () => user,
+    setUser: value => { user = value; },
+    isSelectionReady: () => selection.ready,
+    isSelectionBusy: () => selection.busy,
+    loadSelection,
+    onProfileChange: () => {
+      updateEditorial();
+      updateCommerce();
+      updateJavaLibrary();
+      updateFeedback();
+      updateAdminReviews();
+      updateAnnouncement();
+      updateAbout();
+    },
+    toast,
+  });
+  return { bookDetail, account };
+}
 const openBook = book => bookDetail.open(book);
-const account = setupAccount({
-  getUser: () => user,
-  setUser: value => { user = value; },
-  isSelectionReady: () => selection.ready,
-  isSelectionBusy: () => selection.busy,
-  loadSelection,
-  onProfileChange: () => {
-    updateEditorial();
-    updateCommerce();
-    updateJavaLibrary();
-    updateFeedback();
-    updateAdminReviews();
-    updateAnnouncement();
-    updateAbout();
-  },
-  toast,
-});
-$("#search").oninput = () => {
-  page = 1;
-  render();
-};
-document.querySelectorAll("[data-filter]").forEach(
-  (b) =>
-    (b.onclick = () => {
-      filter = b.dataset.filter;
-      page = 1;
-      document
-        .querySelectorAll("[data-filter]")
-        .forEach((x) => x.classList.toggle("active", x === b));
-      render();
-    }),
-);
-document
-  .querySelectorAll("dialog .close")
-  .forEach((b) => (b.onclick = () => b.closest("dialog").close()));
-document.querySelectorAll("dialog").forEach((d) =>
-  d.addEventListener("click", (e) => {
-    if (e.target === d) {
-      const r = d.getBoundingClientRect();
-      if (
-        e.clientX < r.left ||
-        e.clientX > r.right ||
-        e.clientY < r.top ||
-        e.clientY > r.bottom
-      )
-        d.close();
+function setupCatalogueControls() {
+  $("#search").oninput = () => {
+    page = 1;
+    render();
+  };
+  document.querySelectorAll("[data-filter]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        filter = b.dataset.filter;
+        page = 1;
+        document
+          .querySelectorAll("[data-filter]")
+          .forEach((x) => x.classList.toggle("active", x === b));
+        render();
+      }),
+  );
+  $("#add-book").onclick = () => openBookManager(null,category);
+  $("#book-form").onsubmit = async (e) => {
+    e.preventDefault();
+    const button = e.target.querySelector("button");
+    button.disabled = true;
+    try {
+      await request("/books", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(e.target))),
+      });
+      e.target.reset();
+      $("#book-dialog").close();
+      await loadBooks();
+      toast("Книга добавлена в каталог");
+    } catch (err) {
+      $("#book-error").textContent = err.message;
+    } finally {
+      button.disabled = false;
     }
-  }),
-);
-$("#add-book").onclick = () => openBookManager(null,category);
-$("#book-form").onsubmit = async (e) => {
-  e.preventDefault();
-  const button = e.target.querySelector("button");
-  button.disabled = true;
-  try {
-    await request("/books", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.fromEntries(new FormData(e.target))),
-    });
-    e.target.reset();
-    $("#book-dialog").close();
-    await loadBooks();
-    toast("Книга добавлена в каталог");
-  } catch (err) {
-    $("#book-error").textContent = err.message;
-  } finally {
-    button.disabled = false;
-  }
-};
-$("#open-cart").onclick = () => {
-  renderCart();
-  $("#cart-dialog").showModal();
-};
-$("#clear-cart").onclick = () => selection.clear();
-$("#continue-shopping").onclick = () => {
-  $("#cart-dialog").close();
-  $("#catalog").scrollIntoView();
-};
-async function init() {
-  try {
-    const r = await fetch("/catalog-covers.json");
-    if (r.ok) covers = await r.json();
-  } catch (_) {}
-  await account.loadProfile().catch((e) => toast(e.message));
+  };
+  $("#open-cart").onclick = () => {
+    renderCart();
+    $("#cart-dialog").showModal();
+  };
+  $("#clear-cart").onclick = () => selection.clear();
+  $("#continue-shopping").onclick = () => {
+    $("#cart-dialog").close();
+    $("#catalog").scrollIntoView();
+  };
+}
+async function loadCovers() {
+  const response = await fetch("/catalog-covers.json");
+  if (response.ok) covers = await response.json();
+}
+async function reloadCatalogueAndSelection() {
   await loadBooks();
-  if (isAIHash(location.hash)) openAI();
-  else if (location.hash === "#ai-books") openAIBooks();
-  else if (location.hash === "#digital-books") openDigitalBooks();
+  await loadSelection();
 }
-setupCatalogueAdmin({getUser:()=>user,toast,getSections:()=>sections,getSection:()=>category,reload:async()=>{await loadBooks();await loadSelection();}});
-setupBookOrdering({getUser:()=>user,toast,getSection:()=>category,createCover:b=>coverImage(catalogueEntry(b,0)),onSaved:async section=>{
-  category=section;page=1;filter='all';$('#search').value='';
-  document.querySelectorAll('[data-filter]').forEach(button=>button.classList.toggle('active',button.dataset.filter==='all'));
-  await loadBooks();await loadSelection();$('#catalog').scrollIntoView({block:'start'});
-}});
-setupAbout({ getUser: () => user, toast });
-setupAnnouncement({ getUser: () => user });
-setupAdminReviews({ getUser: () => user });
-setupFeedback({ getUser: () => user });
-setupJavaLibrary({ getUser: () => user, toast, getFavorites: () => selection.libraryFavorites, toggleFavorite: toggleLibraryFavorite, isSelectionReady: () => selection.ready && !selection.busy });
-setupCommerce({
-  getUser: () => user,
-  getBooks: () => books,
-  getCart: () => selection.cart,
-  toast,
-  reload: async () => {
-    await loadBooks();
-    await loadSelection();
-  },
-});
-setupEditorial({ getUser: () => user, toast });
-document.addEventListener("library-books-changed",loadBooks);
-document.addEventListener("editorial-open-catalog", e => { const book = books.find(b => String(b.id) === e.detail); if (book) openBook(book); });
-init();
+function setupStoreComponents() {
+  setupCatalogueAdmin({
+    getUser: () => user,
+    toast,
+    getSections: () => sections,
+    getSection: () => category,
+    reload: reloadCatalogueAndSelection,
+  });
+  setupBookOrdering({
+    getUser: () => user,
+    toast,
+    getSection: () => category,
+    createCover: book => coverImage(catalogueEntry(book, 0)),
+    onSaved: async section => {
+      category = section;
+      page = 1;
+      filter = 'all';
+      $('#search').value = '';
+      document.querySelectorAll('[data-filter]').forEach(button =>
+        button.classList.toggle('active', button.dataset.filter === 'all'));
+      await reloadCatalogueAndSelection();
+      $('#catalog').scrollIntoView({ block: 'start' });
+    },
+  });
+  setupAbout({ getUser: () => user, toast });
+  setupAnnouncement({ getUser: () => user });
+  setupAdminReviews({ getUser: () => user });
+  setupFeedback({ getUser: () => user });
+  setupJavaLibrary({
+    getUser: () => user,
+    toast,
+    getFavorites: () => selection.libraryFavorites,
+    toggleFavorite: toggleLibraryFavorite,
+    isSelectionReady: () => selection.ready && !selection.busy,
+  });
+  setupCommerce({
+    getUser: () => user,
+    getBooks: () => books,
+    getCart: () => selection.cart,
+    toast,
+    reload: reloadCatalogueAndSelection,
+  });
+  setupEditorial({ getUser: () => user, toast });
+  document.addEventListener('library-books-changed', loadBooks);
+  document.addEventListener('editorial-open-catalog', event => {
+    const book = books.find(book => String(book.id) === event.detail);
+    if (book) openBook(book);
+  });
+}
 
-// Enhance navigation only after the controls are wired; links remain available without JS.
-const menuToggle = $("#menu-toggle");
-const mainNavigation = $("#main-navigation");
-function closeMobileMenu() {
-  menuToggle.setAttribute("aria-expanded", "false");
-}
-menuToggle.addEventListener("click", () => {
-  menuToggle.setAttribute("aria-expanded", String(menuToggle.getAttribute("aria-expanded") !== "true"));
+// Wire components and controls before loading account-dependent data and opening a deep link.
+const { bookDetail, account } = setupCoreComponents();
+setupCatalogueControls();
+setupStoreComponents();
+const navigation = setupApplicationNavigation({
+  getCategory: () => category,
+  getSections: () => sections,
+  showSection: id => { category = id; page = 1; render(); },
 });
-mainNavigation.addEventListener("click", (event) => {
-  if (event.target.closest("a")) closeMobileMenu();
+startApplication({
+  loadCovers,
+  loadProfile: () => account.loadProfile(),
+  loadBooks,
+  openInitialRoute: navigation.openInitialRoute,
+  notify: toast,
 });
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && menuToggle.getAttribute("aria-expanded") === "true") {
-    closeMobileMenu();
-    menuToggle.focus();
-  }
-});
-window.matchMedia("(max-width: 600px)").addEventListener("change", closeMobileMenu);
-document.documentElement.classList.add("mobile-navigation-ready");
-
-function openAIBooks() {
-  $("#ai").hidden = true;
-  category = "ai"; page = 1; render();
-  $("#catalog").scrollIntoView({block: "start"});
-}
-document.querySelectorAll('[data-open-ai-books]').forEach(link => link.addEventListener('click', openAIBooks));
-setupAINavigation({openBooks:openAIBooks,ensureBooks:()=>{if(category !== 'ai') openAIBooks();}});
-
-// Return from the digital atlas to the matching managed catalogue section.
-function openDigitalBooks() {
-  const section=sections.find(section=>atlasForSection(section)?.id === 'digital');
-  if (!section) { $('#catalog').scrollIntoView({block:'start'}); return; }
-  $('#ai').hidden=true;category=section.id;page=1;render();
-  $('#catalog').scrollIntoView({block:'start'});
-}
-window.addEventListener('hashchange',()=>{if(location.hash === '#digital-books')openDigitalBooks();});
