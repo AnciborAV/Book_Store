@@ -15,14 +15,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PdfDeliveryService {
     private static final int CHUNK_SIZE = 1024 * 1024;
+
     private final JdbcTemplate jdbc;
 
     void download(JavaLibraryService.Book book, HttpServletResponse response) throws IOException {
         String name = book.title().replaceAll("[\\p{Cntrl}/\\\\]", "_") + ".pdf";
         response.setContentType("application/pdf");
         response.setContentLengthLong(book.fileSize());
-        response.setHeader("Content-Disposition", ContentDisposition.attachment()
-            .filename(name, StandardCharsets.UTF_8).build().toString());
+        response.setHeader(
+            "Content-Disposition",
+            ContentDisposition.attachment().filename(name, StandardCharsets.UTF_8).build().toString()
+        );
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("X-Content-Type-Options", "nosniff");
         copyCompleteFile(book.id(), book.fileSize(), response.getOutputStream());
@@ -41,28 +44,40 @@ public class PdfDeliveryService {
         }
         if (range != null) {
             response.setStatus(206);
-            response.setHeader("Content-Range", "bytes " + requested.start() + "-"
-                + requested.end() + "/" + book.fileSize());
+            response.setHeader(
+                "Content-Range",
+                "bytes " + requested.start() + "-" + requested.end() + "/" + book.fileSize()
+            );
         }
         response.setContentType("application/pdf");
         response.setContentLengthLong(requested.length());
         response.setHeader("X-Content-Type-Options", "nosniff");
-        response.setHeader("Content-Disposition", ContentDisposition.inline()
-            .filename("book.pdf").build().toString());
+        response.setHeader(
+            "Content-Disposition",
+            ContentDisposition.inline().filename("book.pdf").build().toString()
+        );
         copyRange(book.id(), requested, response.getOutputStream());
     }
 
     private record ByteRange(long start, long end) {
-        long length() { return end - start + 1; }
+        long length() {
+            return end - start + 1;
+        }
     }
 
     private ByteRange resolveRange(String header, long size) {
-        if (header == null) return new ByteRange(0, size - 1);
+        if (header == null) {
+            return new ByteRange(0, size - 1);
+        }
         var ranges = HttpRange.parseRanges(header);
-        if (ranges.size() != 1) throw new IllegalArgumentException();
+        if (ranges.size() != 1) {
+            throw new IllegalArgumentException();
+        }
         long start = ranges.getFirst().getRangeStart(size);
         long end = ranges.getFirst().getRangeEnd(size);
-        if (start < 0 || start >= size || end < start) throw new IllegalArgumentException();
+        if (start < 0 || start >= size || end < start) {
+            throw new IllegalArgumentException();
+        }
         return new ByteRange(start, end);
     }
 
@@ -98,6 +113,7 @@ public class PdfDeliveryService {
     private byte[] loadChunk(String id, int part) {
         return jdbc.queryForObject(
             "SELECT data FROM java_library_pdf_chunks WHERE book_id=? AND part=?",
-            byte[].class, id, part);
+            byte[].class, id, part
+        );
     }
 }
