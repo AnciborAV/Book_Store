@@ -4,9 +4,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.security.Principal;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/selection")
@@ -36,12 +44,13 @@ public class SelectionController {
 
     @PutMapping("/library-favorites/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void libraryFavorite(Principal user, @PathVariable java.util.UUID bookId) {
+    public void libraryFavorite(Principal user, @PathVariable UUID bookId) {
         selection.libraryFavorite(user.getName(), bookId.toString());
     }
+
     @DeleteMapping("/library-favorites/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void libraryUnfavorite(Principal user, @PathVariable java.util.UUID bookId) {
+    public void libraryUnfavorite(Principal user, @PathVariable UUID bookId) {
         selection.libraryUnfavorite(user.getName(), bookId.toString());
     }
 
