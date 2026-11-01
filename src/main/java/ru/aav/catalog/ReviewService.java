@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.aav.auth.CurrentAccount;
+import ru.aav.notifications.ReviewMailQueue;
 import ru.aav.service.BookService;
 
 @Service
@@ -17,7 +18,7 @@ public class ReviewService {
     private final ReviewRepository reviews;
     private final CurrentAccount accounts;
     private final BookService books;
-    private final ru.aav.notifications.ReviewMailQueue mail;
+    private final ReviewMailQueue mail;
 
     public List<Review> list(long book, String email) {
         books.findById(book);
@@ -32,10 +33,14 @@ public class ReviewService {
         var account = accounts.lock(email);
         var title = books.findById(book);
         if (reviews.save(book, account.getId(), rating, body.strip())) {
-            mail.enqueue("BOOK:"+reviews.id(book,account.getId()), "Новый отзыв о книге",
-                "Книга: "+title.getName()+" — "+title.getAuthor()+"\nАвтор отзыва: "+account.getDisplayName()
-                +"\nОценка: "+rating+" из 5\n\n"+body.strip()
-                +"\n\nОткройте кабинет администратора → Отзывы и уведомления → Книги.");
+            mail.enqueue(
+                "BOOK:" + reviews.id(book, account.getId()),
+                "Новый отзыв о книге",
+                "Книга: " + title.getName() + " — " + title.getAuthor()
+                    + "\nАвтор отзыва: " + account.getDisplayName()
+                    + "\nОценка: " + rating + " из 5\n\n" + body.strip()
+                    + "\n\nОткройте кабинет администратора → Отзывы и уведомления → Книги."
+            );
         }
     }
 
