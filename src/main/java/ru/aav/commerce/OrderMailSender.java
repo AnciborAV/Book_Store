@@ -37,7 +37,9 @@ public class OrderMailSender {
         this.sender = sender;
         this.from = from;
         try {
-            if (from.isBlank()) throw new IllegalArgumentException();
+            if (from.isBlank()) {
+                throw new IllegalArgumentException();
+            }
             new InternetAddress(from, true).validate();
         } catch (Exception ex) {
             throw new IllegalArgumentException(
@@ -52,7 +54,9 @@ public class OrderMailSender {
     )
     public void sendPending() {
         for (String id : queue.due()) {
-            if (!queue.claim(id)) continue;
+            if (!queue.claim(id)) {
+                continue;
+            }
             try {
                 var order = orders.find(id, false).orElseThrow();
                 var content = OrderMailTemplate.render(

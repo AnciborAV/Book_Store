@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /** Durable outbox: an order and its notification are committed together. */
@@ -14,6 +15,8 @@ public class OrderMailQueue {
 
     private final JdbcTemplate jdbc;
     private final boolean enabled;
+
+    public record Status(String state, String message) {}
 
     public OrderMailQueue(
         JdbcTemplate jdbc,
@@ -24,7 +27,7 @@ public class OrderMailQueue {
     }
 
     @Transactional(
-        propagation = org.springframework.transaction.annotation.Propagation.MANDATORY
+        propagation = Propagation.MANDATORY
     )
     public void enqueue(String orderId) {
         jdbc.update("INSERT INTO order_mail(order_id) VALUES (?)", orderId);
@@ -55,24 +58,28 @@ public class OrderMailQueue {
         );
     }
 
-    public record Status(String state, String message) {}
-
     public Status status(String id) {
         var rows = jdbc.query(
             "SELECT attempts, sent_at FROM order_mail WHERE order_id=?",
             (rs, n) -> {
-                if (rs.getTimestamp("sent_at") != null) return new Status(
-                    "SENT",
-                    "Подтверждение заказа передано почтовому серверу. Проверьте входящие и папку «Спам»."
-                );
-                if (!enabled) return new Status(
-                    "DISABLED",
-                    "Заказ сохранён. Письмо ожидает настройки почты магазина."
-                );
-                if (rs.getInt("attempts") > 0) return new Status(
-                    "PENDING",
-                    "Письмо отправляется или ожидает повторной попытки. Заказ сохранён."
-                );
+                if (rs.getTimestamp("sent_at") != null) {
+                    return new Status(
+                        "SENT",
+                        "Подтверждение заказа передано почтовому серверу. Проверьте входящие и папку «Спам»."
+                    );
+                }
+                if (!enabled) {
+                    return new Status(
+                        "DISABLED",
+                        "Заказ сохранён. Письмо ожидает настройки почты магазина."
+                    );
+                }
+                if (rs.getInt("attempts") > 0) {
+                    return new Status(
+                        "PENDING",
+                        "Письмо отправляется или ожидает повторной попытки. Заказ сохранён."
+                    );
+                }
                 return new Status(
                     "PENDING",
                     "Подтверждение заказа поставлено в очередь отправки на почту покупателя."

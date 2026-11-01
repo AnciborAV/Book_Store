@@ -1,14 +1,21 @@
 package ru.aav.commerce;
 
-import static ru.aav.commerce.CommerceDto.*;
+import static ru.aav.commerce.CommerceDto.Event;
+import static ru.aav.commerce.CommerceDto.Item;
+import static ru.aav.commerce.CommerceDto.Movement;
+import static ru.aav.commerce.CommerceDto.Order;
+import static ru.aav.commerce.CommerceDto.Stock;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 import ru.aav.auth.StoreUser;
 import ru.aav.model.Book;
 
@@ -16,7 +23,6 @@ import ru.aav.model.Book;
 @RequiredArgsConstructor
 public class CommerceRepository {
 
-    private final JdbcTemplate jdbc;
     private static final RowMapper<Order> ORDER = (r, n) ->
         new Order(
             r.getString("id"),
@@ -31,9 +37,7 @@ public class CommerceRepository {
             formatOrderNumber(r.getLong("order_number"))
         );
 
-    private static String formatOrderNumber(long number) {
-        return String.format(java.util.Locale.ROOT, "%06d", number);
-    }
+    private final JdbcTemplate jdbc;
 
     public Optional<Order> replay(long user, String key) {
         return jdbc
@@ -182,16 +186,20 @@ public class CommerceRepository {
             actor,
             key
         );
-        if (rows.isEmpty()) return false;
+        if (rows.isEmpty()) {
+            return false;
+        }
         var row = rows.getFirst();
         if (
             ((Number) row.get("book_id")).longValue() != book ||
             ((Number) row.get("stock_delta")).intValue() != quantity ||
             !note.equals(row.get("note"))
-        ) throw new org.springframework.web.server.ResponseStatusException(
-            org.springframework.http.HttpStatus.CONFLICT,
-            "Ключ поступления уже использован для других данных"
-        );
+        ) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Ключ поступления уже использован для других данных"
+            );
+        }
         return true;
     }
 
@@ -234,4 +242,8 @@ public class CommerceRepository {
             page * 50
         );
     }
+    private static String formatOrderNumber(long number) {
+        return String.format(Locale.ROOT, "%06d", number);
+    }
+
 }

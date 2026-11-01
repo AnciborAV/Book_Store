@@ -19,10 +19,13 @@ public class OrderInventoryService {
     private final CommerceRepository repository;
 
     record Line(Book book, int quantity) {}
+
     record PreparedCart(List<Line> lines, BigDecimal total) {}
 
     PreparedCart prepare(Map<Long, Integer> cart) {
-        if (cart.isEmpty()) throw conflict("Корзина пуста");
+        if (cart.isEmpty()) {
+            throw conflict("Корзина пуста");
+        }
         var lines = new ArrayList<Line>();
         BigDecimal total = BigDecimal.ZERO;
         // The ascending lock order is shared by checkout, shipment and cancellation.
@@ -39,28 +42,22 @@ public class OrderInventoryService {
         return new PreparedCart(List.copyOf(lines), total);
     }
 
-    private void validateAvailability(Book book, int quantity) {
-        if (book.getPrice() == null) {
-            throw conflict("Не указана цена: " + book.getName());
-        }
-        if (book.getStock() - book.getReserved() < quantity) {
-            throw conflict("Недостаточно книг на складе: " + book.getName());
-        }
-    }
-
     void reserve(String orderId, long actorId, PreparedCart cart) {
         for (var line : cart.lines()) {
             var book = line.book();
             int quantity = line.quantity();
             repository.item(orderId, book, quantity);
             book.setReserved(book.getReserved() + quantity);
-            repository.movement(book, actorId, "RESERVE", 0, quantity,
-                orderId, null, "Резерв заказа");
+            repository.movement(
+                book, actorId, "RESERVE", 0, quantity, orderId, null, "Резерв заказа"
+            );
         }
     }
 
     void applyTransition(String orderId, long actorId, OrderStatus next) {
-        if (next != OrderStatus.SHIPPED && next != OrderStatus.CANCELLED) return;
+        if (next != OrderStatus.SHIPPED && next != OrderStatus.CANCELLED) {
+            return;
+        }
         boolean shipping = next == OrderStatus.SHIPPED;
         // CommerceRepository.items returns rows in ascending book_id order.
         for (var item : repository.items(orderId)) {
@@ -71,9 +68,20 @@ public class OrderInventoryService {
             book.setReserved(book.getReserved() - item.quantity());
             int delta = shipping ? -item.quantity() : 0;
             book.setStock(book.getStock() + delta);
-            repository.movement(book, actorId, shipping ? "SHIP" : "RELEASE",
+            repository.movement(
+                book, actorId, shipping ? "SHIP" : "RELEASE",
                 delta, -item.quantity(), orderId, null,
-                shipping ? "Отправка заказа" : "Отмена заказа");
+                shipping ? "Отправка заказа" : "Отмена заказа"
+            );
+        }
+    }
+
+    private void validateAvailability(Book book, int quantity) {
+        if (book.getPrice() == null) {
+            throw conflict("Не указана цена: " + book.getName());
+        }
+        if (book.getStock() - book.getReserved() < quantity) {
+            throw conflict("Недостаточно книг на складе: " + book.getName());
         }
     }
 
