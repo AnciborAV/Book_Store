@@ -247,10 +247,16 @@ function setupStoreComponents() {
 }
 
 // Wire components and controls before loading account-dependent data and opening a deep link.
+// Capture the original page dialogs before components add editors with their own busy guards.
+const dialogTargets = {
+  dialogs: [...document.querySelectorAll('dialog')],
+  closeButtons: [...document.querySelectorAll('dialog .close')],
+};
 const { bookDetail, account } = setupCoreComponents();
 setupCatalogueControls();
 setupStoreComponents();
 const navigation = setupApplicationNavigation({
+  ...dialogTargets,
   getCategory: () => category,
   getSections: () => sections,
   showSection: id => { category = id; page = 1; render(); },

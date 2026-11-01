@@ -7,7 +7,7 @@ const {once}=require('node:events');
 const assert=require('node:assert/strict');
 const base='http://127.0.0.1:8080';
 const dir=mkdtempSync(join(tmpdir(),'java-library-'));
-let server,browser;
+let server,browser,page;
 async function start(){
  server=spawn('java',['-jar','target/book-store-0.0.1-SNAPSHOT.jar','--spring.profiles.active=local',
   '--bookstore.admin.email=java-admin@example.com','--bookstore.admin.password=java-admin-password',
@@ -19,26 +19,35 @@ async function start(){
 async function stop(){if(server&&server.exitCode===null){const done=once(server,'exit');server.kill('SIGTERM');await done;}}
 (async()=>{
  await start();browser=await chromium.launch({headless:true});
- const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base);await page.getByRole('button',{name:'Java',exact:true}).click();
- assert.equal(await page.locator('#java-add').isVisible(),false);
+ page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(base);
+ assert.equal(await page.locator('#add-book').isVisible(),false);
  await page.locator('#account').click();await page.locator('#auth-form [name=email]').fill('java-admin@example.com');
  await page.locator('#auth-form [name=password]').fill('java-admin-password');await page.locator('#auth-submit').click();
  await page.locator('#profile-dialog').waitFor({state:'visible'});await page.locator('#profile-dialog .close').click();
- await page.locator('#java-add').click();await page.locator('#java-form [name=title]').fill('Java: первая книга');
- await page.locator('#java-form [name=pdf]').setInputFiles('src/test/resources/java-library-sample.pdf');
- await page.locator('#java-save').click();await page.locator('#java-editor').waitFor({state:'hidden'});
- await page.locator('.java-card h3').filter({hasText:'Java: первая книга'}).waitFor();
- const downloadPath=await page.locator('.java-card a').getAttribute('href');
- const downloadEvent = page.waitForEvent('download');
- await page.locator('.java-card a').click();
- assert.equal(await (await downloadEvent).failure(), null);
- assert.equal(await page.locator('.java-card a').textContent(), 'Скачать ещё раз ↓');
- assert.ok(await page.locator('.java-card a').evaluate(n=>n.classList.contains('java-downloaded')));
- await page.reload();await page.getByRole('button',{name:'Java',exact:true}).click();
- await page.locator('.java-card a.java-downloaded').waitFor();
- await page.getByRole('button',{name:'Сбросить отметку',exact:true}).click();
- assert.equal(await page.locator('.java-card a').textContent(), 'Скачать PDF ↓');
+ // A new database has no curated Java section; create it through the actual admin UI.
+ await page.getByRole('button',{name:'Управлять разделами',exact:true}).click();
+ await page.locator('#managed-section-create [name=name]').fill('Java');
+ await page.locator('#managed-section-create button[type=submit]').click();
+ await page.getByRole('button',{name:/^Java ·/}).waitFor();
+ await page.locator('#section-editor [data-managed-close]').click();
+ await page.getByRole('button',{name:/^Java ·/}).click();
+ await page.locator('#add-book').click();
+ await page.locator('#managed-book-form [name=title]').fill('Java: первая книга');
+ await page.locator('#managed-book-form [name=pdf]').setInputFiles('src/test/resources/java-library-sample.pdf');
+ await page.locator('#managed-book-form button[type=submit]').click();
+ await page.locator('#managed-book-editor').waitFor({state:'hidden'});
+ const card=()=>page.locator('.book-card').filter({hasText:'Java: первая книга'});
+ await card().waitFor();
+ const download=card().getByRole('link',{name:'Скачать PDF ↓',exact:true});
+ const downloadPath=await download.getAttribute('href');
+ const downloadEvent=page.waitForEvent('download');await download.click();
+ assert.equal(await (await downloadEvent).failure(),null);
+ const readerPath=await card().getByRole('link',{name:'Читать',exact:true}).getAttribute('href');
+ const reader=await browser.newPage();reader.on('pageerror',e=>errors.push(e.message));
+ await reader.goto(base+readerPath);
+ await reader.locator('#page-canvas').waitFor({state:'visible'});
+ await reader.close();
  // Admin review inbox is accessible and clearly indicates disabled email.
  await page.locator('#account').click();
  await page.locator('#open-review-inbox').click();
@@ -63,23 +72,25 @@ async function stop(){if(server&&server.exitCode===null){const done=once(server,
 
  const source=readFileSync('src/test/resources/java-library-sample.pdf');
  assert.deepEqual(Buffer.from(await (await fetch(base+downloadPath)).arrayBuffer()),source);
- await page.getByRole('button',{name:'Редактировать',exact:true}).click();
- await page.locator('#java-form [name=title]').fill('Java: обновлённая книга');await page.locator('#java-save').click();
- await page.locator('#java-editor').waitFor({state:'hidden'});
- await page.locator('.java-card h3').filter({hasText:'Java: обновлённая книга'}).waitFor();
+ await page.getByRole('button',{name:/^Java ·/}).click();
+ await card().getByRole('button',{name:'Редактировать книгу',exact:true}).click();
+ await page.locator('#managed-book-form [name=title]').fill('Java: обновлённая книга');
+ await page.locator('#managed-book-form button[type=submit]').click();
+ await page.locator('#managed-book-editor').waitFor({state:'hidden'});
+ await page.locator('.book-card').filter({hasText:'Java: обновлённая книга'}).waitFor();
  mkdirSync('target/browser-screenshots',{recursive:true});
  for(const width of [1440,390]){
-  await page.setViewportSize({width,height:1000});await page.locator('#java-library').scrollIntoViewIfNeeded();
+  await page.setViewportSize({width,height:1000});await page.locator('#catalog').scrollIntoViewIfNeeded();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await page.screenshot({path:`target/browser-screenshots/java-${width}.png`});
  }
  await stop();await start();
  const guest=await browser.newPage();await guest.goto(base);await guest.getByRole('button',{name:'Java',exact:true}).click();
- await guest.locator('.java-card h3').filter({hasText:'Java: обновлённая книга'}).waitFor();
- assert.equal(await guest.getByRole('button',{name:'Редактировать',exact:true}).count(),0);
+ await guest.locator('.book-card h3').filter({hasText:'Java: обновлённая книга'}).waitFor();
+ assert.equal(await guest.getByRole('button',{name:'Редактировать книгу',exact:true}).count(),0);
  await guest.locator('#feedback-public .feedback-card').waitFor();
  assert.equal(await guest.locator('#feedback-admin').isVisible(),false);
- assert.equal(await guest.locator('.java-card a').textContent(),'Скачать PDF ↓');
+ await guest.locator('.book-card').filter({hasText:'Java: обновлённая книга'}).getByRole('link',{name:'Скачать PDF ↓',exact:true}).waitFor();
  assert.deepEqual(Buffer.from(await(await fetch(base+downloadPath)).arrayBuffer()),source);
  assert.deepEqual(errors,[]);console.log('Java library upload/edit/public download/restart/mobile passed');
-})().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();await stop();});
+})().catch(async e=>{console.error(e);process.exitCode=1;if(page){mkdirSync('target/browser-screenshots',{recursive:true});await page.screenshot({path:'target/browser-screenshots/pdf-failure.png',fullPage:true}).catch(()=>{});}}).finally(async()=>{await browser?.close();await stop();});

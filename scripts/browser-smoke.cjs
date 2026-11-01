@@ -73,10 +73,10 @@ async function stop() {
   await login("admin@example.com", "admin-test-password");
   await page.locator("#profile-dialog .close").click();
   await page.locator("#add-book").click();
-  await page.locator("#book-form [name=name]").fill("Проверка заказа");
-  await page.locator("#book-form [name=author]").fill("Автор");
-  await page.locator("#book-form button").click();
-  await page.locator("#book-dialog").waitFor({ state: "hidden" });
+  await page.locator("#managed-book-form [name=title]").fill("Проверка заказа");
+  await page.locator("#managed-book-form [name=author]").fill("Автор");
+  await page.locator("#managed-book-form button[type=submit]").click();
+  await page.locator("#managed-book-editor").waitFor({ state: "hidden" });
   await page.locator("#account").click();
   await page.locator("#open-admin").click();
   await page.locator("#inventory-search").fill("Проверка заказа");
