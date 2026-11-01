@@ -13,6 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class EditorialService {
     private final JdbcTemplate jdbc;
     private final ru.aav.text.TextStyles styles;
+    private final ru.aav.catalogue.CatalogueOrderService catalogueOrder;
+    private static final String HOME_LIST = "На главной";
     public record Book(String kind, String id, String title, String author, String section,
                        String description, String source, List<String> lists, String comment, long version, String pdfId, long pdfVersion, boolean customCover, String coverTitle, List<ru.aav.text.TextStyles.Mark> descriptionStyle,List<ru.aav.text.TextStyles.Mark> commentStyle) {}
     private static final String CATALOG = """
@@ -67,6 +69,9 @@ public class EditorialService {
     @Transactional
     public Book save(String kind,String id,EditorialController.Edit edit) {
         Object key=key(kind,id);
+        // All editorial saves use the catalogue lock before parent locks. This also
+        // serializes replacing a homepage choice across catalog and PDF books.
+        catalogueOrder.lock();
         String table=kind.equals("catalog") ? "books" : "java_library";
         String column=kind.equals("catalog") ? "catalog_id" : "library_id";
         // Lock the parent even on the first edit; prevents two concurrent inserts/lost updates.
@@ -90,7 +95,21 @@ public class EditorialService {
                 key,edit.description().strip(),names,edit.comment().strip(),descriptionStyle,commentStyle);
         else jdbc.update("UPDATE book_editorial SET description=?,lists=?,comment=?,description_style=?,comment_style=?,version=version+1 WHERE "+column+"=?",
             edit.description().strip(),names,edit.comment().strip(),descriptionStyle,commentStyle,key);
+        if (lists.contains(HOME_LIST)) removeOtherHomeChoices(column, key);
         return get(kind,id);
+    }
+    private record Recommendation(long id, String lists) {}
+
+    private void removeOtherHomeChoices(String column, Object key) {
+        var others = jdbc.query("SELECT id,lists FROM book_editorial WHERE " + column + " IS NULL OR " + column + "<>?",
+            (r,n) -> new Recommendation(r.getLong("id"), r.getString("lists")), key);
+        for (var recommendation : others) {
+            var labels = new ArrayList<>(Arrays.asList(recommendation.lists().split("\n")));
+            if (labels.removeIf(HOME_LIST::equals)) {
+                jdbc.update("UPDATE book_editorial SET lists=?,version=version+1 WHERE id=?",
+                    String.join("\n", labels), recommendation.id());
+            }
+        }
     }
     private Object key(String kind,String id) {
         try {
