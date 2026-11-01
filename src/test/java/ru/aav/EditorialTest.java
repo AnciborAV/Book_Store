@@ -20,6 +20,59 @@ class EditorialTest {
     @Autowired ObjectMapper json;
     final String library="00000000-0000-0000-0000-000000000071";
     long catalog;
+    @Autowired ru.aav.editorial.EditorialService editorial;
+
+    @Test void choosingHomeBookReplacesPreviousAcrossCatalogsAndPreservesItsContent() throws Exception {
+        String catalogUrl="/api/admin/editorial/books/catalog/"+catalog;
+        var old=(com.fasterxml.jackson.databind.node.ObjectNode)json.readTree(payload(-1,"На главной","Старый комментарий"));
+        old.putArray("commentStyle").addObject().put("start",0).put("end",6).put("bold",true);
+        mvc.perform(put(catalogUrl).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(json.writeValueAsString(old)))
+            .andExpect(status().isOk());
+        mvc.perform(put("/api/admin/editorial/books/library/"+library).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(-1,"На главной","Новая рекомендация")))
+            .andExpect(status().isOk());
+        var previous=editorial.get("catalog",String.valueOf(catalog));
+        assertThat(previous.lists()).containsExactly("Изучаем Java");
+        assertThat(previous.description()).isEqualTo("Моё описание");
+        assertThat(previous.comment()).isEqualTo("Старый комментарий");
+        assertThat(previous.commentStyle()).hasSize(1);
+        assertThat(previous.version()).isEqualTo(1);
+        assertThat(editorial.get("library",library).lists()).contains("На главной");
+        // A stale editor cannot silently put the old book back on the homepage.
+        mvc.perform(put(catalogUrl).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(0,"На главной","Устаревшее изменение")))
+            .andExpect(status().isConflict());
+        assertThat(editorial.get("library",library).lists()).contains("На главной");
+        // Replacement works in the other direction as well.
+        mvc.perform(put(catalogUrl).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(1,"На главной","Возвращаем книгу")))
+            .andExpect(status().isOk());
+        assertThat(editorial.get("library",library).lists()).containsExactly("Изучаем Java");
+    }
+
+    @Test void replacingHomeOnlyBookClearsItsListWithoutDeletingItsEditorial() throws Exception {
+        jdbc.update("INSERT INTO book_editorial(catalog_id,description,lists,comment) VALUES(?,?,?,?)",catalog,"Описание","На главной","Комментарий");
+        mvc.perform(put("/api/admin/editorial/books/library/"+library).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(-1,"На главной","Новая книга")))
+            .andExpect(status().isOk());
+        var previous=editorial.get("catalog",String.valueOf(catalog));
+        assertThat(previous.lists()).isEmpty();
+        assertThat(previous.comment()).isEqualTo("Комментарий");
+        assertThat(previous.description()).isEqualTo("Описание");
+        // An unrelated edit must not unset the homepage selection.
+        mvc.perform(put("/api/admin/editorial/books/catalog/"+catalog).with(user("admin").roles("ADMIN")).with(csrf()).contentType("application/json").content(payload(1,"Классика","Обновлённый комментарий")))
+            .andExpect(status().isOk());
+        assertThat(editorial.get("library",library).lists()).contains("На главной");
+    }
+
+    @Test void simultaneousHomeChoicesLeaveExactlyOneFeaturedBook() throws Exception {
+        var start=new java.util.concurrent.CountDownLatch(1);
+        var pool=java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            var first=pool.submit(()->{start.await();return editorial.save("catalog",String.valueOf(catalog),new ru.aav.editorial.EditorialController.Edit(-1,"Описание",java.util.List.of("На главной"),"",null,null));});
+            var second=pool.submit(()->{start.await();return editorial.save("library",library,new ru.aav.editorial.EditorialController.Edit(-1,"Описание",java.util.List.of("На главной"),"",null,null));});
+            start.countDown();
+            first.get(10,java.util.concurrent.TimeUnit.SECONDS);
+            second.get(10,java.util.concurrent.TimeUnit.SECONDS);
+            assertThat(editorial.list(true).stream().filter(b->b.lists().contains("На главной")).count()).isEqualTo(1);
+        } finally {pool.shutdownNow();}
+    }
     @BeforeEach void reset() {
         jdbc.update("DELETE FROM book_editorial");
         jdbc.update("DELETE FROM java_library WHERE id=?",library);

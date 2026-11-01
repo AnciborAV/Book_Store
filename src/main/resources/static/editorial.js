@@ -216,7 +216,7 @@ async function editBook(kind,id) {
       if(!labels.includes('На главной'))labels.unshift('На главной');
       f.elements.lists.value=labels.join('\n');
     },'category-chip'));
-    $('#editorial-existing').append(element('small','Приоритет у списка «На главной». Если книг в нём несколько, показывается первая по названию. Без этого списка показывается первая рекомендация. Чтобы убрать приоритет книги, удалите строку «На главной».'));
+    $('#editorial-existing').append(element('small','Нажмите «Показывать на главной» и сохраните изменения: эта книга заменит прежнюю. У других книг строка «На главной» снимется автоматически, остальные подборки и комментарии сохранятся. Чтобы убрать отметку у этой книги, удалите строку «На главной».'));
 
     for(const name of [...new Set(records.flatMap(x=>x.lists))].sort()) {
       $('#editorial-existing').append(button(name,()=>{
