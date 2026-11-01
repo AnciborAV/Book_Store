@@ -2,7 +2,8 @@ package ru.aav.auth;
 
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class AvatarProcessor {
 
     public byte[] process(MultipartFile file) {
-        if (file.isEmpty() || file.getSize() > 2 * 1024 * 1024) throw invalid();
+        if (file.isEmpty() || file.getSize() > 2 * 1024 * 1024) {
+            throw invalid();
+        }
         try (
             var input = ImageIO.createImageInputStream(file.getInputStream())
         ) {
             var readers = ImageIO.getImageReaders(input);
-            if (!readers.hasNext()) throw invalid();
+            if (!readers.hasNext()) {
+                throw invalid();
+            }
             var reader = readers.next();
             try {
                 reader.setInput(input);
@@ -27,16 +32,20 @@ public class AvatarProcessor {
                 if (
                     !format.equalsIgnoreCase("png") &&
                     !format.equalsIgnoreCase("jpeg")
-                ) throw invalid();
-                int width = reader.getWidth(0),
-                    height = reader.getHeight(0);
+                ) {
+                    throw invalid();
+                }
+                int width = reader.getWidth(0);
+                int height = reader.getHeight(0);
                 if (
                     width < 1 || height < 1 || width > 4096 || height > 4096
-                ) throw invalid();
+                ) {
+                    throw invalid();
+                }
                 var source = reader.read(0);
-                int side = Math.min(width, height),
-                    x = (width - side) / 2,
-                    y = (height - side) / 2;
+                int side = Math.min(width, height);
+                int x = (width - side) / 2;
+                int y = (height - side) / 2;
                 var result = new BufferedImage(
                     256,
                     256,
