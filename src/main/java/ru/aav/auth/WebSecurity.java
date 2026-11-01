@@ -1,24 +1,37 @@
 package ru.aav.auth;
 
+import java.util.Set;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 public class WebSecurity {
 
     @Bean
-    org.springframework.security.core.session.SessionRegistry sessionRegistry() {
-        return new org.springframework.security.core.session.SessionRegistryImpl();
+    SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
+
     @Bean
-    org.springframework.security.web.session.HttpSessionEventPublisher sessionEvents() {
-        return new org.springframework.security.web.session.HttpSessionEventPublisher();
+    HttpSessionEventPublisher sessionEvents() {
+        return new HttpSessionEventPublisher();
     }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,29 +54,40 @@ public class WebSecurity {
     }
 
     @Bean
-    org.springframework.security.web.authentication.rememberme.PersistentTokenRepository rememberedTokens(javax.sql.DataSource dataSource) {
-        var repository = new org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl();
+    PersistentTokenRepository rememberedTokens(DataSource dataSource) {
+        var repository = new JdbcTokenRepositoryImpl();
         repository.setDataSource(dataSource);
         return repository;
     }
 
     @Bean
-    RememberedLogin rememberedLogin(UserDetailsService users,
-        org.springframework.security.web.authentication.rememberme.PersistentTokenRepository tokens,
-        org.springframework.security.core.session.SessionRegistry sessions,
-        @org.springframework.beans.factory.annotation.Value("${bookstore.remember-me.secure:true}") boolean secure) {
+    RememberedLogin rememberedLogin(
+        UserDetailsService users,
+        PersistentTokenRepository tokens,
+        SessionRegistry sessions,
+        @Value("${bookstore.remember-me.secure:true}") boolean secure
+    ) {
         return new RememberedLogin(users, tokens, sessions, secure);
     }
 
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http, org.springframework.security.core.session.SessionRegistry sessions, RememberedLogin rememberedLogin) throws Exception {
+    SecurityFilterChain apiSecurity(
+        HttpSecurity http, SessionRegistry sessions, RememberedLogin rememberedLogin
+    ) throws Exception {
         return http
             .headers(h -> h.frameOptions(f -> f.disable()).addHeaderWriter((req, res) ->
-                res.setHeader("X-Frame-Options", java.util.Set.of("/ai-atlas.html", "/ai-architects.html", "/ai-history.html", "/ai-models.html", "/ai-russia.html").stream().anyMatch(path -> (req.getContextPath() + path).equals(req.getRequestURI())) ? "SAMEORIGIN" : "DENY")))
+                res.setHeader(
+                    "X-Frame-Options",
+                    Set.of(
+                        "/ai-atlas.html", "/ai-architects.html", "/ai-history.html", "/ai-models.html", "/ai-russia.html"
+                    ).stream().anyMatch(path -> (req.getContextPath() + path).equals(req.getRequestURI()))
+                        ? "SAMEORIGIN" : "DENY"
+                )
+            ))
             .authorizeHttpRequests(a ->
                 a
                     .requestMatchers(
-                        org.springframework.http.HttpMethod.GET,
+                        HttpMethod.GET,
                         "/api/books/*/reviews"
                     )
                     .permitAll()
@@ -76,7 +100,7 @@ public class WebSecurity {
                     )
                     .permitAll()
                     .requestMatchers(
-                        org.springframework.http.HttpMethod.GET,
+                        HttpMethod.GET,
                         "/books",
                         "/books/**",
                         "/",
@@ -178,7 +202,7 @@ public class WebSecurity {
                     .requestMatchers("/api/admin/**")
                     .hasRole("ADMIN")
                     .requestMatchers(
-                        org.springframework.http.HttpMethod.POST,
+                        HttpMethod.POST,
                         "/books",
                         "/books/**"
                     )
@@ -188,12 +212,16 @@ public class WebSecurity {
                     .anyRequest()
                     .authenticated()
             )
-            .sessionManagement(s -> s.maximumSessions(-1).sessionRegistry(sessions)
-                .expiredSessionStrategy(e -> e.getResponse().sendError(401)))
+            .sessionManagement(s -> s.maximumSessions(-1)
+                .sessionRegistry(sessions)
+                .expiredSessionStrategy(e -> e.getResponse().sendError(401))
+            )
             .exceptionHandling(e ->
                 e.authenticationEntryPoint((req, res, ex) -> res.sendError(401))
             )
-            .rememberMe(r -> r.key(RememberedLogin.PROVIDER_KEY).rememberMeServices(rememberedLogin))
+            .rememberMe(r -> r.key(RememberedLogin.PROVIDER_KEY)
+                .rememberMeServices(rememberedLogin)
+            )
             .formLogin(f ->
                 f
                     .loginProcessingUrl("/api/auth/login")

@@ -30,7 +30,9 @@ public class CurrentAccount {
     }
 
     public static String normalize(String email) {
-        if (email == null) throw unauthorized();
+        if (email == null) {
+            throw unauthorized();
+        }
         return email.strip().toLowerCase(Locale.ROOT);
     }
 

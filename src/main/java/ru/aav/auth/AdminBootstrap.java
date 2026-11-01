@@ -26,7 +26,9 @@ public class AdminBootstrap implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        if (email.isBlank()) return;
+        if (email.isBlank()) {
+            return;
+        }
         String normalized = CurrentAccount.normalize(email);
         if (users.findByEmail(normalized).isEmpty()) {
             var registration = new Registration(
