@@ -1,33 +1,43 @@
 import { request } from './api-client.js';
 import { createFeedbackCode } from './feedback-code.js';
 let context, publicPage = 0, adminPage = 0, adminState = 'PENDING', generation = 0;
-let refreshFeedbackLayout = () => {};
+let refreshFeedbackLayout = () => {
+};
 const labels = { REVIEW: 'Отзыв', ISSUE: 'Замечание', IDEA: 'Предложение' };
 const $ = id => document.getElementById(id);
 const el = (tag, text, cls) => {
-  const n = document.createElement(tag); n.textContent = text;
-  if (cls) n.className = cls;
+  const n = document.createElement(tag);
+  n.textContent = text;
+  if (cls) {
+    n.className = cls;
+  }
   return n;
 };
+
 function button(text, handler) {
-  const b = el('button', text, 'button light'); b.type = 'button'; b.onclick = handler; return b;
+  const b = el('button', text, 'button light');
+  b.type = 'button';
+  b.onclick = handler;
+  return b;
 }
+
 function setupCompactFeedback(section) {
   const column = section.querySelector('.feedback-reader-column');
   const grid = el('div', '', 'feedback-masonry');
-  const pages = el('div'); pages.id = 'feedback-public-pages';
+  const pages = el('div');
+  pages.id = 'feedback-public-pages';
   column.append(grid, pages);
   grid.append($('feedback-public'), section.querySelector('.feedback-gallery'));
   let frame;
   const arrange = () => {
     cancelAnimationFrame(frame);
     frame = requestAnimationFrame(() => {
-      // Preserve DOM reading order; dense grid packing only removes vertical holes.
-      for (const item of grid.querySelectorAll('#feedback-public > *, .feedback-gallery > *')) {
-        const span = Math.ceil((item.getBoundingClientRect().height + 20) / 4);
-        item.style.gridRowEnd = `span ${Math.max(1, span)}`;
-      }
-    });
+        // Preserve DOM reading order; dense grid packing only removes vertical holes.
+        for (const item of grid.querySelectorAll('#feedback-public > *, .feedback-gallery > *')) {
+          const span = Math.ceil((item.getBoundingClientRect().height + 20) / 4);
+          item.style.gridRowEnd = `span ${Math.max(1, span)}`;
+        }
+      });
   };
   const observer = new ResizeObserver(arrange);
   refreshFeedbackLayout = () => {
@@ -38,10 +48,12 @@ function setupCompactFeedback(section) {
   };
   refreshFeedbackLayout();
 }
+
 export function setupFeedback(ctx) {
   context = ctx;
   const section = document.createElement('section');
-  section.id = 'site-feedback'; section.className = 'site-feedback';
+  section.id = 'site-feedback';
+  section.className = 'site-feedback';
   section.innerHTML = `
     <div class="eyebrow">СДЕЛАЕМ «ПЕРЕПЛЁТ» ЛУЧШЕ</div>
     <h2>Ваше мнение важно</h2>
@@ -100,82 +112,144 @@ export function setupFeedback(ctx) {
   $('feedback-form').onsubmit = async e => {
     e.preventDefault();
     const form = e.currentTarget, submit = form.querySelector('button[type=submit]');
-    if (!form.elements.body.value.trim()) { $('feedback-result').textContent = 'Напишите сообщение.'; return; }
-    submit.disabled = true; submit.textContent = 'Сохраняем…'; $('feedback-result').textContent = '';
+    if (!form.elements.body.value.trim()) {
+      $('feedback-result').textContent = 'Напишите сообщение.';
+      return;
+    }
+    submit.disabled = true;
+    submit.textContent = 'Сохраняем…';
+    $('feedback-result').textContent = '';
     try {
       const data = { requestId, kind: form.elements.kind.value, body: form.elements.body.value.trim(), publicConsent: form.elements.publicConsent.checked };
-      await request('/api/site-feedback', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-      form.reset(); requestId = crypto.randomUUID();
+      await request('/api/site-feedback', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+      form.reset();
+      requestId = crypto.randomUUID();
       $('feedback-result').textContent = data.publicConsent
-        ? 'Спасибо! Сообщение сохранено и ожидает проверки перед публикацией.'
-        : 'Спасибо! Ваше сообщение сохранено для администратора.';
-    } catch (error) { $('feedback-result').textContent = error.message; }
-    finally { submit.disabled = false; submit.textContent = 'Отправить сообщение'; }
+      ? 'Спасибо! Сообщение сохранено и ожидает проверки перед публикацией.'
+      : 'Спасибо! Ваше сообщение сохранено для администратора.';
+    } catch (error) {
+      $('feedback-result').textContent = error.message;
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Отправить сообщение';
+    }
   };
-  $('feedback-state').onchange = () => { adminState = $('feedback-state').value; adminPage = 0; load(true); };
+  $('feedback-state').onchange = () => {
+    adminState = $('feedback-state').value;
+    adminPage = 0;
+    load(true);
+  };
   $('feedback-refresh').onclick = () => load(true);
   load(false);
 }
+
 export function updateFeedback() {
-  if (!context) return;
+  if (!context) {
+    return;
+  }
   generation++;
   const user = context.getUser(), admin = user?.role === 'ADMIN';
-  $('feedback-form').hidden = !user; $('feedback-login').hidden = !!user;
+  $('feedback-form').hidden = !user;
+  $('feedback-login').hidden = !!user;
   $('feedback-admin').hidden = !admin;
-  $('feedback-inbox').replaceChildren(); $('feedback-admin-result').textContent = '';
-  $('feedback-form').reset(); $('feedback-result').textContent = '';
+  $('feedback-inbox').replaceChildren();
+  $('feedback-admin-result').textContent = '';
+  $('feedback-form').reset();
+  $('feedback-result').textContent = '';
   // Fetch private messages only on an explicit admin action.
 }
+
 async function load(admin) {
-  if (admin && context.getUser()?.role !== 'ADMIN') return;
+  if (admin && context.getUser()?.role !== 'ADMIN') {
+    return;
+  }
   const target = $(admin ? 'feedback-inbox' : 'feedback-public');
   const stamp = generation, page = admin ? adminPage : publicPage;
-  const marker = {}; target._request = marker;
-  if (!admin) $('feedback-public-pages').replaceChildren();
-  target.replaceChildren(el('p','Загрузка…'));
-  if (!admin) refreshFeedbackLayout();
+  const marker = {};
+  target._request = marker;
+  if (!admin) {
+    $('feedback-public-pages').replaceChildren();
+  }
+  target.replaceChildren(el('p', 'Загрузка…'));
+  if (!admin) {
+    refreshFeedbackLayout();
+  }
   try {
     const data = await request(admin ? `/api/admin/site-feedback?page=${page}&state=${adminState}` : `/api/site-feedback?page=${page}`);
-    if (target._request !== marker || (admin && stamp !== generation)) return;
+    if (target._request !== marker || (admin && stamp !== generation)) {
+      return;
+    }
     target.replaceChildren();
-    if (!data.items.length) target.append(el('p', admin ? 'В этом разделе пока нет сообщений.' : 'Пока нет опубликованных отзывов. Ваш может стать первым.'));
+    if (!data.items.length) {
+      target.append(el('p', admin ? 'В этом разделе пока нет сообщений.' : 'Пока нет опубликованных отзывов. Ваш может стать первым.'));
+    }
     for (const item of data.items) {
       const card = el('article', '', 'feedback-card');
       card.append(el('strong', item.author), el('p', `${labels[item.kind]} · ${new Date(item.createdAt).toLocaleDateString('ru-RU')}`, 'muted'), el('p', item.body, 'feedback-body'));
       if (!admin && item.kind === 'REVIEW' && item.author.trim() === 'Мария'
-          && /^Отличная\s+подборка\s+книг(?:\s|[.!…]|$)/u.test(item.body.trim())) {
+      && /^Отличная\s+подборка\s+книг(?:\s|[.!…]|$)/u.test(item.body.trim())) {
         card.append(createFeedbackCode());
       }
       if (admin) {
         const controls = el('div', '', 'feedback-controls');
         card.append(el('p', item.publicConsent ? 'Автор разрешил публикацию.' : 'Только для администратора. Публикация запрещена.', 'muted'));
         const change = async (state, b) => {
-          if (state === 'PUBLISHED' && !confirm('Опубликовать сообщение и имя автора для всех посетителей?')) return;
+          if (state === 'PUBLISHED' && !confirm('Опубликовать сообщение и имя автора для всех посетителей?')) {
+            return;
+          }
           b.disabled = true;
           try {
-            await request(`/api/admin/site-feedback/${item.id}`, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:item.version,state})});
+            await request(`/api/admin/site-feedback/${item.id}`, {method: 'PATCH', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({version: item.version, state})});
             $('feedback-admin-result').textContent = 'Статус сообщения обновлён.';
-            await load(true); await load(false);
-          } catch(error) { $('feedback-admin-result').textContent = error.message; }
-          finally { b.disabled = false; }
+            await load(true);
+            await load(false);
+          } catch (error) {
+            $('feedback-admin-result').textContent = error.message;
+          } finally {
+            b.disabled = false;
+          }
         };
-        if (item.publicConsent && item.state !== 'PUBLISHED') { const b=button('Опубликовать',()=>change('PUBLISHED',b)); controls.append(b); }
-        if (item.state !== 'ARCHIVED') { const b=button(item.state==='PUBLISHED'?'Снять с публикации':'В архив',()=>change('ARCHIVED',b)); controls.append(b); }
-        if (item.state === 'ARCHIVED') { const b=button('Вернуть в новые',()=>change('PENDING',b)); controls.append(b); }
+        if (item.publicConsent && item.state !== 'PUBLISHED') {
+          const b = button('Опубликовать', () => change('PUBLISHED', b));
+          controls.append(b);
+        }
+        if (item.state !== 'ARCHIVED') {
+          const b = button(item.state === 'PUBLISHED' ? 'Снять с публикации' : 'В архив', () => change('ARCHIVED', b));
+          controls.append(b);
+        }
+        if (item.state === 'ARCHIVED') {
+          const b = button('Вернуть в новые', () => change('PENDING', b));
+          controls.append(b);
+        }
         card.append(controls);
       }
       target.append(card);
     }
-    const nav = el('div','','feedback-controls');
-    const go = p => { if(admin) adminPage=p; else publicPage=p; load(admin); };
-    if (page>0) nav.append(button('← Назад',()=>go(page-1)));
+    const nav = el('div', '', 'feedback-controls');
+    const go = p => {
+      if (admin) {
+        adminPage = p;
+      } else {
+        publicPage = p;
+      }
+      load(admin);
+    };
+    if (page > 0) {
+      nav.append(button('← Назад', () => go(page - 1)));
+    }
     nav.append(el('span', `Сообщений: ${data.total} · Страница ${page+1}`));
-    if ((page+1)*20 < data.total) nav.append(button('Далее →',()=>go(page+1)));
+    if ((page + 1) * 20 < data.total) {
+      nav.append(button('Далее →', () => go(page + 1)));
+    }
     (admin ? target : $('feedback-public-pages')).append(nav);
-  } catch(error) {
-    if (target._request !== marker || (admin && stamp !== generation)) return;
-    target.replaceChildren(el('p',error.message),button('Повторить',()=>load(admin)));
+  } catch (error) {
+    if (target._request !== marker || (admin && stamp !== generation)) {
+      return;
+    }
+    target.replaceChildren(el('p', error.message), button('Повторить', () => load(admin)));
   } finally {
-    if (!admin) refreshFeedbackLayout();
+    if (!admin) {
+      refreshFeedbackLayout();
+    }
   }
 }

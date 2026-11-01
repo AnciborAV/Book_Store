@@ -4,8 +4,12 @@ const SOURCE = "@Transactional\npublic String create(String email, UUID requestI
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
-  if (text !== undefined) node.textContent = text;
-  if (className) node.className = className;
+  if (text !== undefined) {
+    node.textContent = text;
+  }
+  if (className) {
+    node.className = className;
+  }
   return node;
 }
 
@@ -26,7 +30,9 @@ export function createFeedbackCode() {
     end = match.index + token.length;
   }
   code.append(document.createTextNode(SOURCE.slice(end)));
-  pre.append(code); editor.append(pre); details.append(editor);
+  pre.append(code);
+  editor.append(pre);
+  details.append(editor);
   details.append(element('p', 'Сохранение отзыва не означает публикацию: он станет виден посетителям после проверки редактором и при наличии согласия автора.', 'feedback-source-explanation'));
   return details;
 }
