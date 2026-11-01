@@ -23,6 +23,8 @@ jobs:
         run: node scripts/test-catalogue.mjs
       - name: Cart data, state and view
         run: node scripts/test-cart.mjs
+      - name: Account data, forms and profile
+        run: node scripts/test-account.mjs
       - name: Install browser test dependencies
         run: |
           npm install --prefix "$RUNNER_TEMP/browser-test" playwright@1.58.2

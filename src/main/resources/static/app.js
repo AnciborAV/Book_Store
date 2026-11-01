@@ -1,3 +1,4 @@
+import { setupAccount } from "./account-controller.js";
 import { createSelectionState } from "./selection-state.js";
 import { cartRows } from "./cart-model.js";
 import { renderCartRows, renderSelectionHints } from "./cart-view.js";
@@ -15,11 +16,10 @@ import { setupAnnouncement, updateAnnouncement } from "./announcement.js";
 import { setupFeedback, updateFeedback } from "./feedback.js";
 import { setupJavaLibrary, updateJavaLibrary, openJavaLibrary } from "./java-library.js";
 import { setupCommerce, updateCommerce } from "./commerce.js";
-import { request, csrf, resetCsrf } from "./api-client.js";
+import { request } from "./api-client.js";
 const $ = (s) => document.querySelector(s);
 let books = [], libraryBooks = [], sections = [],
   user = null,
-  register = false,
   filter = "all",
   category = "all",
   page = 1,
@@ -214,41 +214,23 @@ async function loadReviews(book) {
         "Не удалось загрузить отзывы. Откройте книгу ещё раз.";
   }
 }
-function avatar(target) {
-  target.replaceChildren();
-  if (user?.hasAvatar) {
-    const image = node("img");
-    image.alt = "Аватарка пользователя";
-    image.src = "/api/profile/avatar?t=" + Date.now();
-    target.append(image);
-  } else target.textContent = user?.displayName?.[0]?.toUpperCase() || "Ч";
-}
-async function loadProfile() {
-  const previous = user?.email;
-  const r = await fetch("/api/profile");
-  if (r.status === 401) {
-    user = null;
-  } else if (r.ok) {
-    user = await r.json();
-  } else throw Error("Не удалось загрузить профиль");
-  $("#account-label").textContent = user ? user.displayName : "Войти";
-  $(".mobile-account-label").textContent = user ? "Кабинет" : "Войти";
-  $("#account").setAttribute("aria-label", user ? `Личный кабинет: ${user.displayName}` : "Войти в личный кабинет");
-  avatar($("#account .avatar"));
-  if (user) {
-    $("#profile-name").textContent = user.displayName;
-    $("#profile-email").textContent = user.email;
-    avatar($("#profile-avatar"));
-  }
-  updateEditorial();
-  updateCommerce();
-  updateJavaLibrary();
-  updateFeedback();
-  updateAdminReviews();
-  updateAnnouncement();
-  updateAbout();
-  if (previous !== user?.email || !selection.ready) await loadSelection();
-}
+const account = setupAccount({
+  getUser: () => user,
+  setUser: value => { user = value; },
+  isSelectionReady: () => selection.ready,
+  isSelectionBusy: () => selection.busy,
+  loadSelection,
+  onProfileChange: () => {
+    updateEditorial();
+    updateCommerce();
+    updateJavaLibrary();
+    updateFeedback();
+    updateAdminReviews();
+    updateAnnouncement();
+    updateAbout();
+  },
+  toast,
+});
 $("#search").oninput = () => {
   page = 1;
   render();
@@ -281,102 +263,6 @@ document.querySelectorAll("dialog").forEach((d) =>
     }
   }),
 );
-$("#account").onclick = () => {
-  $(user ? "#profile-dialog" : "#auth-dialog").showModal();
-};
-$("#auth-toggle").onclick = () => {
-  register = !register;
-  $("#name-field").hidden = !register;
-  $("#name-field input").required = register;
-  $("#auth-title").textContent = register
-    ? "Начнём вашу историю"
-    : "С возвращением";
-  $("#auth-hint").textContent = register
-    ? "Создайте аккаунт и добавьте свою аватарку."
-    : "Войдите в свой книжный мир.";
-  $("#auth-submit").textContent = register ? "Создать аккаунт ↗" : "Войти ↗";
-  $("#auth-toggle").textContent = register
-    ? "Уже есть аккаунт? Войти"
-    : "Нет аккаунта? Зарегистрироваться";
-  $("#auth-form [name=password]").autocomplete = register
-    ? "new-password"
-    : "current-password";
-  $("#auth-error").textContent = "";
-  $("#forgot-password").hidden = register;
-};
-$("#auth-form").onsubmit = async (e) => {
-  e.preventDefault();
-  const button = $("#auth-submit");
-  button.disabled = true;
-  $("#auth-error").textContent = "";
-  const data = Object.fromEntries(new FormData(e.target));
-  try {
-    if (register)
-      await request("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-    await request("/api/auth/login", {
-      method: "POST",
-      body: new URLSearchParams({
-        email: data.email.trim().toLowerCase(),
-        password: data.password,
-        "remember-me": data["remember-me"] === "true" ? "true" : "false",
-      }),
-    });
-    resetCsrf();
-    await csrf();
-    await loadProfile();
-    e.target.reset();
-    $("#auth-dialog").close();
-    $("#profile-dialog").showModal();
-    toast(register ? "Аккаунт создан" : "Вы вошли в аккаунт");
-  } catch (err) {
-    $("#auth-error").textContent = err.message;
-  } finally {
-    button.disabled = false;
-  }
-};
-$("#avatar-form").onsubmit = async (e) => {
-  e.preventDefault();
-  const button = e.target.querySelector("button");
-  const file = e.target.file.files[0];
-  $("#avatar-message").textContent = "";
-  if (!file || file.size > 2 * 1024 * 1024) {
-    $("#avatar-message").textContent = "Выберите PNG или JPEG до 2 МБ";
-    return;
-  }
-  button.disabled = true;
-  try {
-    await request("/api/profile/avatar", {
-      method: "PUT",
-      body: new FormData(e.target),
-    });
-    await loadProfile();
-    $("#avatar-message").textContent = "Аватарка сохранена";
-    e.target.reset();
-  } catch (err) {
-    $("#avatar-message").textContent = err.message;
-  } finally {
-    button.disabled = false;
-  }
-};
-$("#logout").onclick = async () => {
-  if (selection.busy) {
-    toast("Дождитесь сохранения выбора");
-    return;
-  }
-  try {
-    await request("/api/auth/logout", { method: "POST" });
-    resetCsrf();
-    await loadProfile();
-    $("#profile-dialog").close();
-    toast("Вы вышли из аккаунта");
-  } catch (e) {
-    toast(e.message);
-  }
-};
 $("#add-book").onclick = () => openBookManager(null,category);
 $("#book-form").onsubmit = async (e) => {
   e.preventDefault();
@@ -440,7 +326,7 @@ async function init() {
     const r = await fetch("/catalog-covers.json");
     if (r.ok) covers = await r.json();
   } catch (_) {}
-  await loadProfile().catch((e) => toast(e.message));
+  await account.loadProfile().catch((e) => toast(e.message));
   await loadBooks();
   if (isAIHash(location.hash)) openAI();
   else if (location.hash === "#ai-books") openAIBooks();
