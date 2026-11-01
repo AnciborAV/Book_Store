@@ -41,16 +41,10 @@ public class OrderService {
             .orElseThrow(OrderService::missing);
         if (
             order.userId() != user.getId() && !"ADMIN".equals(user.getRole())
-        ) throw missing();
+        ) {
+            throw missing();
+        }
         return detail(order);
-    }
-
-    private Detail detail(Order order) {
-        return new Detail(
-            order,
-            repository.items(order.id()),
-            repository.events(order.id())
-        );
     }
 
     @Transactional
@@ -58,7 +52,9 @@ public class OrderService {
         // Cart mutations acquire the same account lock. A retry with this key returns the original order.
         var user = accounts.lock(email);
         var replay = repository.replay(user.getId(), key.toString());
-        if (replay.isPresent()) return detail(replay.get());
+        if (replay.isPresent()) {
+            return detail(replay.get());
+        }
         var cart = orderInventory.prepare(selection.find(user.getId()).cart());
         String id = UUID.randomUUID().toString();
         repository.create(id, user, key.toString(), cart.total());
@@ -85,14 +81,26 @@ public class OrderService {
         if (
             !adminRoute &&
             (order.userId() != actor.getId() || next != OrderStatus.CANCELLED)
-        ) throw missing();
-        if (order.status() == next) return detail(order);
-        if (!order.status().canMoveTo(next)) throw conflict(
-            "Недопустимый переход статуса заказа"
-        );
+        ) {
+            throw missing();
+        }
+        if (order.status() == next) {
+            return detail(order);
+        }
+        if (!order.status().canMoveTo(next)) {
+            throw conflict("Недопустимый переход статуса заказа");
+        }
         orderInventory.applyTransition(id, actor.getId(), next);
         repository.status(id, next, actor.getId());
         return detail(repository.find(id, false).orElseThrow());
+    }
+
+    private Detail detail(Order order) {
+        return new Detail(
+            order,
+            repository.items(order.id()),
+            repository.events(order.id())
+        );
     }
 
     private static ResponseStatusException missing() {

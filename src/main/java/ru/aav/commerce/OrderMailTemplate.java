@@ -41,7 +41,9 @@ public final class OrderMailTemplate {
                 .append(" = ")
                 .append(sum)
                 .append("\n");
-            rows.append("<tr><td style='padding:20px 0;border-bottom:1px solid #5a4c38;vertical-align:top;overflow-wrap:anywhere;word-break:break-word'>")
+            rows.append(
+                "<tr><td style='padding:20px 0;border-bottom:1px solid #5a4c38;vertical-align:top;overflow-wrap:anywhere;word-break:break-word'>"
+            )
                 .append("<span style='font-family:Georgia,serif;font-size:21px;line-height:1.4;color:#efe6d6'>")
                 .append(escape(item.name()))
                 .append("</span><br><span style='font-size:16px;line-height:1.6;color:#c1b69f'>")
@@ -50,7 +52,9 @@ public final class OrderMailTemplate {
                 .append(item.quantity())
                 .append(" × ")
                 .append(money(item.unitPrice()))
-                .append("</span></td><td align='right' style='width:112px;padding:20px 0 20px 12px;border-bottom:1px solid #5a4c38;vertical-align:top;font-size:18px;line-height:1.6;color:#efe6d6;white-space:nowrap'>")
+                .append(
+                    "</span></td><td align='right' style='width:112px;padding:20px 0 20px 12px;border-bottom:1px solid #5a4c38;vertical-align:top;font-size:18px;line-height:1.6;color:#efe6d6;white-space:nowrap'>"
+                )
                 .append(sum)
                 .append("</td></tr>");
         }
