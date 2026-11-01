@@ -3,7 +3,9 @@ import { request } from './api-client.js';
 export function createBookDetailData({ send = request } = {}) {
   const reviewsPath = book => '/api/books/' + book.id + '/reviews';
   return {
-    loadReviews(book) { return send(reviewsPath(book)); },
+    loadReviews(book) {
+      return send(reviewsPath(book));
+    },
     saveReview(book, values) {
       return send(reviewsPath(book), {
         method: 'PUT',

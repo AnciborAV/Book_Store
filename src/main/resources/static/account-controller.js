@@ -9,25 +9,35 @@ export function setupAccount({ getUser, setUser, isSelectionReady, isSelectionBu
     setUser(await data.loadProfile());
     view.renderProfile(getUser());
     onProfileChange();
-    if (previous !== getUser()?.email || !isSelectionReady()) await loadSelection();
+    if (previous !== getUser()?.email || !isSelectionReady()) {
+      await loadSelection();
+    }
   }
   view.bind({
     open: () => view.open(getUser()),
-    toggle() { register = !register; view.renderRegistration(register); },
+    toggle() {
+      register = !register;
+      view.renderRegistration(register);
+    },
     async submitAuth(event) {
       event.preventDefault();
       view.setAuthBusy(true);
       view.setAuthError('');
       const values = Object.fromEntries(new FormData(event.target));
       try {
-        if (register) await data.register(values);
+        if (register) {
+          await data.register(values);
+        }
         await data.login(values);
         await data.renewCsrf();
         await loadProfile();
         view.completeAuth(event.target);
         toast(register ? 'Аккаунт создан' : 'Вы вошли в аккаунт');
-      } catch (error) { view.setAuthError(error.message); }
-      finally { view.setAuthBusy(false); }
+      } catch (error) {
+        view.setAuthError(error.message);
+      } finally {
+        view.setAuthBusy(false);
+      }
     },
     async submitAvatar(event) {
       event.preventDefault();
@@ -35,7 +45,8 @@ export function setupAccount({ getUser, setUser, isSelectionReady, isSelectionBu
       const file = event.target.file.files[0];
       view.setAvatarMessage('');
       if (!file || file.size > 2 * 1024 * 1024) {
-        view.setAvatarMessage('Выберите PNG или JPEG до 2 МБ'); return;
+        view.setAvatarMessage('Выберите PNG или JPEG до 2 МБ');
+        return;
       }
       button.disabled = true;
       try {
@@ -43,17 +54,25 @@ export function setupAccount({ getUser, setUser, isSelectionReady, isSelectionBu
         await loadProfile();
         view.setAvatarMessage('Аватарка сохранена');
         event.target.reset();
-      } catch (error) { view.setAvatarMessage(error.message); }
-      finally { button.disabled = false; }
+      } catch (error) {
+        view.setAvatarMessage(error.message);
+      } finally {
+        button.disabled = false;
+      }
     },
     async logout() {
-      if (isSelectionBusy()) { toast('Дождитесь сохранения выбора'); return; }
+      if (isSelectionBusy()) {
+        toast('Дождитесь сохранения выбора');
+        return;
+      }
       try {
         await data.logout();
         await loadProfile();
         view.closeProfile();
         toast('Вы вышли из аккаунта');
-      } catch (error) { toast(error.message); }
+      } catch (error) {
+        toast(error.message);
+      }
     },
   });
   return { loadProfile };

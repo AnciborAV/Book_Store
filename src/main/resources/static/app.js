@@ -34,20 +34,28 @@ const selection = createSelectionState({
   onReset: render,
   onChange: () => {
     render();
-    if ($('#cart-dialog').open) renderCart();
+    if ($('#cart-dialog').open) {
+      renderCart();
+    }
   },
 });
 const node = (tag, text, cls) => {
   const n = document.createElement(tag);
-  if (text !== undefined) n.textContent = text;
-  if (cls) n.className = cls;
+  if (text !== undefined) {
+    n.textContent = text;
+  }
+  if (cls) {
+    n.className = cls;
+  }
   return n;
 };
+
 function toast(message) {
   $("#toast").textContent = message;
   $("#toast").style.display = "block";
   setTimeout(() => ($("#toast").style.display = "none"), 3500);
 }
+
 function coverImage(book) {
   const image = node("img", undefined, "catalog-cover");
   image.src = book.coverUrl || covers[book.coverTitle || book.name] || "/covers/default.svg";
@@ -66,10 +74,12 @@ const setCartQuantity = (id, quantity) => selection.setQuantity(id, quantity);
 const addToCart = book => selection.add(book);
 const toggleFavorite = book => selection.toggleFavorite(book);
 const toggleLibraryFavorite = book => selection.toggleFavorite(book, true);
+
 async function loadSelection() {
   await selection.load();
   renderSelectionHints({ selectionNote: $('#selection-note'), cartHint: $('.cart-hint') }, user);
 }
+
 function updateCartCount() {
   updateEditorial();
   updateCommerce();
@@ -78,16 +88,21 @@ function updateCartCount() {
   updateBookOrderingAdmin();
   $('#cart-count').textContent = selection.count;
 }
+
 function renderCart() {
   const model = cartRows(selection.cart, books);
   selection.removeMissing(model.missing);
   renderCartRows({ list: $('#cart-items'), total: $('#cart-total'), clear: $('#clear-cart') },
-    model, { coverImage, setQuantity: setCartQuantity });
+  model, { coverImage, setQuantity: setCartQuantity });
   updateCartCount();
 }
+
 function render() {
-  $("#library-layout").classList.remove('ai-books-layout'); $("#java-library").hidden = true;
-  for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) $(selector).hidden = false;
+  $("#library-layout").classList.remove('ai-books-layout');
+  $("#java-library").hidden = true;
+  for (const selector of [".catalog-tools", "#selection-note", "#catalog-message", "#books", "#pagination", ".catalog-bottom", ".catalog-top .search"]) {
+    $(selector).hidden = false;
+  }
   const model = selectCatalogue({ books, libraryBooks, sections, category, filter,
     query: $("#search").value, page, pageSize, favorites: selection.favorites, libraryFavorites: selection.libraryFavorites });
   category = model.category;
@@ -102,10 +117,13 @@ function render() {
     favorites: selection.favorites, libraryFavorites: selection.libraryFavorites, toggleFavorite, toggleLibraryFavorite, addToCart,
     addEditorialControls, addManagementControls });
   renderCataloguePager($("#pagination"), model, nextPage => {
-    page = nextPage; render(); $("#catalog").scrollIntoView();
+    page = nextPage;
+    render();
+    $("#catalog").scrollIntoView();
   });
   updateCartCount();
 }
+
 async function loadBooks() {
   try {
     const data = await loadCatalogue();
@@ -116,14 +134,17 @@ async function loadBooks() {
     render();
   } catch (e) {
     $("#catalog-message").textContent =
-      "Каталог недоступен. Проверьте подключение к серверу.";
+    "Каталог недоступен. Проверьте подключение к серверу.";
   }
 }
+
 function setupCoreComponents() {
   const bookDetail = setupBookDetail({ getUser: () => user, coverImage, addToCart, toast });
   const account = setupAccount({
     getUser: () => user,
-    setUser: value => { user = value; },
+    setUser: value => {
+      user = value;
+    },
     isSelectionReady: () => selection.ready,
     isSelectionBusy: () => selection.busy,
     loadSelection,
@@ -141,6 +162,7 @@ function setupCoreComponents() {
   return { bookDetail, account };
 }
 const openBook = book => bookDetail.open(book);
+
 function setupCatalogueControls() {
   $("#search").oninput = () => {
     page = 1;
@@ -148,16 +170,16 @@ function setupCatalogueControls() {
   };
   document.querySelectorAll("[data-filter]").forEach(
     (b) =>
-      (b.onclick = () => {
+    (b.onclick = () => {
         filter = b.dataset.filter;
         page = 1;
         document
-          .querySelectorAll("[data-filter]")
-          .forEach((x) => x.classList.toggle("active", x === b));
+        .querySelectorAll("[data-filter]")
+        .forEach((x) => x.classList.toggle("active", x === b));
         render();
       }),
   );
-  $("#add-book").onclick = () => openBookManager(null,category);
+  $("#add-book").onclick = () => openBookManager(null, category);
   $("#book-form").onsubmit = async (e) => {
     e.preventDefault();
     const button = e.target.querySelector("button");
@@ -188,14 +210,19 @@ function setupCatalogueControls() {
     $("#catalog").scrollIntoView();
   };
 }
+
 async function loadCovers() {
   const response = await fetch("/catalog-covers.json");
-  if (response.ok) covers = await response.json();
+  if (response.ok) {
+    covers = await response.json();
+  }
 }
+
 async function reloadCatalogueAndSelection() {
   await loadBooks();
   await loadSelection();
 }
+
 function setupStoreComponents() {
   setupCatalogueAdmin({
     getUser: () => user,
@@ -242,10 +269,11 @@ function setupStoreComponents() {
   document.addEventListener('library-books-changed', loadBooks);
   document.addEventListener('editorial-open-catalog', event => {
     const book = books.find(book => String(book.id) === event.detail);
-    if (book) openBook(book);
+    if (book) {
+      openBook(book);
+    }
   });
 }
-
 // Wire components and controls before loading account-dependent data and opening a deep link.
 // Capture the original page dialogs before components add editors with their own busy guards.
 const dialogTargets = {
@@ -259,7 +287,11 @@ const navigation = setupApplicationNavigation({
   ...dialogTargets,
   getCategory: () => category,
   getSections: () => sections,
-  showSection: id => { category = id; page = 1; render(); },
+  showSection: id => {
+    category = id;
+    page = 1;
+    render();
+  },
 });
 startApplication({
   loadCovers,

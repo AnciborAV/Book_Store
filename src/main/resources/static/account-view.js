@@ -8,7 +8,9 @@ export function createAccountView({ query = selector => document.querySelector(s
       image.alt = 'Аватарка пользователя';
       image.src = '/api/profile/avatar?t=' + now();
       target.append(image);
-    } else target.textContent = user?.displayName?.[0]?.toUpperCase() || 'Ч';
+    } else {
+      target.textContent = user?.displayName?.[0]?.toUpperCase() || 'Ч';
+    }
   }
   return {
     bind(handlers) {
@@ -18,7 +20,9 @@ export function createAccountView({ query = selector => document.querySelector(s
       $('#avatar-form').onsubmit = handlers.submitAvatar;
       $('#logout').onclick = handlers.logout;
     },
-    open(user) { $(user ? '#profile-dialog' : '#auth-dialog').showModal(); },
+    open(user) {
+      $(user ? '#profile-dialog' : '#auth-dialog').showModal();
+    },
     renderProfile(user) {
       $('#account-label').textContent = user ? user.displayName : 'Войти';
       $('.mobile-account-label').textContent = user ? 'Кабинет' : 'Войти';
@@ -41,10 +45,22 @@ export function createAccountView({ query = selector => document.querySelector(s
       $('#auth-error').textContent = '';
       $('#forgot-password').hidden = register;
     },
-    setAuthBusy(busy) { $('#auth-submit').disabled = busy; },
-    setAuthError(message) { $('#auth-error').textContent = message; },
-    completeAuth(form) { form.reset(); $('#auth-dialog').close(); $('#profile-dialog').showModal(); },
-    setAvatarMessage(message) { $('#avatar-message').textContent = message; },
-    closeProfile() { $('#profile-dialog').close(); },
+    setAuthBusy(busy) {
+      $('#auth-submit').disabled = busy;
+    },
+    setAuthError(message) {
+      $('#auth-error').textContent = message;
+    },
+    completeAuth(form) {
+      form.reset();
+      $('#auth-dialog').close();
+      $('#profile-dialog').showModal();
+    },
+    setAvatarMessage(message) {
+      $('#avatar-message').textContent = message;
+    },
+    closeProfile() {
+      $('#profile-dialog').close();
+    },
   };
 }
