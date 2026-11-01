@@ -1,3 +1,5 @@
+import { cartSummary } from "./cart-model.js";
+import { renderCartSummary } from "./cart-view.js";
 import { request } from "./api-client.js";
 
 const $ = (s) => document.querySelector(s);
@@ -183,25 +185,8 @@ export function updateCommerce() {
   $("#open-orders").hidden = !user;
   $("#open-admin").hidden = user?.role !== "ADMIN";
   $("#add-book").hidden = user?.role !== "ADMIN";
-  const books = context.getBooks(),
-    cart = context.getCart();
-  let cents = 0,
-    valid = true;
-  for (const [id, q] of Object.entries(cart)) {
-    const b = books.find((b) => String(b.id) === id);
-    if (!b || b.price === null || b.availableStock < q) valid = false;
-    if (b?.price !== null && b) cents += Math.round(Number(b.price) * 100) * q;
-  }
-  $("#cart-amount").textContent =
-    "Сумма: " +
-    money(cents / 100) +
-    (valid ? "" : " · Есть позиции без цены или доступного остатка");
-  $("#checkout").disabled = !user || !Object.keys(cart).length;
-  $("#checkout-note").textContent = user
-    ? valid
-      ? "Оформление резервирует книги. Онлайн-оплата не подключена."
-      : "Администратору нужно назначить любую положительную цену и оформить поступление недостающих книг в разделе «Управление магазином»."
-    : "Войдите, чтобы оформить заказ. Гостевая корзина не переносится в аккаунт.";
+  renderCartSummary({ amount: $('#cart-amount'), checkout: $('#checkout'), note: $('#checkout-note') },
+    cartSummary(context.getCart(), context.getBooks(), user));
 }
 async function loadInventory() {
   inventory = await request("/api/admin/inventory");
