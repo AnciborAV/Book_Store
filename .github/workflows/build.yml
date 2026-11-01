@@ -30,6 +30,7 @@ jobs:
       - name: Application startup and navigation
         run: node scripts/test-app-startup.mjs
       - name: Install browser test dependencies
+        id: browser-deps
         run: |
           npm install --prefix "$RUNNER_TEMP/browser-test" playwright@1.58.2
           "$RUNNER_TEMP/browser-test/node_modules/.bin/playwright" install --with-deps chromium
@@ -38,6 +39,7 @@ jobs:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser-test/node_modules/playwright
         run: node scripts/browser-smoke.cjs
       - name: Java PDF library and persistent files
+        if: ${{ !cancelled() && steps.browser-deps.outcome == 'success' }}
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser-test/node_modules/playwright
         run: node scripts/java-library-smoke.cjs
