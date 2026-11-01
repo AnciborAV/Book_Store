@@ -50,20 +50,21 @@ class Target {
   scrollIntoView(options) { this.scrollOptions = options || null; this.scrollCount = (this.scrollCount || 0) + 1; }
   getBoundingClientRect() { return { left: 10, right: 90, top: 20, bottom: 80 }; }
 }
-function navigationFixture(hash = '') {
+function navigationFixture(hash = '', excludeDynamic = false) {
   const nodes = new Map(), document = new Target(), window = new Target(), media = new Target(), calls = [];
   const $ = selector => { if (!nodes.has(selector)) nodes.set(selector, new Target()); return nodes.get(selector); };
+  const dynamic = new Target();
   const dialog = new Target(), close = new Target(), aiLink = new Target(); close.closest = () => dialog;
-  document.querySelector = $; document.querySelectorAll = selector => ({ 'dialog': [dialog], 'dialog .close': [close], '[data-open-ai-books]': [aiLink] }[selector] || []);
+  document.querySelector = $; document.querySelectorAll = selector => ({ 'dialog': excludeDynamic ? [dialog, dynamic] : [dialog], 'dialog .close': [close], '[data-open-ai-books]': [aiLink] }[selector] || []);
   document.documentElement = new Target();
   window.location = { hash }; window.history = { replaceState: (...args) => calls.push(['replace', ...args]) };
   window.matchMedia = query => { assert.equal(query, '(max-width: 600px)'); return media; };
   let category = 'all', sections = [], aiHandlers;
-  const nav = setupApplicationNavigation({ document, window, getCategory: () => category, getSections: () => sections,
+  const nav = setupApplicationNavigation({ document, window, ...(excludeDynamic ? { dialogs: [dialog], closeButtons: [close] } : {}), getCategory: () => category, getSections: () => sections,
     showSection: id => { category = id; calls.push(['section',id]); }, atlas: section => section.atlas,
     ai: { isAIHash: hash => ['#ai','#ai-history'].includes(hash), openAI: () => calls.push(['ai']),
       setupAINavigation: options => { aiHandlers = options; } } });
-  return { nav, $, document, window, media, calls, dialog, close, aiLink,
+  return { nav, $, document, window, media, calls, dialog, close, aiLink, dynamic,
     get aiHandlers() { return aiHandlers; }, setSections: value => { sections = value; } };
 }
 
@@ -129,7 +130,8 @@ test('entry point wires all components before profile/catalogue loads and preser
   const source = await readFile(new URL('app.js', root), 'utf8');
   const events = [], options = {}, nodes = new Map(), document = new Target();
   const $ = key => { if (!nodes.has(key)) nodes.set(key, new Target()); return nodes.get(key); };
-  document.querySelector = $; document.querySelectorAll = () => [];
+  const dynamicDialogs = [];
+  document.querySelector = $; document.querySelectorAll = selector => selector === 'dialog' ? dynamicDialogs : [];
   let pending;
   const selection = { cart: {}, favorites: new Set(), libraryFavorites: new Set(), ready: true, busy: false, count: 0,
     async load() { events.push('selection'); }, removeMissing() {} };
@@ -146,11 +148,13 @@ test('entry point wires all components before profile/catalogue loads and preser
     selectCatalogue: () => ({ category: 'all', page: 1 }), cartRows: () => ({ missing: [] }),
   });
   for (const name of ['setupCatalogueAdmin','setupBookOrdering','setupAbout','setupAnnouncement','setupAdminReviews','setupFeedback','setupJavaLibrary','setupCommerce','setupEditorial'])
-    mocks[name] = value => { events.push(name); options[name] = value; };
+    mocks[name] = value => { events.push(name); options[name] = value; if (name === 'setupCatalogueAdmin') dynamicDialogs.push(new Target()); };
   vm.runInNewContext(source.replace(/^import[^\n]+\n/gm, ''), mocks);
   await pending;
   const expected = ['setupBookDetail','setupAccount','setupCatalogueAdmin','setupBookOrdering','setupAbout','setupAnnouncement','setupAdminReviews','setupFeedback','setupJavaLibrary','setupCommerce','setupEditorial','navigation','/catalog-covers.json','profile','catalogue','route'];
   assert.deepEqual(events, expected);
+  assert.equal(dynamicDialogs.length, 1);
+  assert.equal(options.navigation.dialogs.length, 0);
   events.length = 0; await options.setupCatalogueAdmin.reload(); await options.setupCommerce.reload();
   assert.deepEqual(events, ['catalogue','selection','catalogue','selection']);
   events.length = 0; document.emit('editorial-open-catalog', { detail: '1' });
@@ -160,4 +164,13 @@ test('entry point wires all components before profile/catalogue loads and preser
   events.length = 0; await options.setupBookOrdering.onSaved('java');
   assert.deepEqual(events, ['catalogue','selection']); assert.equal($('#search').value, '');
   assert.deepEqual(JSON.parse(JSON.stringify($('#catalog').scrollOptions)), { block: 'start' });
+});
+
+// Dynamically created editors own their close/cancel handlers and must retain their busy guards.
+test('navigation uses the captured static dialogs and does not add outside-close to dynamic editors', () => {
+  const f = navigationFixture('', true);
+  assert.equal(f.dialog.listeners.get('click').length, 1);
+  assert.equal(f.dynamic.listeners.has('click'), false);
+  f.dynamic.emit('click', { target: f.dynamic, clientX: 0, clientY: 0 });
+  assert.equal(f.dynamic.closed, undefined);
 });

@@ -3,12 +3,12 @@ import { isAIHash, openAI, setupAINavigation } from './ai-navigation.js';
 
 export function setupApplicationNavigation({ getCategory, getSections, showSection,
   document: doc = document, window: win = window,
-  ai = { isAIHash, openAI, setupAINavigation }, atlas = atlasForSection }) {
+  ai = { isAIHash, openAI, setupAINavigation }, atlas = atlasForSection, dialogs, closeButtons }) {
   const $ = selector => doc.querySelector(selector);
   const all = selector => doc.querySelectorAll(selector);
 
-  all('dialog .close').forEach(button => { button.onclick = () => button.closest('dialog').close(); });
-  all('dialog').forEach(dialog => dialog.addEventListener('click', event => {
+  (closeButtons ?? all('dialog .close')).forEach(button => { button.onclick = () => button.closest('dialog').close(); });
+  (dialogs ?? all('dialog')).forEach(dialog => dialog.addEventListener('click', event => {
     if (event.target !== dialog) return;
     const rect = dialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right
