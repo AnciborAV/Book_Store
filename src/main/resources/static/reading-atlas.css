@@ -220,7 +220,7 @@ h1 {
 }
 
 .atlas-viewport:fullscreen::before {
-  content:'Esc — выйти из полноэкранного режима';
+  content:'Esc - выйти из полноэкранного режима';
   position:fixed;
   right:20px;
   top:4px;

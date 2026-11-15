@@ -59,7 +59,7 @@ function toast(message) {
 function coverImage(book) {
   const image = node("img", undefined, "catalog-cover");
   image.src = book.coverUrl || covers[book.coverTitle || book.name] || "/covers/default.svg";
-  image.alt = "Обложка: " + book.name + " — " + book.author;
+  image.alt = "Обложка: " + book.name + " - " + book.author;
   image.loading = "lazy";
   image.decoding = "async";
   image.onerror = () => {

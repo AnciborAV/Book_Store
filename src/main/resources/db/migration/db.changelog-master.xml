@@ -30,4 +30,5 @@
     <include file="/db/migration/digital-technologies-section.xml"/>
     <include file="/db/migration/editorial-comment-text.xml"/>
     <include file="/db/migration/text-formatting.xml"/>
+    <include file="/db/migration/short-hyphens.xml"/>
 </databaseChangeLog>
