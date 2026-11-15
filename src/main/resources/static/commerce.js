@@ -216,7 +216,7 @@ function renderInventoryOptions() {
   for (const b of inventory.filter((b) =>
       (b.name + " " + b.author).toLocaleLowerCase("ru").includes(q),
   )) {
-    const o = el("option", b.name + " — " + b.author);
+    const o = el("option", b.name + " - " + b.author);
     o.value = b.bookId;
     select.append(o);
   }
@@ -315,7 +315,7 @@ async function showOrder(id) {
     list.append(
       el(
         "li",
-        `${item.name} — ${item.author}: ${item.quantity} × ${money(item.unitPrice)}`,
+        `${item.name} - ${item.author}: ${item.quantity} × ${money(item.unitPrice)}`,
       ),
     );
   }

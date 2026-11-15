@@ -491,7 +491,7 @@ export function setupEditorial(options) {
     }
     const f = e.target, lists = [...new Set(f.elements.lists.value.split('\n').map(x => x.trim()).filter(Boolean))];
     if (lists.length > 8 || lists.some(x => x.length > 50)) {
-      $('#editorial-error').textContent = 'До 8 списков, каждое название — не более 50 символов.';
+      $('#editorial-error').textContent = 'До 8 списков, каждое название - не более 50 символов.';
       return;
     }
     saving = true;

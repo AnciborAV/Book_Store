@@ -38,7 +38,7 @@ public class AdminBootstrap implements ApplicationRunner {
             );
             if (!validator.validate(registration).isEmpty()) {
                 throw new IllegalStateException(
-                    "Для нового администратора задайте корректные BOOKSTORE_ADMIN_EMAIL и BOOKSTORE_ADMIN_PASSWORD (8–72 символа)"
+                    "Для нового администратора задайте корректные BOOKSTORE_ADMIN_EMAIL и BOOKSTORE_ADMIN_PASSWORD (8-72 символа)"
                 );
             }
             accounts.register(registration);

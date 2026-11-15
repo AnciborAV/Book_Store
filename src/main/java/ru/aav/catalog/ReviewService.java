@@ -36,7 +36,7 @@ public class ReviewService {
             mail.enqueue(
                 "BOOK:" + reviews.id(book, account.getId()),
                 "Новый отзыв о книге",
-                "Книга: " + title.getName() + " — " + title.getAuthor()
+                "Книга: " + title.getName() + " - " + title.getAuthor()
                     + "\nАвтор отзыва: " + account.getDisplayName()
                     + "\nОценка: " + rating + " из 5\n\n" + body.strip()
                     + "\n\nОткройте кабинет администратора → Отзывы и уведомления → Книги."

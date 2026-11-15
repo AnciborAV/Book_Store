@@ -234,9 +234,9 @@ export function setupCatalogueAdmin(ctx) {
     <p>Оставьте цену пустой, если книга не продаётся. После сохранения цены появится кнопка «В корзину». Для оформления заказа добавьте остаток в панели «Управление магазином» → «Поступление на склад». Чтение и скачивание PDF остаются доступными всем.</p>
     <label>Описание<textarea name="description" rows="6" maxlength="3000"></textarea></label>
     <img id="managed-book-preview" alt="Обложка книги" hidden />
-    <label>Обложка — PNG или JPEG до 2 МБ<input name="cover" type="file" accept="image/png,image/jpeg" /></label>
+    <label>Обложка - PNG или JPEG до 2 МБ<input name="cover" type="file" accept="image/png,image/jpeg" /></label>
     <p>При добавлении PDF выбранная вами обложка сохранится. Если обложки нет, используем первую страницу PDF.</p>
-    <label>PDF — до 500 МБ, без пароля<input name="pdf" type="file" accept="application/pdf,.pdf" /></label>
+    <label>PDF - до 500 МБ, без пароля<input name="pdf" type="file" accept="application/pdf,.pdf" /></label>
     <label id="managed-pdf-remove" class="managed-check" hidden><input name="removePdf" type="checkbox" />Убрать PDF, сохранив карточку и обложку</label>
     <p id="managed-book-error" class="form-error" role="alert"></p><div class="managed-editor-actions"><button type="submit" class="button dark">Сохранить книгу</button><button type="button" class="button light" data-managed-close>Отмена</button></div></form>`;
   document.body.append(editor);
@@ -292,7 +292,7 @@ export function setupCatalogueAdmin(ctx) {
     }
     const pdf = form.elements.pdf.files[0], cover = form.elements.cover.files[0];
     if (pdf?.size > 500 * 1024 * 1024 || cover?.size > 2 * 1024 * 1024) {
-      $('#managed-book-error').textContent = 'PDF — до 500 МБ, обложка — до 2 МБ.';
+      $('#managed-book-error').textContent = 'PDF - до 500 МБ, обложка - до 2 МБ.';
       return;
     }
     const data = new FormData(form);

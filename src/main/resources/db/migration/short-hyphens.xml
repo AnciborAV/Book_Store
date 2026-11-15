@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+ <changeSet id="short-hyphens-20261115" author="aav"><sql><![CDATA[
+-- One-character replacements preserve the offsets of saved text styles.
+UPDATE books SET name = REPLACE(REPLACE(name, '—', '-'), '–', '-'), author = REPLACE(REPLACE(author, '—', '-'), '–', '-'), category = REPLACE(REPLACE(category, '—', '-'), '–', '-') WHERE name LIKE '%—%' OR name LIKE '%–%' OR author LIKE '%—%' OR author LIKE '%–%' OR category LIKE '%—%' OR category LIKE '%–%';
+UPDATE java_library SET title = REPLACE(REPLACE(title, '—', '-'), '–', '-'), author = REPLACE(REPLACE(author, '—', '-'), '–', '-'), description = REPLACE(REPLACE(description, '—', '-'), '–', '-'), version = version + 1 WHERE title LIKE '%—%' OR title LIKE '%–%' OR author LIKE '%—%' OR author LIKE '%–%' OR description LIKE '%—%' OR description LIKE '%–%';
+UPDATE book_editorial SET description = REPLACE(REPLACE(description, '—', '-'), '–', '-'), comment = REPLACE(REPLACE(comment, '—', '-'), '–', '-'), lists = REPLACE(REPLACE(lists, '—', '-'), '–', '-'), version = version + 1 WHERE description LIKE '%—%' OR description LIKE '%–%' OR comment LIKE '%—%' OR comment LIKE '%–%' OR lists LIKE '%—%' OR lists LIKE '%–%';
+UPDATE site_about SET title = REPLACE(REPLACE(title, '—', '-'), '–', '-'), lead = REPLACE(REPLACE(lead, '—', '-'), '–', '-'), body = REPLACE(REPLACE(body, '—', '-'), '–', '-'), signature = REPLACE(REPLACE(signature, '—', '-'), '–', '-'), link_label = REPLACE(REPLACE(link_label, '—', '-'), '–', '-'), photo_alt = REPLACE(REPLACE(photo_alt, '—', '-'), '–', '-'), version = version + 1 WHERE title LIKE '%—%' OR title LIKE '%–%' OR lead LIKE '%—%' OR lead LIKE '%–%' OR body LIKE '%—%' OR body LIKE '%–%' OR signature LIKE '%—%' OR signature LIKE '%–%' OR link_label LIKE '%—%' OR link_label LIKE '%–%' OR photo_alt LIKE '%—%' OR photo_alt LIKE '%–%';
+UPDATE site_announcement SET body = REPLACE(REPLACE(body, '—', '-'), '–', '-'), version = version + 1 WHERE body LIKE '%—%' OR body LIKE '%–%';
+ ]]></sql></changeSet>
+</databaseChangeLog>

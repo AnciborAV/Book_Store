@@ -115,8 +115,8 @@ export function openJavaLibrary(nextSection = 'java') {
   ? 'Искусственный интеллект в книгах. Читайте описания, сохраняйте в избранное, читайте на сайте и скачивайте PDF.'
   : section === 'civil-law'
   ? 'Книги по гражданскому праву. Скачивайте PDF и изучайте в удобное время.'
-  : 'От первой строки кода — к большим идеям. Книги в PDF, которые можно забрать с собой.';
-  $('#java-search-form label').textContent = 'Найти книгу — ' + sectionTitle();
+  : 'От первой строки кода - к большим идеям. Книги в PDF, которые можно забрать с собой.';
+  $('#java-search-form label').textContent = 'Найти книгу - ' + sectionTitle();
   $('#java-pages').setAttribute('aria-label', 'Страницы библиотеки: ' + sectionTitle());
   load();
 }
@@ -223,7 +223,7 @@ function editor(book = null) {
   const form = $('#java-form');
   form.reset();
   $('#java-error').textContent = '';
-  $('#java-editor-title').textContent = book ? 'Редактировать книгу' : 'Новая книга — ' + sectionTitle();
+  $('#java-editor-title').textContent = book ? 'Редактировать книгу' : 'Новая книга - ' + sectionTitle();
   form.elements.title.value = book?.title || '';
   form.elements.author.value = book?.author || '';
   form.elements.description.value = book?.description || '';

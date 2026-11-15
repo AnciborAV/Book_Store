@@ -123,7 +123,7 @@ public class PasswordRecovery {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(email);
-        message.setSubject("Переплёт — восстановление пароля");
+        message.setSubject("Переплёт - восстановление пароля");
         message.setText(
             "Для смены пароля откройте ссылку (действует 30 минут):\n\n" + baseUrl +
                 "/#reset-password=" + token + "\n\nЕсли вы не запрашивали смену пароля, просто проигнорируйте письмо. Ваш пароль не изменится."

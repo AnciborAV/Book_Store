@@ -32,7 +32,7 @@ public final class OrderMailTemplate {
                 item.unitPrice().multiply(BigDecimal.valueOf(item.quantity()))
             );
             text.append(item.name())
-                .append(" — ")
+                .append(" - ")
                 .append(item.author())
                 .append(": ")
                 .append(item.quantity())
@@ -67,7 +67,7 @@ public final class OrderMailTemplate {
         <!doctype html>
         <html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
-        <title>Подтверждение заказа — Переплёт</title></head>
+        <title>Подтверждение заказа - Переплёт</title></head>
         <body bgcolor="#1b1916" style="margin:0;padding:0;background-color:#1b1916;color:#efe6d6;font-family:Arial,sans-serif;-webkit-text-size-adjust:100%%">
         <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all">Ваш заказ сохранён. Новая история начинается с первой страницы.</div>
         <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" border="0" bgcolor="#1b1916"><tr><td align="center" style="padding:28px 12px">
@@ -118,7 +118,7 @@ public final class OrderMailTemplate {
             money(order.total())
         );
         return new Content(
-            "Переплёт — ваш заказ № " + order.orderNumber(),
+            "Переплёт - ваш заказ № " + order.orderNumber(),
             text.toString(),
             html
         );
